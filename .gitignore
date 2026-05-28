@@ -1,0 +1,11 @@
+# CMake temporäre Dateien und Compiler-Outputs
+/build/
+/cmake-build-debug/
+/cmake-build-release/
+
+# CLion spezifische Einstellungen
+/.idea/
+
+# Betriebssystem-Metadaten
+.DS_Store
+
