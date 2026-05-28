@@ -12,6 +12,8 @@ This document serves as the single source of truth for software requirements, ac
     The engine shall provide a `hello` method returning a deterministic verification string for tag-1 validation.
 *   **[REQ-001-C] Automated Testing Framework**  
     The project shall integrate GoogleTest (v1.17.0) via CMake FetchContent and register the executable using CMake's CTest suite.
+    *   **Regulatory Status (Tool Qualification):** GoogleTest is used exclusively as an off-device verification tool. Its source code is strictly separated from the production target (`clegmed` library) and is only linked into the test executable.
+    *   **Risk Evaluation:** No GoogleTest code is deployed onto the final medical device. It cannot introduce operational runtime risks to the patient. Its impact is limited to verification confidence.
 
 ---
 
