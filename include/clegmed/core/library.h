@@ -1,4 +1,8 @@
 #pragma once
 #include <string>
 
-std::string hello();
+namespace clegmed::core
+{
+    std::string hello();
+}
+
