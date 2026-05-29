@@ -5,10 +5,12 @@ This document serves as the single source of truth for software requirements, ac
 # Software Requirements Specification (SRS) - clegmed v0.1.0
 
 
-| Requirement ID  | Title               | Status       | Verified By        | Commit / Reference                                                  |
-|:----------------|:--------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
-| **[REQ-001]**   | Core Infrastructure | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
-| **[CHORE-001]** | Governance Tools    | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
+| Requirement ID  | Title                           | Status       | Verified By        | Commit / Reference                                                  |
+|:----------------|:--------------------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
+| **[REQ-001]**   | Core Infrastructure             | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
+| **[CHORE-001]** | Governance Tools                | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
+| **[REQ-002]**   | Modular Data Streaming Pipeline | **DRAFT**    |                    |                                                                     |
+
 
 
 ---
@@ -23,6 +25,11 @@ This document serves as the single source of truth for software requirements, ac
     The project shall integrate GoogleTest (v1.17.0) via CMake FetchContent and register the executable using CMake's CTest suite.
     *   **Regulatory Status (Tool Qualification):** GoogleTest is used exclusively as an off-device verification tool. Its source code is strictly separated from the production target (`clegmed` library) and is only linked into the test executable.
     *   **Risk Evaluation:** No GoogleTest code is deployed onto the final medical device. It cannot introduce operational runtime risks to the patient. Its impact is limited to verification confidence.
+
+## 🧩 [REQ-002] Modular Data Streaming Pipeline (Functional Requirement)
+
+*   **Description:** The framework shall provide a mechanism to process, transform, and route medical data flows in a highly modular and deterministic manner.
+*   **Decoupling:** Individual processing steps must be isolated from each other so they can be reconfigured without tight coupling of the underlying business logic.
 
 ---
 
