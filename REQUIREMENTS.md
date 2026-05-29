@@ -5,13 +5,13 @@ This document serves as the single source of truth for software requirements, ac
 # Software Requirements Specification (SRS) - clegmed v0.1.0
 
 
-| Requirement ID  | Title                           | Status       | Verified By        | Commit / Reference                                                  |
-|:----------------|:--------------------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
-| **[REQ-001]**   | Core Infrastructure             | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
-| **[CHORE-001]** | Governance Tools                | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
-| **[REQ-002]**   | Modular Data Streaming Pipeline | **VERIFIED** | ADR-0002           | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |                                                                   |
-| **[CHORE-002]** | Architecture Decision Records   | **VERIFIED** | Code Review        | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |
-
+| Requirement ID  | Title                                            | Status       | Verified By        | Commit / Reference                                                  |
+|:----------------|:-------------------------------------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
+| **[REQ-001]**   | Core Infrastructure                              | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
+| **[CHORE-001]** | Governance Tools                                 | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
+| **[REQ-002]**   | Modular Data Streaming Pipeline                  | **VERIFIED** | ADR-0002           | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |                                                                   |
+| **[CHORE-002]** | Architecture Decision Records                    | **VERIFIED** | Code Review        | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |
+| **[REQ-003]**   | Component Specifications (Derived from ADR 0002) | **DRAFT**    |                    |                                                                     |
 
 
 ---
@@ -30,6 +30,16 @@ This document serves as the single source of truth for software requirements, ac
 ## 🧩 [REQ-002] Modular Data Streaming Pipeline (Functional Requirement)
 *   **Description:** The framework shall provide a mechanism to process, transform, and route medical data flows in a highly modular and deterministic manner.
 *   **Decoupling:** Individual processing steps must be isolated from each other so they can be reconfigured without tight coupling of the underlying business logic.
+
+
+## 🧩 [REQ-003] Component Specifications (Derived from ADR 0001)
+
+*   **[REQ-003-A] Filter Components**  
+    The framework shall provide processing components ("Filter") that encapsulate a specific data operation. Different filter types will be offered based on the number of intput/output pipes, e.g., `SoureFilter`, `SinkFilter`, `PorcessingFilter`.
+*   **[REQ-003-B] Pipe Components**  
+    The framework shall provide `InputPipes` and `OutputPipes` to receive data from a preceding filter or send data to a succeeding filter.
+*   **[REQ-003-C] Binding Object**  
+    The connection topology between an `OuputPipe` and `InputPipe` shall be represented as a first-class citizen (`BindingObject`).
 
 ---
 
