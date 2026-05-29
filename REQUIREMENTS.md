@@ -9,7 +9,8 @@ This document serves as the single source of truth for software requirements, ac
 |:----------------|:--------------------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
 | **[REQ-001]**   | Core Infrastructure             | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
 | **[CHORE-001]** | Governance Tools                | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
-| **[REQ-002]**   | Modular Data Streaming Pipeline | **APPROVED** |                    |                                                                     |
+| **[REQ-002]**   | Modular Data Streaming Pipeline | **APPROVED** | *Pending*          |                                                                     |
+| **[CHORE-002]** | Architecture Decision Records   | **DRAFT**    | *Pending*          |                                                                     |
 
 
 
@@ -27,7 +28,6 @@ This document serves as the single source of truth for software requirements, ac
     *   **Risk Evaluation:** No GoogleTest code is deployed onto the final medical device. It cannot introduce operational runtime risks to the patient. Its impact is limited to verification confidence.
 
 ## 🧩 [REQ-002] Modular Data Streaming Pipeline (Functional Requirement)
-
 *   **Description:** The framework shall provide a mechanism to process, transform, and route medical data flows in a highly modular and deterministic manner.
 *   **Decoupling:** Individual processing steps must be isolated from each other so they can be reconfigured without tight coupling of the underlying business logic.
 
@@ -41,3 +41,7 @@ This document serves as the single source of truth for software requirements, ac
     A local `commit-msg` Git-hook shall enforce the presence of a valid tracking token (`[REQ-XXXX]`, `[BUG-XXXX]`, or `[CHORE-XXXX]`) before any commit is accepted.
 *   **[CHORE-001-C] Requirements Engineering & Lifecycle Tracking**  
     The project shall maintain a single source of truth for software requirements within this document, allowing manual lifecycle tracking via status tags (e.g., `[Draft]`, `[Approved]`, `[Verified]`).
+
+## 🔒 [CHORE-002] Architecture Decision Logging
+*   **[CHORE-002-A] Architecture Decision Logging**  
+    The project shall document all architecturally significant decisions using Architecture Decision Records (ADRs) to ensure long-term rationale tracking and compliance with IEC 62304 architecture design controls.
