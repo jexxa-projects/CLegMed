@@ -73,3 +73,26 @@ target_link_libraries(hello_world_test PRIVATE
 )
 
 add_test(NAME clegmed_core_test COMMAND hello_world_test)
+
+# ==============================================================================
+# 8. Add doxygen
+# ==============================================================================
+find_package(Doxygen REQUIRED)
+
+if(DOXYGEN_FOUND)
+    set(DOXYGEN_PROJECT_NAME "${PROJECT_NAME}")
+    set(DOXYGEN_PROJECT_NUMBER "${PROJECT_VERSION}")
+
+    set(DOXYGEN_GENERATE_HTML YES)
+    set(DOXYGEN_GENERATE_LATEX NO)
+    set(DOXYGEN_RECURSIVE YES)
+    set(DOXYGEN_BUILTIN_STL_SUPPORT YES)
+    set(DOXYGEN_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/docs")
+
+    doxygen_add_docs(docs
+            ${PROJECT_SOURCE_DIR}/src
+            ${PROJECT_SOURCE_DIR}/include
+            COMMENT "Generating architecture documentation for v${PROJECT_VERSION}"
+    )
+endif()
+
