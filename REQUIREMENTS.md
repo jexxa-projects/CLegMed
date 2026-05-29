@@ -9,7 +9,7 @@ This document serves as the single source of truth for software requirements, ac
 |:----------------|:--------------------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
 | **[REQ-001]**   | Core Infrastructure             | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
 | **[CHORE-001]** | Governance Tools                | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
-| **[REQ-002]**   | Modular Data Streaming Pipeline | **DRAFT**    |                    |                                                                     |
+| **[REQ-002]**   | Modular Data Streaming Pipeline | **APPROVED** |                    |                                                                     |
 
 
 
