@@ -23,3 +23,5 @@ This document serves as the single source of truth for software requirements, ac
     The repository shall maintain an up-to-date README detailing the safety class, project layout, and building instructions.
 *   **[CHORE-001-B] Commit Verification**  
     A local `commit-msg` Git-hook shall enforce the presence of a valid tracking token (`[REQ-XXXX]`, `[BUG-XXXX]`, or `[CHORE-XXXX]`) before any commit is accepted.
+*   **[CHORE-001-C] Requirements Engineering & Lifecycle Tracking**  
+    The project shall maintain a single source of truth for software requirements within this document, allowing manual lifecycle tracking via status tags (e.g., `[Draft]`, `[Approved]`, `[Verified]`).
