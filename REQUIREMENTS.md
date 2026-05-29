@@ -2,6 +2,15 @@
 
 This document serves as the single source of truth for software requirements, according to IEC 62304. All functional code changes must trace back to an ID in this document.
 
+# Software Requirements Specification (SRS) - clegmed v0.1.0
+
+
+| Requirement ID  | Title               | Status       | Verified By        | Commit / Reference                                                  |
+|:----------------|:--------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
+| **[REQ-001]**   | Core Infrastructure | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
+| **[CHORE-001]** | Governance Tools    | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
+
+
 ---
 
 ## 🏗️ [REQ-001] Core Infrastructure & Verification Setup
