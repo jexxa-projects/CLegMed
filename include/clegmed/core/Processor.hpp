@@ -8,10 +8,11 @@
 #include "OutputPipe.hpp"
 
 namespace clegmed::core {
-    template<typename InputData>
+    template<typename InputData, typename OutputData, typename Strategy>
     class Processor : public Filter {
     public:
-        Processor() = default;
+        Processor() = delete;
+        explicit  Processor(Strategy strategy) : m_strategy(strategy) {}
         ~Processor() override = default;
 
         auto inputPipe() {
@@ -23,11 +24,13 @@ namespace clegmed::core {
             return std::forward<Self>(explicit_this).m_output_pipe;
         }
 
-        virtual void process(InputData input_data) {
-            m_output_pipe.forward(std::move(input_data));
+        void process(InputData input_data) {
+            auto result = m_strategy(std::move(input_data));
+            m_output_pipe.forward(std::move(result));
         }
 
     private:
-        OutputPipe<InputData> m_output_pipe = OutputPipe<InputData>(*this);
+        Strategy m_strategy;
+        OutputPipe<OutputData> m_output_pipe = OutputPipe<OutputData>(*this);
     };
 }
