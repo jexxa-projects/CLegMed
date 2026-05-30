@@ -23,6 +23,10 @@ add_library(clegmed SHARED
         src/core/Filter.cpp
         include/clegmed/core/Filter.hpp
         include/clegmed/core/library.h
+        include/clegmed/core/InputPipe.hpp
+        include/clegmed/core/Processor.hpp
+        src/core/OutpuPipe.cpp
+        include/clegmed/core/OutputPipe.hpp
 )
 
 # ==============================================================================
@@ -65,6 +69,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(hello_world_test
         tests/core/HelloWorldTest.cpp
         tests/core/FilterTest.cpp
+        tests/core/ProcessorTest.cpp
 )
 target_link_libraries(hello_world_test PRIVATE
         clegmed
