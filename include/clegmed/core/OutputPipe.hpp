@@ -8,7 +8,7 @@
 #include <utility>
 
 namespace clegmed::core {
-    template <typename T, typename NextPipeType = void*>
+    template <typename T>
     class OutputPipe {
     public:
         OutputPipe() = delete;
@@ -31,9 +31,6 @@ namespace clegmed::core {
         }
 
     private:
-        // Interner Konstruktor für das Chaining
-        explicit OutputPipe(NextPipeType pipe, const Filter& filter) : m_input_pipe(std::move(pipe)), m_filter(filter) {}
-
         std::function<void(T)> m_input_pipe;
         const Filter& m_filter;
     };
