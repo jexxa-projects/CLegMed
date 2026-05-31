@@ -9,10 +9,7 @@ TEST(CoreTest, ProducerSendsData) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [] { return "Hello World";};
 
-    auto object_under_test = clegmed::core::Producer<
-        std::string,
-        decltype(test_strategy)
-    >(test_strategy);
+    auto object_under_test = clegmed::core::Producer(test_strategy);
 
     object_under_test.outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));

@@ -25,6 +25,8 @@ add_library(clegmed SHARED
         include/clegmed/core/Processor.hpp
         include/clegmed/core/OutputPipe.hpp
         include/clegmed/core/Producer.hpp
+        include/clegmed/core/Consumer.hpp
+        include/clegmed/core/Traits.hpp
 )
 
 # ==============================================================================
@@ -68,6 +70,7 @@ add_executable(hello_world_test
         tests/core/FilterTest.cpp
         tests/core/ProcessorTest.cpp
         tests/core/ProducerTest.cpp
+        tests/core/FlowGraphTest.cpp
 )
 target_link_libraries(hello_world_test PRIVATE
         clegmed

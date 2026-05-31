@@ -1,4 +1,3 @@
-#include "clegmed/core/library.h"
 #include "clegmed/core/Processor.hpp"
 #include "gtest/gtest.h"
 //
@@ -11,11 +10,7 @@ TEST(CoreTest, ProcessorReceivesFromInputPipe) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input){ return input + " World";};
 
-    auto object_under_test = clegmed::core::Processor<
-        std::string,
-        std::string,
-        decltype(test_strategy)
-    >(test_strategy);
+    auto object_under_test = clegmed::core::Processor(test_strategy);
 
     object_under_test.outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));

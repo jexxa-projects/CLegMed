@@ -6,13 +6,14 @@
 #include <iostream>
 
 #include "OutputPipe.hpp"
+#include "Traits.hpp"
 
 namespace clegmed::core {
     template<typename InputData, typename OutputData, typename Strategy>
     class Processor : public Filter {
     public:
         Processor() = delete;
-        explicit  Processor(Strategy strategy) : m_strategy(strategy) {}
+        explicit  Processor(Strategy strategy) : m_strategy(std::move(strategy)) {}
         ~Processor() override = default;
 
         auto inputPipe() {
@@ -33,4 +34,12 @@ namespace clegmed::core {
         Strategy m_strategy;
         OutputPipe<OutputData> m_output_pipe = OutputPipe<OutputData>(*this);
     };
+
+
+    template <typename ProcessorStrategy>
+    Processor(ProcessorStrategy) -> Processor<
+        typename detail::function_traits<decltype(&ProcessorStrategy::operator())>::argument_type,
+        typename detail::function_traits<decltype(&ProcessorStrategy::operator())>::result_type,
+        ProcessorStrategy>;
+
 }
