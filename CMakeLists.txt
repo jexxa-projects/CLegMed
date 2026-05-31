@@ -19,10 +19,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 4. TARGET DEFINITION (The core shared library)
 # ==============================================================================
 add_library(clegmed SHARED
-        src/core/library.cpp
         src/core/Filter.cpp
         include/clegmed/core/Filter.hpp
-        include/clegmed/core/library.h
         include/clegmed/core/InputPipe.hpp
         include/clegmed/core/Processor.hpp
         include/clegmed/core/OutputPipe.hpp
@@ -67,7 +65,6 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(hello_world_test
-        tests/core/HelloWorldTest.cpp
         tests/core/FilterTest.cpp
         tests/core/ProcessorTest.cpp
         tests/core/ProducerTest.cpp
