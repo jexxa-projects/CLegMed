@@ -10,8 +10,12 @@
 
 
 namespace clegmed::core {
+    template <typename Strategy, typename OutputData>
+    concept ValidProducerStrategy =
+    std::is_invocable_v<Strategy, OutputPipe<OutputData>&> ||
+    std::is_invocable_v<Strategy>;
 
-    template <typename OutputData, typename ProducerStrategy>
+    template <typename OutputData, ValidProducerStrategy <OutputData> ProducerStrategy>
     class Producer : public Filter {
     public:
         Producer() = delete;
@@ -25,8 +29,12 @@ namespace clegmed::core {
         }
 
         void produce() {
-            auto result = m_strategy();
-            m_outputPipe.forward(std::move(result));
+            if constexpr (std::is_invocable_v<ProducerStrategy, OutputPipe<OutputData>&>) {
+                m_strategy(m_outputPipe);
+            } else if constexpr (std::is_invocable_v<ProducerStrategy>) {
+                auto result = m_strategy();
+                m_outputPipe.forward(std::move(result));
+            }
         }
 
     private:
@@ -34,9 +42,15 @@ namespace clegmed::core {
         OutputPipe<OutputData> m_outputPipe = OutputPipe<OutputData>(*this);
     };
 
-    template <typename ProducerStrategy>
-    Producer(ProducerStrategy) -> Producer<
-      std::invoke_result_t<ProducerStrategy>,
-      ProducerStrategy
-    >;
+    template <typename  ProducerStrategy>
+    [[nodiscard]] auto simpleProducer(ProducerStrategy&& producer_strategy) {
+        using OutputData = std::invoke_result_t<ProducerStrategy>;
+        return Producer<OutputData, std::decay_t<ProducerStrategy>>(std::forward<ProducerStrategy>(producer_strategy));
+    }
+
+    template <typename OutputData, typename  ProducerStrategy>
+    [[nodiscard]] auto pipedProducer(ProducerStrategy&& producer_strategy) {
+        return Producer<OutputData, std::decay_t<ProducerStrategy>>(std::forward<ProducerStrategy>(producer_strategy));
+    }
+
 }
