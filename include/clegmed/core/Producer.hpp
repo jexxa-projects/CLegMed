@@ -43,7 +43,7 @@ namespace clegmed::core {
     };
 
     template <typename  ProducerStrategy>
-    [[nodiscard]] auto simpleProducer(ProducerStrategy&& producer_strategy) {
+    [[nodiscard]] auto producer(ProducerStrategy&& producer_strategy) {
         using OutputData = std::invoke_result_t<ProducerStrategy>;
         return Producer<OutputData, std::decay_t<ProducerStrategy>>(std::forward<ProducerStrategy>(producer_strategy));
     }

@@ -18,7 +18,7 @@ static void BM_FlowGraphThroughput(benchmark::State& state) {
         data_storage.push_back(data);
     };
 
-    auto producer = clegmed::core::simpleProducer(producer_strategy);
+    auto producer = clegmed::core::producer(producer_strategy);
     auto processor = clegmed::core::Processor(processor_strategy);
     auto consumer = clegmed::core::Consumer(consumer_strategy);
 
@@ -28,7 +28,7 @@ static void BM_FlowGraphThroughput(benchmark::State& state) {
     int64_t items_processed = 0;
 
     // 2. Act: Die eigentliche Benchmark-Schleife
-    for (auto _ : state) {
+    for ([[maybe_unused]]auto _ : state) {
         producer.produce();
         items_processed++;
 
