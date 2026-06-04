@@ -19,8 +19,8 @@ TEST(FlowGraphTest, FlowGraphProcessesData) {
     auto consumer_strategy = [&data_storage](const std::string &data) {data_storage.push_back(data);};
 
     auto producer = make_producer(producer_strategy);
-    auto processor = Processor(processor_strategy);
-    auto consumer = Consumer(consumer_strategy);
+    auto processor = make_processor(processor_strategy);
+    auto consumer = make_consumer(consumer_strategy);
 
     //Act
     producer.outputPipe().connect(processor.inputPipe());

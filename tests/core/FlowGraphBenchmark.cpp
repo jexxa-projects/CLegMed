@@ -21,8 +21,8 @@ static void BM_FlowGraphThroughput(benchmark::State& state) {
     };
 
     auto producer = make_producer(producer_strategy);
-    auto processor = Processor(processor_strategy);
-    auto consumer = Consumer(consumer_strategy);
+    auto processor = make_processor(processor_strategy);
+    auto consumer = make_consumer(consumer_strategy);
 
     producer.outputPipe().connect(processor.inputPipe());
     processor.outputPipe().connect(consumer.inputPipe());
