@@ -35,6 +35,10 @@ namespace clegmed::core {
             } else if constexpr (std::is_invocable_v<ProducerStrategy>) {
                 auto result = m_strategy();
                 m_outputPipe.forward(std::move(result));
+            } else {
+                static_assert(false,
+                    "❌ ARCHITECTURE-ERROR: Given ProducerStrategy neither uses "
+                    "Piped-Signature (Pipe&) nor 1:1-signature ().");
             }
         }
 

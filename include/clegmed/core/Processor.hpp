@@ -36,9 +36,13 @@ namespace clegmed::core {
         void process(InputData input_data) {
             if constexpr (std::is_invocable_v<Strategy, const InputData&, OutputPipe<OutputData>&>) {
                 m_strategy(std::move(input_data), m_output_pipe);
-            } else if constexpr (std::is_invocable_v<Strategy, const InputData&>) {
+            } else if constexpr (std::is_invocable_r_v<OutputData, Strategy, const InputData&>) {
                 auto result = m_strategy(std::move(input_data));
                 m_output_pipe.forward(std::move(result));
+            } else {
+                static_assert(false,
+                    "❌ ARCHITECTURE-ERROR: Given ProcessStrategy neither uses "
+                    "Piped-Signature (Input, Pipe&) nor 1:1-signature (Input).");
             }
         }
 

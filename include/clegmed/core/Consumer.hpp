@@ -22,7 +22,12 @@ namespace clegmed::core {
             return [this](InputData data) { this->consume(std::move(data)); };
         }
         void consume(InputData input_data) {
-            m_strategy(std::move(input_data));
+            if constexpr (std::is_invocable_r_v<void, ConsumerStrategy, const InputData&>) {
+                m_strategy(std::move(input_data));
+            }  else { static_assert(false,
+                    "❌ ARCHITECTURE-ERROR: Given ConsumerStrategy does not use "
+                    "1:1-signature (Input).");
+            }
         }
     private:
         ConsumerStrategy m_strategy;
