@@ -18,7 +18,7 @@ static void BM_FlowGraphThroughput(benchmark::State& state) {
         data_storage.push_back(data);
     };
 
-    auto producer = clegmed::core::producer(producer_strategy);
+    auto producer = clegmed::core::make_producer(producer_strategy);
     auto processor = clegmed::core::Processor(processor_strategy);
     auto consumer = clegmed::core::Consumer(consumer_strategy);
 

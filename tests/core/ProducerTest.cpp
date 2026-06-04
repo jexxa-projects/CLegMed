@@ -9,7 +9,7 @@ TEST(CoreTest, ProducerSendsData) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [] { return "Hello World";};
 
-    auto object_under_test = clegmed::core::producer(test_strategy);
+    auto object_under_test = clegmed::core::make_producer(test_strategy);
 
     object_under_test.outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
@@ -29,7 +29,7 @@ TEST(CoreTest, ProducerSendsDataByOutputPipe) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](auto& outputPipe) { outputPipe.forward( "Hello World");};
 
-    auto object_under_test = clegmed::core::pipedProducer<std::string>(test_strategy);
+    auto object_under_test = clegmed::core::make_piped_producer<std::string>(test_strategy);
 
     object_under_test.outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));

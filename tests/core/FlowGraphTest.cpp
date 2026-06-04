@@ -16,7 +16,7 @@ TEST(FlowGraphTest, FlowGraphProcessesData) {
     auto processor_strategy = [](const std::string &input){ return input + " World";};
     auto consumer_strategy = [&data_storage](const std::string &data) {data_storage.push_back(data);};
 
-    auto producer = clegmed::core::producer(producer_strategy);
+    auto producer = clegmed::core::make_producer(producer_strategy);
     auto processor = clegmed::core::Processor(processor_strategy);
     auto consumer = clegmed::core::Consumer(consumer_strategy);
 
