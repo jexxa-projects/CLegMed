@@ -55,3 +55,8 @@ This document serves as the single source of truth for software requirements, ac
 ## 🔒 [CHORE-002] Architecture Decision Logging
 *   **[CHORE-002-A] Architecture Decision Logging**  
     The project shall document all architecturally significant decisions using Architecture Decision Records (ADRs) to ensure long-term rationale tracking and compliance with IEC 62304 architecture design controls.
+
+## 🔒 [CHORE-003] Build & Release
+*   **[CHORE-003-A] CMake Build System**  
+    The project shall use CMake as its build system so that each target can be built independently. Especially, the build system should support 
+    the separation of core and plugins to facilitate modular development and testing.
