@@ -8,7 +8,9 @@
 
 namespace clegmed::core {
     template<typename Strategy, typename InputData>
-    concept ValidConsumerStrategy = std::is_invocable_r_v<void, Strategy, InputData>;
+    concept ValidConsumerStrategy =
+        requires(Strategy&& strategy, InputData&& input_data)
+        { { strategy(std::forward<InputData>(input_data)) } -> std::same_as<void>; };
 
     template <typename InputData, typename ConsumerStrategy>
         requires ValidConsumerStrategy<ConsumerStrategy, InputData>

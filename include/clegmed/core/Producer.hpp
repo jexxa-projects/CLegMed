@@ -12,8 +12,8 @@
 namespace clegmed::core {
     template <typename Strategy, typename OutputData>
     concept ValidProducerStrategy =
-    std::is_invocable_r_v<void, Strategy, OutputPipe<OutputData>&> ||
-    std::is_invocable_r_v<OutputData, Strategy>;
+        requires(Strategy&& strategy) { { strategy() } -> std::same_as<OutputData>; } ||
+        requires(Strategy&& strategy, OutputPipe<OutputData>& pipe) { { strategy(pipe) } -> std::same_as<void>; };
 
     template <typename OutputData, typename  ProducerStrategy>
         requires ValidProducerStrategy<ProducerStrategy, OutputData>
