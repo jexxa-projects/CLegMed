@@ -4,6 +4,8 @@
 
 #pragma once
 #include <iostream>
+#include <expected>
+#include <exception>
 
 #include "OutputPipe.hpp"
 #include "Traits.hpp"
@@ -12,8 +14,11 @@ namespace clegmed::core {
 
     template <typename Strategy, typename InputData, typename OutputData>
     concept ValidProcessorStrategy =
-        std::is_invocable_r_v<void, Strategy, const InputData&, OutputPipe<OutputData>&> ||
-        std::is_invocable_r_v<OutputData, Strategy, const InputData&>;
+        requires(Strategy&& strategy, const InputData& input, OutputPipe<OutputData>& pipe)
+        { { strategy(input, pipe) } -> std::same_as<void>;}
+        ||
+        requires(Strategy&& strategy, const InputData& input)
+        { { strategy(input) } -> std::convertible_to<OutputData>;};
 
 
     template<typename InputData, typename OutputData, typename Strategy>
@@ -33,16 +38,29 @@ namespace clegmed::core {
             return std::forward<Self>(explicit_this).m_output_pipe;
         }
 
-        void process(InputData input_data) {
+        void process(InputData input_data) noexcept
+        {
+            std::optional<std::expected<OutputData, std::exception_ptr>> pipeline_result;
+
             if constexpr (std::is_invocable_v<Strategy, const InputData&, OutputPipe<OutputData>&>) {
                 m_strategy(std::move(input_data), m_output_pipe);
+                return;
             } else if constexpr (std::is_invocable_r_v<OutputData, Strategy, const InputData&>) {
-                auto result = m_strategy(std::move(input_data));
-                m_output_pipe.forward(std::move(result));
+                pipeline_result.emplace( m_strategy(std::move(input_data)) );
             } else {
                 static_assert(false,
                     "❌ ARCHITECTURE-ERROR: Given ProcessStrategy neither uses "
                     "Piped-Signature (Input, Pipe&) nor 1:1-signature (Input).");
+            }
+
+            //TODO: Actually, we do not know how to handle errors in general
+            if (!pipeline_result.has_value()) {
+                std::cout << "Pipeline Error: error occurred . TODO implement error handling"  << std::endl;
+                exit(EXIT_FAILURE);
+            }
+
+            if constexpr (std::is_invocable_r_v<OutputData, Strategy, const InputData&>) {
+                m_output_pipe.forward(std::move(*pipeline_result.value()));
             }
         }
 

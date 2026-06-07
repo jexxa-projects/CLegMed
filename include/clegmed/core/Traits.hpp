@@ -18,19 +18,19 @@ namespace clegmed::core::detail {
     // 1. Function Traits (Analysiert Lambda-Signaturen)
     // =========================================================================
     template <typename T>
-    struct function_traits;
+    struct function_traits : function_traits<decltype(&T::operator())> {};
 
-    // Spezialisierung für const Member-Funktionen (Standard bei Lambdas)
-    template <typename ClassType, typename ReturnType, typename... Args>
-    struct function_traits<ReturnType(ClassType::*)(Args...) const> {
-
+    template <typename ClassType, typename ReturnType, bool IsNoexcept, typename... Args>
+    struct function_traits<ReturnType(ClassType::*)(Args...) const noexcept(IsNoexcept)> {
         using result_type = std::remove_cvref_t<ReturnType>;
+
+        // extract noexcept
+        static constexpr bool is_noexcept = IsNoexcept;
 
         // Indizierter Zugriff auf die Argumente (0, 1, 2...)
         template <std::size_t Index>
         using argument_t = std::decay_t<std::tuple_element_t<Index, std::tuple<Args...>>>;
     };
-
 
     // =========================================================================
     // 2. Universeller Template Type Extractor
