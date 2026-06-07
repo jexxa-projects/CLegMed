@@ -43,8 +43,7 @@ namespace clegmed::core {
             std::optional<std::expected<OutputData, std::exception_ptr>> pipeline_result;
 
             if constexpr (std::is_invocable_v<Strategy, const InputData&, OutputPipe<OutputData>&>) {
-                m_strategy(std::move(input_data), m_output_pipe);
-                return;
+                return m_strategy(std::move(input_data), m_output_pipe);
             } else if constexpr (std::is_invocable_r_v<OutputData, Strategy, const InputData&>) {
                 pipeline_result.emplace( m_strategy(std::move(input_data)) );
             } else {
