@@ -41,6 +41,13 @@ This document serves as the single source of truth for software requirements, ac
 *   **[REQ-003-C] Binding Object**  
     The connection topology between an `OuputPipe` and `InputPipe` shall be represented as a first-class citizen (`BindingObject`).
 
+## 🧩 [REQ-004] Set of generic filters for testing purposes
+*   **[REQ-004-A] Generic Filter**  
+    The framework shall provide a set of generic filters that can be used for testing purposes.
+*   **Description:**  
+    The generic filters will include basic operations such as identity, passthrough, and no-op filters, which can be used to verify the framework's functionality without the need for complex custom filters.
+    These plugins should reside in a separate namespace (`clegmed::plugins::generic`) to enable a clean separation of core functionality and plugins.
+
 ---
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
