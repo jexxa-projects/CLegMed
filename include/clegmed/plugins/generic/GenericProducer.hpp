@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <type_traits>
 #include <clegmed/core/Producer.hpp>
 
 namespace clegmed::plugins::generic {
@@ -14,7 +13,7 @@ namespace clegmed::plugins::generic {
         auto lambda_strategy = [data = std::move(output_data)]() -> OutputData {
             return data;
         };
-        return core::Producer<OutputData, decltype(lambda_strategy)>(std::move(lambda_strategy));
+        return core::make_producer(std::move(lambda_strategy));
     }
 
 }

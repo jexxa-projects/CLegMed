@@ -12,6 +12,7 @@ target_sources(clegmed_core INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/Consumer.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/Traits.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericProducer.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericProcessor.hpp
 
 )
 

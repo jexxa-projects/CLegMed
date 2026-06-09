@@ -18,6 +18,7 @@ gtest_discover_tests(clegmed_core_test)
 # --- 7.2 GOOGLE BENCHMARK (Für Performance-Messungen) ---
 add_executable(clegmed_benchmarks
         FlowGraphBenchmark.cpp
+        ../../include/clegmed/plugins/generic/GenericProcessor.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE
         clegmed::core
