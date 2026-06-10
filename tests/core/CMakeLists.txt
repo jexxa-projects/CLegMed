@@ -19,6 +19,7 @@ gtest_discover_tests(clegmed_core_test)
 add_executable(clegmed_benchmarks
         FlowGraphBenchmark.cpp
         ../../include/clegmed/plugins/generic/GenericProcessor.hpp
+        ../../include/clegmed/plugins/generic/GenericConsumer.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE
         clegmed::core

@@ -9,11 +9,18 @@
 namespace clegmed::plugins::generic {
 
     template <typename OutputData>
-    [[nodiscard]] auto emit(const OutputData& output_data) {
-        auto lambda_strategy = [data = std::move(output_data)]() -> OutputData {
-            return data;
+    [[nodiscard]] auto emit(OutputData output_data) { // Übergabe per Value für perfektes Verschieben!
+
+        using PipelineType = std::conditional_t<
+            std::is_array_v<OutputData> || std::is_same_v<std::decay_t<OutputData>, const char*>,
+            std::string,
+            std::decay_t<OutputData>
+        >;
+
+        auto lambda_strategy = [data = PipelineType(std::move(output_data))]() -> PipelineType {
+            return data; // Gibt nun legal einen std::string zurück
         };
+
         return core::make_producer(std::move(lambda_strategy));
     }
-
 }
