@@ -19,17 +19,16 @@ namespace clegmed::plugins::generic {
     template<typename TContainer>
     requires Container<TContainer, typename TContainer::value_type>
     [[nodiscard]] auto store(TContainer& data_storage) {
-        using DataType = typename TContainer::value_type;
+        using DataType = TContainer::value_type;
 
-        // Das Lambda nutzt if constexpr, um flexibel push oder push_back zu rufen
-        auto lambda_strategy = [&data_storage](const DataType& data) {
-            if constexpr (requires { data_storage.push_back(data); }) {
-                data_storage.push_back(data);
-            } else {
-                data_storage.push(data);
+        auto lambda_strategy = [&data_storage](DataType data) {
+            if constexpr (requires { data_storage.push_back(std::move(data)); }) {
+                data_storage.push_back(std::move(data));
+            } else if constexpr (requires { data_storage.push(std::move(data)); }) {
+                data_storage.push(std::move(data));
             }
         };
 
-        return core::make_consumer(lambda_strategy); // Gibt die Strategie zurück
+        return core::make_consumer(lambda_strategy);
     }
 }

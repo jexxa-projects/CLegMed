@@ -9,7 +9,7 @@
 namespace clegmed::plugins::generic {
 
     template <typename OutputData>
-    [[nodiscard]] auto emit(OutputData output_data) { // Übergabe per Value für perfektes Verschieben!
+    [[nodiscard]] auto emit(OutputData output_data) {
 
         using PipelineType = std::conditional_t<
             std::is_array_v<OutputData> || std::is_same_v<std::decay_t<OutputData>, const char*>,
