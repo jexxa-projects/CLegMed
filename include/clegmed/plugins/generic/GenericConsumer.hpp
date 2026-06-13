@@ -7,6 +7,7 @@
 
 #include "clegmed/core/Consumer.hpp"
 
+
 namespace clegmed::plugins::generic {
 
     template<typename TContainer, typename TElement>
@@ -14,6 +15,13 @@ namespace clegmed::plugins::generic {
       { container.push_back(std::forward<TElement>(element));}
       || requires(TContainer& container, TElement&& element)
       { container.push(std::forward<TElement>(element)); };
+
+    template<typename T>
+    [[nodiscard]] auto discard() {
+        return core::make_consumer([](T ) {
+            // we discard data
+        });
+    }
 
 
     template<typename TContainer>
