@@ -48,6 +48,12 @@ This document serves as the single source of truth for software requirements, ac
     The generic filters will include basic operations such as identity, passthrough, and no-op filters, which can be used to verify the framework's functionality without the need for complex custom filters.
     These plugins should reside in a separate namespace (`clegmed::plugins::generic`) to enable a clean separation of core functionality and plugins.
 
+## 🧩 [REQ-005] FlowGraph class to manage filters 
+*   **[REQ-004-A] FlowGraph**  
+    The framework shall provide a concept to build and manage filters within a FlowGraph
+*   **Description:**
+    The FlowGraph class shall provide a fluent API to setup the final flow graph with explicit semantic from(<PRODUCER>), then(<PROCESSOR>), consumeWith(<CONSUMER>) 
+
 ---
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
