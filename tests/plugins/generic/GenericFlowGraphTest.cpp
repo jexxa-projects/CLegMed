@@ -5,6 +5,7 @@
 #include "clegmed/core/Pipe.hpp"
 #include "clegmed/core/Consumer.hpp"
 #include "clegmed/core/Processor.hpp"
+#include "clegmed/core/flowgraph/FlowGraph.hpp"
 #include "clegmed/plugins/generic/GenericConsumer.hpp"
 #include "clegmed/plugins/generic/GenericProcessor.hpp"
 #include "clegmed/plugins/generic/GenericProducer.hpp"
@@ -53,3 +54,28 @@ TEST(FlowGraphTest, PipeFlowGraphTest) {
     EXPECT_EQ(data_storage.size(), 1);
     EXPECT_EQ(data_storage[0], expected_result);
 }
+
+
+TEST(FlowGraphTest, RealFlowGraphTest) {
+    //Arrange
+    using namespace clegmed::plugins::generic;
+    using namespace clegmed::core;
+    const auto expected_result = "Hello World";
+    std::vector<std::string> data_storage;
+    //Act
+    auto flowgraph = FlowGraph{}
+        .every(std::chrono::milliseconds(10))
+        .from(emit("Hello"))
+        .then(append(" World"))
+        .consumeWith(store(data_storage));
+
+    //Act
+    flowgraph.run();
+
+    //Assert
+    EXPECT_EQ(data_storage.size(), 1);
+    EXPECT_EQ(data_storage[0], expected_result);
+}
+
+
+

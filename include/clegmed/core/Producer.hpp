@@ -3,6 +3,9 @@
 //
 
 #pragma once
+#include <iostream>
+#include <ostream>
+
 #include "Filter.hpp"
 #include "OutputPipe.hpp"
 #include <type_traits>
@@ -23,6 +26,8 @@ namespace clegmed::core {
         ~Producer() override = default;
 
         explicit Producer(ProducerStrategy strategy) : Filter(), m_strategy(std::move(strategy)) {}
+        Producer(Producer&&) noexcept = default;
+        Producer& operator=(Producer&&) noexcept = default;
 
         template<typename Self >
         auto&& outputPipe(this Self&& explicit_this) {
@@ -57,5 +62,15 @@ namespace clegmed::core {
     [[nodiscard]] auto make_piped_producer(ProducerStrategy&& producer_strategy) {
         return Producer<OutputData, std::decay_t<ProducerStrategy>>(std::forward<ProducerStrategy>(producer_strategy));
     }
+
+
+    template <typename T>
+    struct is_producer_class : std::false_type {};
+
+    template <typename OutputData, typename ProducerStrategy>
+    struct is_producer_class<Producer<OutputData, ProducerStrategy>> : std::true_type {};
+
+    template <typename T>
+    inline constexpr bool is_producer_class_v = is_producer_class<std::decay_t<T>>::value;
 
 }

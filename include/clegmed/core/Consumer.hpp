@@ -3,6 +3,9 @@
 //
 
 #pragma once
+#include <iostream>
+#include <ostream>
+
 #include "Filter.hpp"
 #include "Traits.hpp"
 
@@ -19,6 +22,8 @@ namespace clegmed::core {
         Consumer() = delete;
         explicit Consumer(ConsumerStrategy strategy) : m_strategy(strategy) {}
         ~Consumer() override = default;
+        Consumer(Consumer&&) noexcept = default;
+        Consumer& operator=(Consumer&&) noexcept = default;
 
         auto inputPipe() {
             return [this](InputData data) { this->consume(std::move(data)); };

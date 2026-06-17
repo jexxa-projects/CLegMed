@@ -27,6 +27,8 @@ namespace clegmed::core {
         void forward(T&& data) noexcept {
             if (m_input_pipe) { // Prüft zur Laufzeit, ob verbunden
                 m_input_pipe(std::move(data));
+            } else {
+                std::cerr << "OutputPipe is not connected -> Discard data  " << data << std::endl;
             }
         }
 

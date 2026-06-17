@@ -28,7 +28,8 @@ namespace clegmed::core {
         Processor() = delete;
         explicit  Processor(Strategy strategy) : m_strategy(std::move(strategy)) {}
         ~Processor() override = default;
-
+        Processor(Processor&&) noexcept = default;
+        Processor& operator=(Processor&&) noexcept = default;
         auto inputPipe() {
             return [this](InputData data) { this->process(std::move(data)); };
         }
@@ -54,7 +55,7 @@ namespace clegmed::core {
 
             //TODO: Actually, we do not know how to handle errors in general
             if (!pipeline_result.has_value()) {
-                std::cout << "Pipeline Error: error occurred . TODO implement error handling"  << std::endl;
+                std::cerr << "Pipeline Error: error occurred . TODO implement error handling"  << std::endl;
                 exit(EXIT_FAILURE);
             }
 

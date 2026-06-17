@@ -21,9 +21,11 @@ TEST(GenericPluginsTest, EmitProducer) {
 
     // Act: Produce data
     object_under_test.produce();
+    object_under_test.produce();
 
     // Assert: Validate if passed
-    EXPECT_EQ(data_storage.size(), 1);
+    EXPECT_EQ(data_storage.size(), 2);
     EXPECT_EQ(data_storage[0], message);
+    EXPECT_EQ(data_storage[1], message);
 }
 

@@ -49,7 +49,7 @@ This document serves as the single source of truth for software requirements, ac
     These plugins should reside in a separate namespace (`clegmed::plugins::generic`) to enable a clean separation of core functionality and plugins.
 
 ## 🧩 [REQ-005] FlowGraph class to manage filters 
-*   **[REQ-004-A] FlowGraph**  
+*   **[REQ-005-A] FlowGraph**  
     The framework shall provide a concept to build and manage filters within a FlowGraph
 *   **Description:**
     The FlowGraph class shall provide a fluent API to setup the final flow graph with explicit semantic from(<PRODUCER>), then(<PROCESSOR>), consumeWith(<CONSUMER>) 

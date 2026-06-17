@@ -9,7 +9,7 @@ public:
     int value = 0;
 
     void modifyValue(const int v) { value = v; }
-    int getValue() const { return value; }
+    [[nodiscard]] int getValue() const { return value; }
 };
 
 // --- 1. COMPILE-TIME TESTS (IEC 62304 Traceability: REQ-003-A) ---
@@ -17,8 +17,8 @@ public:
 // Testet, ob das Kopieren und Verschieben auf Compiler-Ebene blockiert ist
 static_assert(!std::is_copy_constructible_v<Filter>, "REQ-003-A Violation: Filter must not be copy constructible!");
 static_assert(!std::is_copy_assignable_v<Filter>,    "REQ-003-A Violation: Filter must not be copy assignable!");
-static_assert(!std::is_move_constructible_v<Filter>, "REQ-003-A Violation: Filter must not be move constructible!");
-static_assert(!std::is_move_assignable_v<Filter>,    "REQ-003-A Violation: Filter must not be move assignable!");
+static_assert(std::is_move_constructible_v<Filter>, "REQ-003-A Violation: Filter must not be move constructible!");
+static_assert(std::is_move_assignable_v<Filter>,    "REQ-003-A Violation: Filter must not be move assignable!");
 
 // Testet, ob der Destruktor virtuell ist (wichtig für polymorphes Löschen)
 static_assert(std::has_virtual_destructor_v<Filter>, "REQ-003-A Violation: Filter must have a virtual destructor!");

@@ -21,6 +21,10 @@ add_executable(clegmed_benchmarks
         ../../include/clegmed/plugins/generic/GenericProcessor.hpp
         ../../include/clegmed/plugins/generic/GenericConsumer.hpp
         ../../include/clegmed/core/Pipe.hpp
+        ../../include/clegmed/core/flowgraph/FlowGraph.hpp
+        ../../include/clegmed/core/flowgraph/FlowGraphConfig.hpp
+        ../../include/clegmed/core/flowgraph/PipelineBuilder.hpp
+        ../../include/clegmed/core/flowgraph/ExecutableGraph.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE
         clegmed::core
