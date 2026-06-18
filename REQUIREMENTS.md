@@ -53,6 +53,8 @@ This document serves as the single source of truth for software requirements, ac
     The framework shall provide a concept to build and manage filters within a FlowGraph
 *   **Description:**
     The FlowGraph class shall provide a fluent API to setup the final flow graph with explicit semantic from(<PRODUCER>), then(<PROCESSOR>), consumeWith(<CONSUMER>) 
+*   **[REQ-005-B] Producer specific methods**  
+    The flow graph class shall provide methods for different producer types, such as every(), await() and repeat()
 
 ---
 
