@@ -70,7 +70,7 @@ TEST(FlowGraphTest, RealFlowGraphTest) {
         .consumeWith(store(data_storage));
 
     //Act
-    flowgraph.run();
+    flowgraph.start();
 
     //Assert
     EXPECT_EQ(data_storage.size(), 1);

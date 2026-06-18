@@ -8,6 +8,23 @@
 #include "clegmed/core/Producer.hpp"
 #include "gtest/gtest.h"
 
+
+bool await_condition(const std::chrono::milliseconds timeout, auto condition) {
+    const auto start_zeit = std::chrono::steady_clock::now();
+
+    while (true) {
+        if (condition()) {
+            return true; // Bedingung erfüllt!
+        }
+
+        if (std::chrono::steady_clock::now() - start_zeit >= timeout) {
+            return false;
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
+}
+
 TEST(FlowGraphTest, FlowGraphProcessesData) {
     //Arrange
     using namespace clegmed::core;
@@ -51,9 +68,58 @@ TEST(FlowGraphTest, FlowGraphTest) {
 
 
     //Act
-    flowgraph.run();
+    flowgraph.start();
 
     //Assert
     EXPECT_EQ(data_storage.size(), 1);
     EXPECT_EQ(data_storage[0], expected_result);
+}
+
+TEST(FlowGraphTest, EveryFlowGraphTest) {
+    //Arrange
+    using namespace clegmed::core;
+
+    const auto expected_result = "Hello World";
+    std::vector<std::string> data_storage;
+
+    auto flowgraph = FlowGraph{}
+    .every(std::chrono::milliseconds(10))
+    .from([] { return "Hello";})
+    .then([](const std::string &input){ return input + " World";})
+    .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
+
+
+    //Act
+    flowgraph.start();
+
+    //Assert
+    EXPECT_TRUE(await_condition(std::chrono::seconds(5), [&]{
+        return data_storage.size() >= 10;
+    }));
+    EXPECT_GE(data_storage.size(), 10);
+    EXPECT_EQ(data_storage[0], expected_result);
+
+    flowgraph.stop();
+}
+TEST(FlowGraphTest, FailedEveryFlowGraphTest) {
+    //Arrange
+    using namespace clegmed::core;
+
+    std::vector<std::string> data_storage;
+
+    auto flowgraph = FlowGraph{}
+    .every(std::chrono::seconds(10))
+    .from([] { return "Hello";})
+    .then([](const std::string &input){ return input + " World";})
+    .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
+
+
+    //Act
+    flowgraph.start();
+
+    //Assert
+    EXPECT_FALSE(await_condition(std::chrono::seconds(5), [&]{
+        return data_storage.size() >= 10;
+    }));
+    flowgraph.stop();
 }
