@@ -53,6 +53,9 @@ namespace clegmed::core {
                     });
                     break;
                 case TriggerType::Await:
+                    m_thread_ptr = std::make_unique<std::jthread>([this](const std::stop_token &stoken) {
+                        this->startAwait(stoken);
+                    });
                     break;
             }
             std::get<0>(m_pipeline).produce();
@@ -92,6 +95,15 @@ namespace clegmed::core {
 
         void startRepeat(const std::stop_token& stoken) {
             for (int i = 0; i < m_config.repeat_count; ++i) {
+                std::get<0>(m_pipeline).produce();
+                if (stoken.stop_requested()) {
+                    break;
+                }
+            }
+        }
+
+        void startAwait(const std::stop_token& stoken) {
+            while (!stoken.stop_requested()) {
                 std::get<0>(m_pipeline).produce();
                 if (stoken.stop_requested()) {
                     break;

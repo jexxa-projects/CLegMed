@@ -125,14 +125,16 @@ TEST(FlowGraphTest, FailedEveryFlowGraphTest) {
 }
 
 
-TEST(FlowGraphTest, RepeatFlowGraphTest) {
+
+
+TEST(FlowGraphTest, AwaitFlowGraphTest) {
     //Arrange
     using namespace clegmed::core;
 
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
-    .repeat(10)
+    .await()
     .from([] { return "Hello";})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
