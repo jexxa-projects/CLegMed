@@ -123,3 +123,27 @@ TEST(FlowGraphTest, FailedEveryFlowGraphTest) {
     }));
     flowgraph.stop();
 }
+
+
+TEST(FlowGraphTest, RepeatFlowGraphTest) {
+    //Arrange
+    using namespace clegmed::core;
+
+    std::vector<std::string> data_storage;
+
+    auto flowgraph = FlowGraph{}
+    .repeat(10)
+    .from([] { return "Hello";})
+    .then([](const std::string &input){ return input + " World";})
+    .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
+
+
+    //Act
+    flowgraph.start();
+
+    //Assert
+    EXPECT_FALSE(await_condition(std::chrono::seconds(5), [&]{
+        return data_storage.size() == 10;
+    }));
+    flowgraph.stop();
+}

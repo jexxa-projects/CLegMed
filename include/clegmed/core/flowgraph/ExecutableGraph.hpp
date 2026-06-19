@@ -42,12 +42,15 @@ namespace clegmed::core {
         void start() {
             switch (m_config.type) {
                 case TriggerType::Every:
-                    m_thread_ptr =  std::make_unique<std::jthread>([this](std::stop_token stoken) {
+                    m_thread_ptr =  std::make_unique<std::jthread>([this](const std::stop_token &stoken) {
                         this->startEvery(stoken);
                 });
                     break;
 
                 case TriggerType::Repeat:
+                    m_thread_ptr = std::make_unique<std::jthread>([this](const std::stop_token &stoken) {
+                        this->startRepeat(stoken);
+                    });
                     break;
                 case TriggerType::Await:
                     break;
@@ -84,6 +87,15 @@ namespace clegmed::core {
                 m_cv.wait_for(lock, stoken, std::chrono::milliseconds(m_config.interval), [] {
                     return false;
                 });
+            }
+        }
+
+        void startRepeat(const std::stop_token& stoken) {
+            for (int i = 0; i < m_config.repeat_count; ++i) {
+                std::get<0>(m_pipeline).produce();
+                if (stoken.stop_requested()) {
+                    break;
+                }
             }
         }
 
