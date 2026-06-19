@@ -11,6 +11,22 @@
 #include "clegmed/plugins/generic/GenericProducer.hpp"
 #include "gtest/gtest.h"
 
+bool await_condition(const std::chrono::milliseconds timeout, auto condition) {
+    const auto start_zeit = std::chrono::steady_clock::now();
+
+    while (true) {
+        if (condition()) {
+            return true; // Bedingung erfüllt!
+        }
+
+        if (std::chrono::steady_clock::now() - start_zeit >= timeout) {
+            return false;
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
+}
+
 TEST(FlowGraphTest, GenericFlowGraphTest) {
     //Arrange
     using namespace clegmed::plugins::generic;
@@ -73,8 +89,12 @@ TEST(FlowGraphTest, RealFlowGraphTest) {
     flowgraph.start();
 
     //Assert
-    EXPECT_EQ(data_storage.size(), 1);
+    EXPECT_TRUE(await_condition(std::chrono::seconds(5), [&]{
+       return !data_storage.empty();
+    }));
+    EXPECT_GE(data_storage.size(), 1);
     EXPECT_EQ(data_storage[0], expected_result);
+    flowgraph.stop();
 }
 
 

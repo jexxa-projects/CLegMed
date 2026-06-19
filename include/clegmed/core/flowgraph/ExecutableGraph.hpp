@@ -58,7 +58,6 @@ namespace clegmed::core {
                     });
                     break;
             }
-            std::get<0>(m_pipeline).produce();
         }
 
         void stop() {

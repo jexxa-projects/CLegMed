@@ -61,7 +61,7 @@ TEST(FlowGraphTest, FlowGraphTest) {
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
-        .every(std::chrono::milliseconds(10))
+        .repeat(1)
         .from([] { return "Hello";})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
@@ -71,8 +71,13 @@ TEST(FlowGraphTest, FlowGraphTest) {
     flowgraph.start();
 
     //Assert
+    EXPECT_TRUE(await_condition(std::chrono::seconds(5), [&]{
+        return data_storage.size() == 1;
+    }));
     EXPECT_EQ(data_storage.size(), 1);
     EXPECT_EQ(data_storage[0], expected_result);
+
+    flowgraph.stop();
 }
 
 TEST(FlowGraphTest, EveryFlowGraphTest) {
@@ -135,7 +140,9 @@ TEST(FlowGraphTest, AwaitFlowGraphTest) {
 
     auto flowgraph = FlowGraph{}
     .await()
-    .from([] { return "Hello";})
+    .from([] {
+        std::this_thread::sleep_for(std::chrono::milliseconds(20)); //Simulate waiting
+        return "Hello";})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
@@ -144,8 +151,8 @@ TEST(FlowGraphTest, AwaitFlowGraphTest) {
     flowgraph.start();
 
     //Assert
-    EXPECT_FALSE(await_condition(std::chrono::seconds(5), [&]{
-        return data_storage.size() == 10;
+    EXPECT_TRUE(await_condition(std::chrono::seconds(5), [&]{
+        return data_storage.size() >= 10;
     }));
     flowgraph.stop();
 }
