@@ -1,13 +1,13 @@
 # clegmed (v0.1.0)
 
 A modern, highly optimized C++23 shared library designed for pipes and filters.
-This project strictly adheres to the software development lifecycle processes defined by **IEC 62304**.
+This project aligns with established regulatory software development lifecycle processes.
 
 ---
 
-## 🩺 Regulatory Compliance & Safety Status
+## 🩺 Regulatory Compliance & Quality Standards
 
-*   **Software Safety Class:** Class B (Standard Target)
+*   **Software Risk Classification:** Medium-Risk Profile (Standard Target)
 *   **Design Paradigm:** Defensive Programming, Object Ownership Semantics, Zero-Allocation Core.
 *   **Traceability Requirement:** Every functional code modification must be tied to a requirement ID defined in `REQUIREMENTS.md`. Commits are automatically verified via a local `commit-msg` Git-Hook.
 
@@ -19,7 +19,7 @@ To ensure deterministic behavior and meet qualification standards, the project u
 
 *   **Language Standard:** C++23 (Enforced via CMake)
 *   **Build System:** CMake 4.1+ (Target-based architecture)
-*   **Compiler:** Apple Clang 21.0.0 / GCC 13+ (Yocto compatible)
+*   **Compiler:** Apple Clang 21.0.0 / GCC 13+ 
 *   **Unit Testing Framework:** GoogleTest v1.17.0 (Integrated as SOUP via `FetchContent`)
 
 ---
@@ -35,8 +35,10 @@ clegmed/
 ├── include/              # Public API Headers
 │   └── clegmed/
 │       └── core/         # Core subsystem definitions
+│       └── plugins/      # Plugins definitions
 ├── src/                  # Internal Implementation (Source)
 │   └── core/             # Core subsystem logic
+│   └── plugins/          # Plugins implementation
 └── tests/                # Verification Suite (Mirrored)
     └── core/             # GoogleTest cases for the core subsystem
 ```
@@ -68,9 +70,6 @@ Tests are automatically registered with CMake's test automation runner (**CTest*
 ```bash
 # Run all tests using CTest
 ctest --output-on-failure
-
-# Alternatively, run the GoogleTest binary directly for detailed reports
-./hello_world_test
 ```
 
 ---
