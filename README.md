@@ -1,7 +1,11 @@
 # clegmed (v0.1.0)
 
-A modern, highly optimized C++23 shared library designed for pipes and filters.
-This project aligns with established regulatory software development lifecycle processes.
+A modern, highly optimized C++23 shared library designed for pipes and 
+filters. This project aligns with established regulatory software 
+development lifecycle processes.
+
+It serves as the C++ pendant to [JLegMed](https://github.com/jexxa-projects/JLegMed) (Java Legacy Mediator), 
+specifically tailored for resource-constrained IoT, embedded systems, and real-time environments.
 
 ---
 
