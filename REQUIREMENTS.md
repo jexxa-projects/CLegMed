@@ -56,6 +56,10 @@ This document serves as the single source of truth for software requirements, ac
 *   **[REQ-005-B] Producer specific methods**  
     The flow graph class shall provide methods for different producer types, such as every(), await() and repeat()
 
+## 🧩 [REQ-006] Managing class to manage all FlowGraphs within an application 
+*   **[REQ-006-A] CLegMed**  
+    The framework shall provide a concept to build and manage all FlowGraphs of an application, espeacially to start and stop them
+
 ---
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
