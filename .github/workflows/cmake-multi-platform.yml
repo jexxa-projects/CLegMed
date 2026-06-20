@@ -40,11 +40,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install Doxygen (Linux)
+    - name: Install Dependencies (Linux)
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
-        sudo apt-get install -y doxygen
+        sudo apt-get install -y doxygen libc++-18-dev libc++abi-18-dev
 
     - name: Install Doxygen (Windows)
       if: matrix.os == 'windows-latest'
@@ -73,7 +73,6 @@ jobs:
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_CXX_STANDARD=23
         -DCMAKE_CXX_STANDARD_REQUIRED=ON
-        -DCMAKE_CXX_FLAGS="-D__cpp_concepts=202002L"
         -S ${{ github.workspace }}
 
     - name: Build
