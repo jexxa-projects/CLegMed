@@ -25,35 +25,20 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
-        c_compiler: [gcc, clang, cl]
+        # Wir definieren hier direkt die präzisen Compiler-Namen
         include:
           - os: windows-latest
             c_compiler: cl
             cpp_compiler: cl
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
+            c_compiler: gcc-14
+            cpp_compiler: g++-14
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
-        exclude:
-          - os: windows-latest
-            c_compiler: gcc
-          - os: windows-latest
-            c_compiler: clang
-          - os: ubuntu-latest
-            c_compiler: cl
+            c_compiler: clang-18
+            cpp_compiler: clang++-18
 
     steps:
     - uses: actions/checkout@v4
-    - name: Install Latest Compilers (Linux)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y gcc-14 g++-14 clang-18
-        # Verknüpfungen aktualisieren, damit CMake sie findet
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 --slave /usr/bin/g++ g++ /usr/bin/g++-14
-        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-18
 
     - name: Install Doxygen (Linux)
       if: matrix.os == 'ubuntu-latest'
