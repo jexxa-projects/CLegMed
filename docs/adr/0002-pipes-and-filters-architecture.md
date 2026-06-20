@@ -14,7 +14,7 @@ We decide to implement the **Pipes & Filters Architecture Pattern** as the struc
 2. **Pipes** act as `InputPipes` or `OutputPipes` to receive data from a preceding filter or send data to a succeeding filter. 
 3. **BindingObject** will be introduced as first-class citizens to encapsulate the connection topology between the `OuputPipe` and `InputPipe` of two connected Filters, enabling compile-time or runtime configuration validation.
 
-## Consequences & Risk Evaluation (IEC 62304 Class B)
+## Consequences & Risk Evaluation 
 *   **Positive (Benefits):**
     *   *High Testability:* Each Filter can be verified independently with GoogleTest via isolated inputs and outputs.
     *   *Reusability:* Filters can be re-arranged for different medical device setups without changing their internal code.
