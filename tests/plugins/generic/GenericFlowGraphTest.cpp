@@ -10,22 +10,7 @@
 #include "clegmed/plugins/generic/GenericProcessor.hpp"
 #include "clegmed/plugins/generic/GenericProducer.hpp"
 #include "gtest/gtest.h"
-
-bool await_condition(const std::chrono::milliseconds timeout, auto condition) {
-    const auto start_zeit = std::chrono::steady_clock::now();
-
-    while (true) {
-        if (condition()) {
-            return true; // Bedingung erfüllt!
-        }
-
-        if (std::chrono::steady_clock::now() - start_zeit >= timeout) {
-            return false;
-        }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    }
-}
+#include "../../utils/Await.hpp"
 
 TEST(FlowGraphTest, GenericFlowGraphTest) {
     //Arrange

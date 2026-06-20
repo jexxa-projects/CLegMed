@@ -7,6 +7,7 @@ add_executable(clegmed_core_test
         ProcessorTest.cpp
         ProducerTest.cpp
         FlowGraphTest.cpp
+        CLegMedTest.cpp
 )
 target_link_libraries(clegmed_core_test PRIVATE
         clegmed::core
@@ -25,6 +26,8 @@ add_executable(clegmed_benchmarks
         ../../include/clegmed/core/flowgraph/FlowGraphConfig.hpp
         ../../include/clegmed/core/flowgraph/PipelineBuilder.hpp
         ../../include/clegmed/core/flowgraph/ExecutableGraph.hpp
+        ../../include/clegmed/core/CLegMed.hpp
+        ../utils/Await.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE
         clegmed::core

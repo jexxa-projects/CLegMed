@@ -12,6 +12,7 @@ target_sources(clegmed_core INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/Consumer.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/Traits.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/Pipe.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/CLegMed.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/flowgraph/FlowGraph.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/flowgraph/FlowGraphConfig.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/flowgraph/ExecutableGraph.hpp

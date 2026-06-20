@@ -7,6 +7,7 @@
 #include <utility>
 #include <tuple>
 #include <thread>
+#include <iostream>
 #include "FlowGraphConfig.hpp"
 
 
@@ -29,9 +30,30 @@ namespace clegmed::core {
         ExecutableGraph(std::tuple<Filters...>&& pipeline, const FlowGraphConfig& config)
                 : m_pipeline(std::move(pipeline)), m_config(config) {
             constexpr size_t total_elements = sizeof...(Filters);
-            static_assert(total_elements >= 2, "Pipeline braucht mindestens Producer und Consumer!");
+            static_assert(total_elements >= 2, "Pipeline requires at least one Producer and Consumer!");
 
             connect_pipes(std::make_index_sequence<total_elements - 1>{});
+        }
+
+        ExecutableGraph(ExecutableGraph&& other) noexcept
+            : m_pipeline(std::move(other.m_pipeline)),
+              m_config(other.m_config),
+              m_thread_ptr(std::move(other.m_thread_ptr))
+        {
+            other.stop();
+        }
+
+        ExecutableGraph& operator=(ExecutableGraph&& other) noexcept {
+            if (this != &other) {
+                stop(); // First stop ourselves
+
+                m_pipeline = std::move(other.m_pipeline);
+                m_config = other.m_config;
+                m_thread_ptr = std::move(other.m_thread_ptr);
+
+                other.stop(); 
+            }
+            return *this;
         }
 
         ~ExecutableGraph() {
@@ -63,14 +85,13 @@ namespace clegmed::core {
         void stop() {
             if (m_thread_ptr) {
                 m_thread_ptr->request_stop();
-
             }
             {
                 std::unique_lock lock(m_cv_mtx);
                 m_cv.notify_all();
             }
 
-            if (m_thread_ptr->joinable()) {
+            if (m_thread_ptr && m_thread_ptr->joinable()) {
                 m_thread_ptr->join();
             }
         }
