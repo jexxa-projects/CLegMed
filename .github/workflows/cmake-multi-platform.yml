@@ -46,6 +46,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Install Latest Compilers (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc-14 g++-14 clang-18
+        # Verknüpfungen aktualisieren, damit CMake sie findet
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 --slave /usr/bin/g++ g++ /usr/bin/g++-14
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 100 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-18
 
     - name: Install Doxygen (Linux)
       if: matrix.os == 'ubuntu-latest'
