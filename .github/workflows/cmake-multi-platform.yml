@@ -47,6 +47,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Install Doxygen (Linux)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y doxygen
+
+    - name: Install Doxygen (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        choco install doxygen.install -y
+
     - name: Setup CMake 4
       uses: jwlawson/actions-setup-cmake@v2
       with:
