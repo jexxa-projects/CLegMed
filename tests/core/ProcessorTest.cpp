@@ -6,8 +6,8 @@
 TEST(CoreTest, MakeProcessor) {
     // Arrange
     using namespace clegmed::core;
-    constexpr std::string message = "Hello";
-    constexpr std::string expected_result = "Hello World";
+    const std::string message = "Hello";
+    const std::string expected_result = "Hello World";
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input){ return input + " World";};
 
@@ -30,8 +30,8 @@ TEST(CoreTest, MakeProcessor) {
 TEST(CoreTest, MakeNoExceptProcessor) {
     // Arrange
     using namespace clegmed::core;
-    constexpr std::string message = "Hello";
-    constexpr std::string expected_result = "Hello World";
+    const std::string message = "Hello";
+    const std::string expected_result = "Hello World";
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input) noexcept{ return input + " World";};
 
@@ -54,8 +54,8 @@ TEST(CoreTest, MakeNoExceptProcessor) {
 TEST(CoreTest, MakePipedProcessor) {
     // Arrange
     using namespace clegmed::core;
-    constexpr std::string message = "Hello";
-    constexpr std::string expected_result = "Hello World";
+    const std::string message = "Hello";
+    const std::string expected_result = "Hello World";
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input, OutputPipe<std::string>& output_pipe)
         { output_pipe.forward( input + " World");};

@@ -10,7 +10,7 @@
 TEST(GenericPluginsTest, StoreConsumer) {
     // Arrange
     using namespace clegmed::plugins::generic;
-    constexpr std::string message = "Hello World";
+    const std::string message = "Hello World";
     std::vector<std::string> data_storage;
 
     auto object_under_test = store(data_storage);
@@ -26,7 +26,7 @@ TEST(GenericPluginsTest, StoreConsumer) {
 TEST(GenericPluginsTest, DiscardConsumer) {
     // Arrange
     using namespace clegmed::plugins::generic;
-    constexpr std::string message = "Hello World";
+    const std::string message = "Hello World";
     std::vector<std::string> data_storage;
 
     auto object_under_test = discard<std::string>();
