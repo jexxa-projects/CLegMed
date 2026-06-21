@@ -19,14 +19,6 @@ gtest_discover_tests(clegmed_core_test)
 # --- 7.2 GOOGLE BENCHMARK (Für Performance-Messungen) ---
 add_executable(clegmed_benchmarks
         FlowGraphBenchmark.cpp
-        ../../include/clegmed/plugins/generic/GenericProcessor.hpp
-        ../../include/clegmed/plugins/generic/GenericConsumer.hpp
-        ../../include/clegmed/core/Pipe.hpp
-        ../../include/clegmed/core/flowgraph/FlowGraph.hpp
-        ../../include/clegmed/core/flowgraph/FlowGraphConfig.hpp
-        ../../include/clegmed/core/flowgraph/PipelineBuilder.hpp
-        ../../include/clegmed/core/flowgraph/ExecutableGraph.hpp
-        ../../include/clegmed/core/CLegMed.hpp
         ../utils/Await.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE

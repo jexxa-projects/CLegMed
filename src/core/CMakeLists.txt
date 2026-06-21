@@ -16,10 +16,6 @@ target_sources(clegmed_core INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/flowgraph/FlowGraph.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/flowgraph/FlowGraphConfig.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/core/flowgraph/ExecutableGraph.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericProducer.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericProcessor.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericConsumer.hpp
-
 )
 
 # 4. Suchpfad konfigurieren (Sichtbarkeit auf INTERFACE geändert und Pfad korrigiert)
