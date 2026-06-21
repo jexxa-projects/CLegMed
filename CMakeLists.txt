@@ -14,7 +14,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # 3. Add subdirectories
 # ==============================================================================
 
+add_subdirectory(src/utils)
 add_subdirectory(src/core)
+add_subdirectory(src/plugins)
 
 enable_testing()
 

@@ -20,6 +20,7 @@ gtest_discover_tests(clegmed_core_test)
 add_executable(clegmed_benchmarks
         FlowGraphBenchmark.cpp
         ../utils/Await.hpp
+        ../../include/clegmed/utils/Logger.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE
         clegmed::core
