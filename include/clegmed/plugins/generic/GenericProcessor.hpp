@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include "../../core/Processor.hpp"
+#include "../../utils/Logger.hpp"
 
 namespace clegmed::plugins::generic {
 
@@ -16,7 +17,7 @@ namespace clegmed::plugins::generic {
         requires(TInput& input, TSuffix&& suffix) { { input += std::forward<TSuffix>(suffix) }; } ||
         std::convertible_to<TSuffix, TInput>
     )
-    &&(!std::is_arithmetic_v<std::decay_t<TInput>> && !std::is_arithmetic_v<std::decay_t<TSuffix>>);
+    &&!std::is_arithmetic_v<std::decay_t<TInput>> && !std::is_arithmetic_v<std::decay_t<TSuffix>>;
 
     template<typename TInput = void, typename TSuffix>
     [[nodiscard]] auto append(TSuffix suffix) {
@@ -51,5 +52,29 @@ namespace clegmed::plugins::generic {
 
         return core::make_processor(std::move(lambda_strategy));
     }
+
+    template<typename T>
+    [[nodiscard]] auto traceInfo() {
+        return core::make_processor([](T data) {
+            utils::Logger::log(utils::LogLevel::INFO, "{}", data);
+            return data;
+        });
+    }
+    template<typename T>
+    [[nodiscard]] auto traceWarn() {
+        return core::make_processor([](T data) {
+            utils::Logger::log(utils::LogLevel::WARN, "{}", data);
+            return data;
+        });
+    }
+
+    template<typename T>
+    [[nodiscard]] auto traceError() {
+        return core::make_processor([](T data) {
+            utils::Logger::log(utils::LogLevel::ERROR, "{}", data);
+            return data;
+        });
+    }
+
 }
 

@@ -13,5 +13,15 @@ target_link_libraries(clegmed_plugins_generic_test PRIVATE
         gtest
         gtest_main
 )
+
 gtest_discover_tests(clegmed_plugins_generic_test)
+
+add_executable(hello_world
+        HelloWorld.cpp
+)
+target_link_libraries(hello_world PRIVATE
+        clegmed::core
+        clegmed::plugins
+        clegmed::utils
+)
 

@@ -6,6 +6,7 @@
 #include <list>
 
 #include "clegmed/core/Consumer.hpp"
+#include "clegmed/utils/Logger.hpp"
 
 
 namespace clegmed::plugins::generic {
@@ -38,5 +39,26 @@ namespace clegmed::plugins::generic {
         };
 
         return core::make_consumer(lambda_strategy);
+    }
+
+    template<typename T>
+    [[nodiscard]] auto logInfo() {
+        return core::make_consumer([](T data) {
+            utils::Logger::log(utils::LogLevel::INFO, "{}", data);
+        });
+    }
+
+    template<typename T>
+    [[nodiscard]] auto logWarn() {
+        return core::make_consumer([](T data) {
+            utils::Logger::log(utils::LogLevel::WARN, "{}", data);
+        });
+    }
+
+    template<typename T>
+    [[nodiscard]] auto logError() {
+        return core::make_consumer([](T data) {
+            utils::Logger::log(utils::LogLevel::ERROR, "{}", data);
+        });
     }
 }

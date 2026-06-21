@@ -33,3 +33,20 @@ TEST(GenericPluginsTest, DiscardConsumer) {
     // Act/Assert: Produce data
     object_under_test.inputPipe()(message);
 }
+
+
+TEST(GenericPluginsTest, LogInfoConsumer) {
+    // Arrange
+    using namespace clegmed::plugins::generic;
+    const auto message = "Hello World";
+
+    testing::internal::CaptureStdout();
+    auto object_under_test = logInfo<std::string>();
+
+    // Act/Assert: Produce data
+    object_under_test.inputPipe()(message);
+    const std::string info_output = testing::internal::GetCapturedStdout();
+
+    //Assert
+    EXPECT_TRUE(info_output.find("[INFO]") != std::string::npos);
+}
