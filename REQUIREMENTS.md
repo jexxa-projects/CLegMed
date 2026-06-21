@@ -60,6 +60,13 @@ This document serves as the single source of truth for software requirements, ac
 *   **[REQ-006-A] CLegMed**  
     The framework shall provide a concept to build and manage all FlowGraphs of an application, espeacially to start and stop them
 
+## 🧩 [REQ-007] Simple Logging support
+* **[REQ-007-A] Log Levels**
+  The framework shall provide logging for distinct severity levels: 
+  * INFO, WARN, and ERROR.Colored Output: Log messages must be 
+    outputted in color to easily distinguish message types (e.g., error logs in red).
+  * Timestamps: Every log entry must include a standard-formatted timestamp.
+
 ---
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
