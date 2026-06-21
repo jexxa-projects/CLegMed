@@ -1,5 +1,6 @@
 
 #include <semaphore>
+#include <csignal>
 
 #include "clegmed/core/CLegMed.hpp"
 #include "clegmed/core/flowgraph/FlowGraph.hpp"
