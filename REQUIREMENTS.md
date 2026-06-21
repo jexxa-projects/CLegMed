@@ -1,8 +1,6 @@
 # Software Requirements Specification (SRS) - clegmed v0.1.0
 
-This document serves as the single source of truth for software requirements, according to IEC 62304. All functional code changes must trace back to an ID in this document.
-
-# Software Requirements Specification (SRS) - clegmed v0.1.0
+This document serves as the single source of truth for software requirements. All functional code changes must trace back to an ID in this document.
 
 
 | Requirement ID  | Title                                            | Status       | Verified By        | Commit / Reference                                                  |
@@ -52,13 +50,13 @@ This document serves as the single source of truth for software requirements, ac
 *   **[REQ-005-A] FlowGraph**  
     The framework shall provide a concept to build and manage filters within a FlowGraph
 *   **Description:**
-    The FlowGraph class shall provide a fluent API to setup the final flow graph with explicit semantic from(<PRODUCER>), then(<PROCESSOR>), consumeWith(<CONSUMER>) 
+    The FlowGraph class shall provide a fluent API to set up the final flow graph with explicit semantic from(<PRODUCER>), then(<PROCESSOR>), consumeWith(<CONSUMER>) 
 *   **[REQ-005-B] Producer specific methods**  
     The flow graph class shall provide methods for different producer types, such as every(), await() and repeat()
 
 ## 🧩 [REQ-006] Managing class to manage all FlowGraphs within an application 
 *   **[REQ-006-A] CLegMed**  
-    The framework shall provide a concept to build and manage all FlowGraphs of an application, espeacially to start and stop them
+    The framework shall provide a concept to build and manage all FlowGraphs of an application, especially to start and stop them
 
 ## 🧩 [REQ-007] Simple Logging support
 * **[REQ-007-A] Log Levels**
