@@ -10,7 +10,7 @@
 TEST(GenericPluginsTest, StoreConsumer) {
     // Arrange
     using namespace clegmed::plugins::generic;
-    const std::string message = "Hello World";
+    const auto message = "Hello World";
     std::vector<std::string> data_storage;
 
     auto object_under_test = store(data_storage);
@@ -26,14 +26,10 @@ TEST(GenericPluginsTest, StoreConsumer) {
 TEST(GenericPluginsTest, DiscardConsumer) {
     // Arrange
     using namespace clegmed::plugins::generic;
-    const std::string message = "Hello World";
-    std::vector<std::string> data_storage;
+    const auto message = "Hello World";
 
     auto object_under_test = discard<std::string>();
 
-    // Act: Produce data
+    // Act/Assert: Produce data
     object_under_test.inputPipe()(message);
-
-    // Assert: Validate if passed
-    EXPECT_TRUE(data_storage.empty());
 }

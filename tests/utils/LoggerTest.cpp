@@ -10,17 +10,17 @@ TEST(LoggerTest, LogInfo) {
     using namespace clegmed::utils;
 
     //Act
-    ::testing::internal::CaptureStdout();
+    testing::internal::CaptureStdout();
     Logger::log(LogLevel::INFO, "Hello World!");
-    std::string info_output = ::testing::internal::GetCapturedStdout();
+    std::string info_output = testing::internal::GetCapturedStdout();
 
-    ::testing::internal::CaptureStdout();
+    testing::internal::CaptureStdout();
     Logger::log(LogLevel::WARN, "Hello World!");
-    std::string warn_output = ::testing::internal::GetCapturedStdout();
+    std::string warn_output = testing::internal::GetCapturedStdout();
 
-    ::testing::internal::CaptureStdout();
+    testing::internal::CaptureStdout();
     Logger::log(LogLevel::ERROR, "Hello World!");
-    std::string error_output = ::testing::internal::GetCapturedStdout();
+    std::string error_output = testing::internal::GetCapturedStdout();
 
     std::cout << info_output;
     std::cout << warn_output;

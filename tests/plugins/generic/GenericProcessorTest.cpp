@@ -10,7 +10,7 @@
 TEST(GenericPluginsTest, PassThroughProcessor) {
     // Arrange
     using namespace clegmed::plugins::generic;
-    const std::string message = "Hello World";
+    const auto message = "Hello World";
     std::vector<std::string> data_storage;
 
     auto object_under_test = passThrough<std::string>();

@@ -7,7 +7,7 @@ TEST(CoreTest, ProducerSendsData) {
     // Arrange
     using namespace clegmed::core;
 
-    const std::string expected_result = "Hello World";
+    const auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [] { return "Hello World";};
 
@@ -29,7 +29,7 @@ TEST(CoreTest, ProducerSendsDataByOutputPipe) {
     // Arrange
     using namespace clegmed::core;
 
-    const std::string expected_result = "Hello World";
+    const auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](auto& outputPipe) { outputPipe.forward( "Hello World");};
 
