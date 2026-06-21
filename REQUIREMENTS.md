@@ -64,6 +64,8 @@ This document serves as the single source of truth for software requirements. Al
   * INFO, WARN, and ERROR.Colored Output: Log messages must be 
     outputted in color to easily distinguish message types (e.g., error logs in red).
   * Timestamps: Every log entry must include a standard-formatted timestamp.
+* **[REQ-007-B] Log Filter**
+  * Provide consumer und processor filter for logging
 
 ---
 
