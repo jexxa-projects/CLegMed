@@ -80,7 +80,7 @@ ctest --output-on-failure
 
 ## 🔒 Git Workflow & Commit Guidelines
 
-To comply with **IEC 62304 Section 5.1.1**, all commit messages must follow the *Conventional Commits* standard and include a tracking ID matching the `REQUIREMENTS.md`.
+To comply with regulatory requirements, all commit messages must follow the *Conventional Commits* standard and include a tracking ID matching the `REQUIREMENTS.md`.
 
 **Format:** `<type>(<scope>): <description> [<TRACKING-ID>]`
 
