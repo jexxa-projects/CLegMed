@@ -14,7 +14,7 @@ jobs:
     steps:
       # 1. Quellcode auschecken
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # 2. Abhängigkeiten (Doxygen) installieren
       - name: Install System Dependencies
