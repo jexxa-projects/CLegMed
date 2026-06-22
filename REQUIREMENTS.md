@@ -3,13 +3,15 @@
 This document serves as the single source of truth for software requirements. All functional code changes must trace back to an ID in this document.
 
 
-| Requirement ID  | Title                                            | Status       | Verified By        | Commit / Reference                                                  |
-|:----------------|:-------------------------------------------------|:-------------|:-------------------|:--------------------------------------------------------------------|
-| **[REQ-001]**   | Core Infrastructure                              | **VERIFIED** | `hello_world_test` | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
-| **[CHORE-001]** | Governance Tools                                 | **VERIFIED** | Code Review & Git  | Visual verification of README, Git-Hook & CHANGELOG                 |
-| **[REQ-002]**   | Modular Data Streaming Pipeline                  | **VERIFIED** | ADR-0002           | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |                                                                   |
-| **[CHORE-002]** | Architecture Decision Records                    | **VERIFIED** | Code Review        | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |
-| **[REQ-003]**   | Component Specifications (Derived from ADR 0002) | **DRAFT**    |                    |                                                                     |
+| Requirement ID  | Title                                            | Status       | Verified By                                         | Commit / Reference                                                  |
+|:----------------|:-------------------------------------------------|:-------------|:----------------------------------------------------|:--------------------------------------------------------------------|
+| **[REQ-001]**   | Core Infrastructure                              | **VERIFIED** | `hello_world_test`                                  | [dfdbb25](https://github.com/jexxa-projects/CLegMed/commit/dfdbb25) |
+| **[CHORE-001]** | Governance Tools                                 | **VERIFIED** | Code Review & Git                                   | Visual verification of README, Git-Hook & CHANGELOG                 |
+| **[REQ-002]**   | Modular Data Streaming Pipeline                  | **VERIFIED** | ADR-0002                                            | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |                                                                   |
+| **[CHORE-002]** | Architecture Decision Records                    | **VERIFIED** | Code Review                                         | [5a8f850](https://github.com/jexxa-projects/CLegMed/commit/5a8f850) |
+| **[REQ-003]**   | Component Specifications (Derived from ADR 0002) | **DRAFT**    |                                                     |                                                                     |
+| **[REQ-004]**   | Set of generic filters for testing purposes      | **VERIFIED** | tests in `tests/plugins/generic/`                   |                                                                     |
+| **[REQ-005]**   | FlowGraph class to manage filters                | **VERIFIED** | tests in `GenericFlowGraphTest` and `FlowGraphTest` |                                                                     |
 
 
 ---
@@ -57,6 +59,12 @@ This document serves as the single source of truth for software requirements. Al
 ## 🧩 [REQ-006] Managing class to manage all FlowGraphs within an application 
 *   **[REQ-006-A] CLegMed**  
     The framework shall provide a concept to build and manage all FlowGraphs of an application, especially to start and stop them
+*   **[REQ-006-B] CLegMed - run()**  
+    CLegMed shall provide a convenience method that starts all registered flow graphs and blocks main-method until 
+    the application is terminated by standard signals (see [REQ-006-C])
+*   **[REQ-006-C] CLegMed - Standard Signal handling**  
+    CLegMed shall provide a meaningful approach for handling standard signals such as: 
+    SIGINT (CTRL-C), SIGTERM (Signal 15) and SIGHUP (Signal 1)
 
 ## 🧩 [REQ-007] Simple Logging support
 * **[REQ-007-A] Log Levels**
