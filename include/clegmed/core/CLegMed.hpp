@@ -3,11 +3,25 @@
 //
 
 #pragma once
+#include <csignal>
+#include <semaphore>
 #include <vector>
 
+#include "clegmed/plugins/generic/GenericConsumer.hpp"
 #include "flowgraph/ExecutableGraph.hpp"
 
 namespace clegmed::core {
+    inline std::binary_semaphore g_signal_semaphore{0};
+    inline std::atomic g_received_signal{0};
+
+    // Signal handling
+    extern "C" inline void handle_shutdown_signals(const int signal) {
+        if (signal == SIGINT || signal == SIGTERM || signal == SIGHUP) {
+            g_received_signal = signal;
+            g_signal_semaphore.release();
+        }
+    }
+
     template <typename>
     struct IsExecutableGraph : std::false_type {};
 
@@ -50,6 +64,22 @@ namespace clegmed::core {
 
             constexpr auto indices = std::make_index_sequence<sizeof...(ExecutableGraph)>{};
             execute_stop(indices);
+        }
+
+        void run() {
+            start();
+            registerSignalHandler();
+            g_signal_semaphore.acquire();
+            utils::Logger::log(utils::LogLevel::INFO, "Signal {} received -> Stop the application", strsignal(g_received_signal.load()));
+
+            stop();
+        }
+
+    private:
+        static void registerSignalHandler() {
+            std::signal(SIGINT, handle_shutdown_signals);
+            std::signal(SIGHUP, handle_shutdown_signals);
+            std::signal(SIGTERM, handle_shutdown_signals);
         }
     };
 
