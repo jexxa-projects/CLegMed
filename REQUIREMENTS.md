@@ -66,7 +66,7 @@ This document serves as the single source of truth for software requirements. Al
     CLegMed shall provide a meaningful approach for handling standard signals such as: 
     SIGINT (CTRL-C), SIGTERM (Signal 15) and SIGHUP (Signal 1)
 *   **[REQ-006-C] CLegMed - Shortcuts**  
-    CLegMed shall provide a shortucts namespace that uses the required namespaced for convenience purpose 
+    CLegMed shall provide a shortcuts namespace that uses the required namespaced for convenience purpose 
 
 ## 🧩 [REQ-007] Simple Logging support
 * **[REQ-007-A] Log Levels**
