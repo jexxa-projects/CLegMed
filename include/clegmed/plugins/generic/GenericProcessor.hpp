@@ -53,14 +53,14 @@ namespace clegmed::plugins::generic {
         return core::make_processor(std::move(lambda_strategy));
     }
 
-    template<typename T>
+    template<typename T = std::string>
     [[nodiscard]] auto traceInfo() {
         return core::make_processor([](T data) {
             utils::Logger::log(utils::LogLevel::INFO, "{}", data);
             return data;
         });
     }
-    template<typename T>
+    template<typename T = std::string>
     [[nodiscard]] auto traceWarn() {
         return core::make_processor([](T data) {
             utils::Logger::log(utils::LogLevel::WARN, "{}", data);
@@ -68,7 +68,7 @@ namespace clegmed::plugins::generic {
         });
     }
 
-    template<typename T>
+    template<typename T = std::string>
     [[nodiscard]] auto traceError() {
         return core::make_processor([](T data) {
             utils::Logger::log(utils::LogLevel::ERROR, "{}", data);

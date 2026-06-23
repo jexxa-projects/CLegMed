@@ -27,6 +27,26 @@ To ensure deterministic behavior and meet qualification standards, the project u
 *   **Unit Testing Framework:** GoogleTest v1.17.0 (Integrated as SOUP via `FetchContent`)
 
 ---
+## 🛠️ Quickstart
+### Hello World Example
+```C++     
+int main() {
+    using namespace clegmed::core;
+    using namespace clegmed::plugins::generic;
+    using std::chrono::seconds;
+
+    auto flowgraph = FlowGraph{}
+        .every(seconds(2))
+        .from(emit("Hello World"))
+        .then(passThrough<std::string>())
+        .consumeWith(logInfo<std::string>());
+
+    auto clegmed = CLegMed(std::move(flowgraph));
+    clegmed.run();
+}
+```
+
+---
 
 ## 📁 Repository Structure
 

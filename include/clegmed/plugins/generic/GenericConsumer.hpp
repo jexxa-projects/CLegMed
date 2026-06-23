@@ -41,21 +41,21 @@ namespace clegmed::plugins::generic {
         return core::make_consumer(lambda_strategy);
     }
 
-    template<typename T>
+    template<typename T = std::string>
     [[nodiscard]] auto logInfo() {
         return core::make_consumer([](T data) {
             utils::Logger::log(utils::LogLevel::INFO, "{}", data);
         });
     }
 
-    template<typename T>
+    template<typename T = std::string>
     [[nodiscard]] auto logWarn() {
         return core::make_consumer([](T data) {
             utils::Logger::log(utils::LogLevel::WARN, "{}", data);
         });
     }
 
-    template<typename T>
+    template<typename T = std::string>
     [[nodiscard]] auto logError() {
         return core::make_consumer([](T data) {
             utils::Logger::log(utils::LogLevel::ERROR, "{}", data);
