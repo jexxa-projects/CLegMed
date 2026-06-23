@@ -39,19 +39,25 @@ namespace clegmed::plugins::generic {
         return core::make_processor(lambda_strategy);
     }
 
+    struct PassThroughFactory {
+        template <typename InputData>
+        [[nodiscard]] auto build() const {
+            auto lambda_strategy = [](const InputData& input_data) -> InputData {
+                return input_data;
+            };
+            return core::make_processor(std::move(lambda_strategy));
+        }
+    };
+
     /**
      * Passthrough filter
      * @tparam InputData
      * @return
      */
-    template <typename InputData>
-    [[nodiscard]] auto passThrough() {
-        auto lambda_strategy = [](const InputData& input_data) -> InputData {
-            return input_data;
-        };
-
-        return core::make_processor(std::move(lambda_strategy));
+    [[nodiscard]] inline auto passThrough() {
+        return PassThroughFactory{};
     }
+
 
     template<typename T = std::string>
     [[nodiscard]] auto traceInfo() {

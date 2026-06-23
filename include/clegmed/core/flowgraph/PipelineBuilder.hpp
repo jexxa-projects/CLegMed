@@ -13,6 +13,18 @@ namespace clegmed::core {
     template <typename Derived>
     inline constexpr bool is_filter_v = std::is_base_of_v<Filter, Derived>;
 
+    template <typename T>
+    struct filter_traits;
+
+    template <typename Input, typename Output, typename Strategy>
+    struct filter_traits<Processor<Input, Output, Strategy>> {
+        using OutputData = Output;
+    };
+    template <typename Output, typename Strategy>
+    struct filter_traits<Producer<Output, Strategy>> {
+        using OutputData = Output;
+    };
+
 
     template<typename... Filters>
     class PipelineBuilder {
@@ -46,8 +58,20 @@ namespace clegmed::core {
         template<typename Processor>
         auto then(Processor &&processor) && {
             using DecayedProcessor = std::decay_t<Processor>;
+            using LastFilter = std::tuple_element_t<sizeof...(Filters) - 1, std::tuple<Filters...>>;
+            using PreviousOutputType = filter_traits<LastFilter>::OutputData;
 
-            if constexpr (is_filter_v<DecayedProcessor>) {
+            if constexpr (requires { { processor.template build<PreviousOutputType>() }; })
+            {
+                auto concrete_processor = std::forward<Processor>(processor).template build<PreviousOutputType>();
+                return std::move(*this).then(std::move(concrete_processor));
+            } else if constexpr (
+                requires { typename DecayedProcessor::PassThroughFactory; } ||
+                requires { { processor.template build<PreviousOutputType>() }; })
+            {
+                auto concrete_processor = std::forward<Processor>(processor).template build<PreviousOutputType>();
+                return std::move(*this).then(std::move(concrete_processor));
+            } else if constexpr (is_filter_v<DecayedProcessor>) {
                 auto new_tuple = std::tuple_cat(
                     std::move(m_pipeline),
                     std::tuple<DecayedProcessor>{std::forward<Processor>(processor)}

@@ -13,7 +13,7 @@ TEST(GenericPluginsTest, PassThroughProcessor) {
     const auto message = "Hello World";
     std::vector<std::string> data_storage;
 
-    auto object_under_test = passThrough<std::string>();
+    auto object_under_test = passThrough().build<std::string>();
 
     object_under_test.outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));

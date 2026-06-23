@@ -30,18 +30,16 @@ To ensure deterministic behavior and meet qualification standards, the project u
 ## 🛠️ Quickstart
 ### Hello World Example
 ```C++     
-int main() {
-    using namespace clegmed::core;
-    using namespace clegmed::plugins::generic;
-    using std::chrono::seconds;
+int main(const int argc, char** argv) {
+    using namespace clegmed::shortcuts;
 
     auto flowgraph = FlowGraph{}
-        .every(seconds(2))
+        .every(2s)
         .from(emit("Hello World"))
-        .then(passThrough<std::string>())
-        .consumeWith(logInfo<std::string>());
+        .then(passThrough())
+        .consumeWith(logInfo());
 
-    auto clegmed = CLegMed(std::move(flowgraph));
+    auto clegmed = CLegMed(argc, argv, std::move(flowgraph));
     clegmed.run();
 }
 ```

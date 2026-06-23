@@ -15,7 +15,7 @@ int main(const int argc, char** argv) {
     auto flowgraph = FlowGraph{}
         .every(2s)
         .from(emit("Hello World"))
-        .then(passThrough<std::string>())
+        .then(passThrough())
         .consumeWith(logInfo());
 
     auto clegmed = CLegMed(argc, argv, std::move(flowgraph));
