@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 31.05.26.
-//
-
 #pragma once
 #include <type_traits>
 #include <tuple>

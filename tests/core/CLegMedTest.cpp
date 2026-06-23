@@ -1,6 +1,3 @@
-//
-// Created by Michael Repplinger on 20.06.26.
-//
 #include "clegmed/core/CLegMed.hpp"
 #include "clegmed/core/flowgraph/FlowGraph.hpp"
 #include "gtest/gtest.h"

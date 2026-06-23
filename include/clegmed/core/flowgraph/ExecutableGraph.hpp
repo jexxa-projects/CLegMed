@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 14.06.26.
-//
-
 #pragma once
 #include <condition_variable>
 #include <utility>
@@ -51,7 +47,7 @@ namespace clegmed::core {
                 m_config = other.m_config;
                 m_thread_ptr = std::move(other.m_thread_ptr);
 
-                other.stop(); 
+                other.stop();
             }
             return *this;
         }

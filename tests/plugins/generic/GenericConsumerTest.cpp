@@ -1,6 +1,3 @@
-//
-// Created by Michael Repplinger on 10.06.26.
-//
 #include <string>
 
 #include "clegmed/plugins/generic/GenericConsumer.hpp"

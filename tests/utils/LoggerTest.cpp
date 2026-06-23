@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 21.06.26.
-//
-
 #include "clegmed/utils/Logger.hpp"
 #include "gtest/gtest.h"
 

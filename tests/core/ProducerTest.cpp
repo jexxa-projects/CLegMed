@@ -1,8 +1,6 @@
 #include "clegmed/core/Producer.hpp"
 #include "gtest/gtest.h"
-//
-// Created by Michael Repplinger on 29.05.26.
-//
+
 TEST(CoreTest, ProducerSendsData) {
     // Arrange
     using namespace clegmed::core;

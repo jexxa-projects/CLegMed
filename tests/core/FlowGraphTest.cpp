@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 31.05.26.
-//
-
 #include "clegmed/core/Consumer.hpp"
 #include "../../include/clegmed/core/flowgraph/FlowGraph.hpp"
 #include "clegmed/core/Processor.hpp"

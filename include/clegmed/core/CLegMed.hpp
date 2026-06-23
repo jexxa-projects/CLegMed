@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 20.06.26.
-//
-
 #pragma once
 #include <csignal>
 #include <semaphore>

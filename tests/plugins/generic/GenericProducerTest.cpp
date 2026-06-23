@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 07.06.26.
-//
-
 #include <string>
 
 #include "clegmed/plugins/generic/GenericProducer.hpp"

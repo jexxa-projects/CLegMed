@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 31.05.26.
-//
-
 #include "clegmed/core/Pipe.hpp"
 #include "clegmed/core/Consumer.hpp"
 #include "clegmed/core/Processor.hpp"

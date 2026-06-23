@@ -1,8 +1,6 @@
 #include "clegmed/core/Processor.hpp"
 #include "gtest/gtest.h"
-//
-// Created by Michael Repplinger on 29.05.26.
-//
+
 TEST(CoreTest, MakeProcessor) {
     // Arrange
     using namespace clegmed::core;

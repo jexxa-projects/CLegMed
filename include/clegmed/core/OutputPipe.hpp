@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 29.05.26.
-//
-
 #pragma once
 #include "Filter.hpp"
 #include <functional>

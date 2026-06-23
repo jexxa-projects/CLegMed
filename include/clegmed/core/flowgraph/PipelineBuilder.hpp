@@ -1,7 +1,3 @@
-//
-// Created by Michael Repplinger on 14.06.26.
-//
-
 #pragma once
 #include "ExecutableGraph.hpp"
 #include "FlowGraphConfig.hpp"
