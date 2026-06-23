@@ -9,7 +9,7 @@
 #include "clegmed/plugins/generic/GenericProducer.hpp"
 
 
-int main() {
+int main(const int argc, char** argv) {
     using namespace clegmed::shortcuts;
 
     auto flowgraph = FlowGraph{}
@@ -18,7 +18,7 @@ int main() {
         .then(passThrough<std::string>())
         .consumeWith(logInfo());
 
-    auto clegmed = CLegMed(std::move(flowgraph));
+    auto clegmed = CLegMed(argc, argv, std::move(flowgraph));
     clegmed.run();
 }
 
