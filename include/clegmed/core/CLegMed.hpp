@@ -10,8 +10,9 @@
 #include "clegmed/plugins/generic/GenericConsumer.hpp"
 #include "flowgraph/ExecutableGraph.hpp"
 
-inline std::binary_semaphore g_signal_semaphore{0};
-inline std::atomic g_received_signal{0};
+inline static std::binary_semaphore g_signal_semaphore{0};
+inline static std::atomic g_received_signal{0};
+
 
 // Signal handling
 extern "C" inline void handle_shutdown_signals(const int signal) {
@@ -38,7 +39,6 @@ namespace clegmed::core {
     class CLegMed final {
         std::tuple<ExecutableGraph ...> m_executable_graphs;
         std::vector<std::string> m_argv;
-
     public:
         template<typename ... Args>
         requires
