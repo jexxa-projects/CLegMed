@@ -21,6 +21,7 @@ add_executable(clegmed_benchmarks
         FlowGraphBenchmark.cpp
         ../utils/Await.hpp
         ../../include/clegmed/utils/Logger.hpp
+        ../../include/clegmed/utils/Signal.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE
         clegmed::core
