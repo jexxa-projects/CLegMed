@@ -9,6 +9,13 @@
 
 #include "clegmed/plugins/generic/GenericConsumer.hpp"
 #include "flowgraph/ExecutableGraph.hpp"
+inline const char* safe_signal_string(int sig) {
+#if defined(__linux__)
+    return sigdescr_np(sig);
+#else
+    return strsignal(sig);
+#endif
+}
 
 inline static std::binary_semaphore g_signal_semaphore{0};
 inline static std::atomic g_received_signal{0};
@@ -101,7 +108,7 @@ namespace clegmed::core {
 
             utils::Logger::log(
                 utils::LogLevel::INFO,
-                "Signal {} received -> Stop the application ", strsignal(g_received_signal.load()));
+                "Signal {} received -> Stop the application ", safe_signal_string(g_received_signal.load()));
 
             stop();
 
