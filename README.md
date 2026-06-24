@@ -30,7 +30,7 @@ To ensure deterministic behavior and meet qualification standards, the project u
 ## 🛠️ Quickstart
 ### Hello World Example
 ```C++     
-int main(const int argc, char** argv) {
+int main(int argc, char** argv) {
     using namespace clegmed::shortcuts;
 
     auto flowgraph = FlowGraph{}
@@ -56,9 +56,11 @@ clegmed/
 ├── REQUIREMENTS.md       # Software Requirements Specification (SRS)
 ├── include/              # Public API Headers
 │   └── clegmed/
+│       └── utils/        # Utility functions for core- and plugins
 │       └── core/         # Core subsystem definitions
 │       └── plugins/      # Plugins definitions
 ├── src/                  # Internal Implementation (Source)
+│   └── utils/            # Utility implementation
 │   └── core/             # Core subsystem logic
 │   └── plugins/          # Plugins implementation
 └── tests/                # Verification Suite (Mirrored)
@@ -108,3 +110,22 @@ To comply with regulatory requirements, all commit messages must follow the *Con
     `chore(cmake): bump build version to 0.1.0 [CHORE-000]`
 
 If your message does not contain a valid `[REQ-XXXX]`, `[BUG-XXXX]`, or `[CHORE-XXXX]` token, the local Git-Hook will reject the commit.
+
+---
+
+## Release
+* Configure release mode
+  ```shell
+   cmake -B build -DCMAKE_BUILD_TYPE=Release
+  ```
+
+* Compile
+  ```shell
+   make --build build --config Release
+  ```
+
+* Create archive
+  ```shell
+    cd build
+    cpack -C Release
+  ```
