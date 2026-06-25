@@ -96,3 +96,6 @@ This document serves as the single source of truth for software requirements. Al
 *   **[CHORE-003-A] CMake Build System**  
     The project shall use CMake as its build system so that each target can be built independently. Especially, the build system should support 
     the separation of core and plugins to facilitate modular development and testing.
+*   **[CHORE-003-B] Standard compliant (OS-Source)**
+    The project shall provide a dedicated cmake-directory for header only components. The core package shall provide utils, 
+    core and generic plugins.
