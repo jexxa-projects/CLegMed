@@ -11,22 +11,39 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ==============================================================================
-# 3. Add subdirectories
+# 3. ADD Modules
 # ==============================================================================
+include(cmake/utils.cmake)
+include(cmake/core.cmake)
+include(cmake/plugins.generic.cmake)
 
-add_subdirectory(src/utils)
-add_subdirectory(src/core)
-add_subdirectory(src/plugins)
-
-enable_testing()
-
-add_subdirectory(tests)
 # ==============================================================================
-# 8. Add doxygen
+# 4. DAS ZUSAMMENFASSENDE CORE-TARGET (Neu für den Header-Only-Verbund)
 # ==============================================================================
-find_package(Doxygen REQUIRED)
+add_library(clegmed_core INTERFACE)
+add_library(clegmed::core ALIAS clegmed_core)
 
-if(DOXYGEN_FOUND)
+target_link_libraries(clegmed_core INTERFACE
+        clegmed_utils
+        clegmed_core_base
+        clegmed_plugins_generic
+)
+
+# ==============================================================================
+# 5. TEST SUITE
+# ==============================================================================
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
+# ==============================================================================
+# 6. DOXYGEN DOCUMENTATION (Optimiert: REQUIRED entfernt)
+# ==============================================================================
+# Im OS-Bereich immer OPTIONAL suchen, da Endnutzer oft kein Doxygen installiert haben.
+find_package(Doxygen)
+
+if(DOXYGEN_FOUND AND CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(DOXYGEN_PROJECT_NAME "${PROJECT_NAME}")
     set(DOXYGEN_PROJECT_NUMBER "${PROJECT_VERSION}")
 
@@ -44,27 +61,32 @@ if(DOXYGEN_FOUND)
 endif()
 
 # ==============================================================================
-# 9. Build Release
+# 7. BUILD RELEASE & INSTALLATION
 # ==============================================================================
-set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
-set(INSTALL_GMOCK OFF CACHE BOOL "" FORCE)
-set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+include(GNUInstallDirs)
 
-install(TARGETS clegmed_core clegmed_plugins clegmed_utils
-        ARCHIVE DESTINATION lib     # Wo die statische Bibliothek (.a / .lib) landet
-        LIBRARY DESTINATION lib     # Wo die geteilte Bibliothek (.so / .dylib) landet
-        RUNTIME DESTINATION bin     # Wo ausführbare Dateien (.exe) landen
+install(TARGETS
+        clegmed_core
+        clegmed_core_base
+        clegmed_utils
+        clegmed_plugins_generic
+        EXPORT clegmedTargets
 )
 
-install(DIRECTORY include/clegmed/
-        DESTINATION include/clegmed
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(EXPORT clegmedTargets
+        FILE clegmedTargets.cmake
+        NAMESPACE clegmed::
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/clegmed
 )
 
-
+# ==============================================================================
+# 8. CPACK (Für optionale lokale Paketgenerierung)
+# ==============================================================================
 set(CPACK_PACKAGE_NAME "clegmed")
 set(CPACK_PACKAGE_VENDOR "Michael Repplinger")
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_GENERATOR "TGZ") # TGZ erzeugt das .tar.gz-Archiv
+set(CPACK_GENERATOR "TGZ")
 
 include(CPack)

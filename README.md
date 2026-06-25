@@ -51,20 +51,18 @@ int main(int argc, char** argv) {
 The project follows a mirrored directory layout for optimal separation of public interfaces, inner logic, and validation suites:
 
 ```text
-clegmed/
-├── CMakeLists.txt        # Central target-based build configuration
-├── REQUIREMENTS.md       # Software Requirements Specification (SRS)
-├── include/              # Public API Headers
-│   └── clegmed/
-│       └── utils/        # Utility functions for core- and plugins
-│       └── core/         # Core subsystem definitions
-│       └── plugins/      # Plugins definitions
-├── src/                  # Internal Implementation (Source)
-│   └── utils/            # Utility implementation
-│   └── core/             # Core subsystem logic
-│   └── plugins/          # Plugins implementation
-└── tests/                # Verification Suite (Mirrored)
-    └── core/             # GoogleTest cases for the core subsystem
+    clegmed/
+    ├── CMakeLists.txt        # Central target-based build configuration
+    ├── REQUIREMENTS.md       # Software Requirements Specification (SRS)
+    ├── include/              # Public API Headers
+    │   └── clegmed/
+    │       └── utils/        # Utility functions for core- and plugins
+    │       └── core/         # Core subsystem definitions
+    │       └── plugins/      # Plugins definitions
+(   ├── src/ )                # Internal Implementation (Source) for future plugins that require external dependencies or cpp files 
+(   │   └── plugins/ )        # Plugins implementation
+    └── tests/                # Verification Suite (Mirrored)
+        └── core/             # GoogleTest cases for the core subsystem
 ```
 
 ---
