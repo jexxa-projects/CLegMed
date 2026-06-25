@@ -7,7 +7,7 @@ target_sources(clegmed_plugins INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericProducer.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericProcessor.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/generic/GenericConsumer.hpp
-
+        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/clegmed/plugins/shortcuts.hpp
 )
 
 target_include_directories(clegmed_plugins INTERFACE

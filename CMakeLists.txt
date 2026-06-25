@@ -42,3 +42,29 @@ if(DOXYGEN_FOUND)
             COMMENT "Generating architecture documentation for v${PROJECT_VERSION}"
     )
 endif()
+
+# ==============================================================================
+# 9. Build Release
+# ==============================================================================
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+set(INSTALL_GMOCK OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+
+install(TARGETS clegmed_core clegmed_plugins clegmed_utils
+        ARCHIVE DESTINATION lib     # Wo die statische Bibliothek (.a / .lib) landet
+        LIBRARY DESTINATION lib     # Wo die geteilte Bibliothek (.so / .dylib) landet
+        RUNTIME DESTINATION bin     # Wo ausführbare Dateien (.exe) landen
+)
+
+install(DIRECTORY include/clegmed/
+        DESTINATION include/clegmed
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+
+
+set(CPACK_PACKAGE_NAME "clegmed")
+set(CPACK_PACKAGE_VENDOR "Michael Repplinger")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_GENERATOR "TGZ") # TGZ erzeugt das .tar.gz-Archiv
+
+include(CPack)

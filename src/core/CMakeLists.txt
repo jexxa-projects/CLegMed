@@ -1,5 +1,4 @@
-add_library(clegmed_core INTERFACE
-        ../../include/clegmed/plugins/shortcuts.hpp)
+add_library(clegmed_core INTERFACE)
 add_library(clegmed::core ALIAS clegmed_core)
 
 get_filename_component(CLEGMED_PUBLIC_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../include" ABSOLUTE)
