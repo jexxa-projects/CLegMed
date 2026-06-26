@@ -71,6 +71,7 @@ install(TARGETS
         clegmed_utils
         clegmed_plugins_generic
         EXPORT clegmedTargets
+        FILE_SET HEADERS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
