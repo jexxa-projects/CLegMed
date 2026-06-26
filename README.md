@@ -1,4 +1,4 @@
-# clegmed (v0.1.0)
+# clegmed (v0.1.1)
 
 A modern, highly optimized C++23 shared library designed for pipes and 
 filters. This project aligns with established regulatory software 
