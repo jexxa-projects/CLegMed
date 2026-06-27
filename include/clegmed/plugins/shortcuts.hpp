@@ -21,12 +21,14 @@ namespace clegmed::shortcuts {
     using plugins::generic::traceInfo;
     using plugins::generic::traceWarn;
     using plugins::generic::traceError;
+    using plugins::generic::append;
 
-    // Plugins processor
+    // Plugins consumer
     using plugins::generic::logInfo;
     using plugins::generic::logWarn;
     using plugins::generic::logError;
     using plugins::generic::discard;
+    using plugins::generic::store;
 
 
 }
