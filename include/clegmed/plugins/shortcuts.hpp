@@ -1,11 +1,8 @@
 #pragma once
 #include "../core/CLegMed.hpp"
+#include "../core/flowgraph/FlowGraph.hpp"
 #include "generic/GenericProcessor.hpp"
 #include "generic/GenericProducer.hpp"
-
-namespace clegmed::core {
-    class FlowGraph;
-}
 
 namespace clegmed::shortcuts {
     // Core classes

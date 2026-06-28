@@ -2,10 +2,11 @@
 
 #include "clegmed/plugins/generic/GenericProducer.hpp"
 #include "gtest/gtest.h"
+#include "clegmed/plugins/shortcuts.hpp"
 
 TEST(GenericPluginsTest, EmitProducer) {
     // Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
     const auto message = "Hello World";
     std::vector<std::string> data_storage;
 

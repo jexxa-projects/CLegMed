@@ -7,10 +7,11 @@
 #include "clegmed/plugins/generic/GenericProducer.hpp"
 #include "gtest/gtest.h"
 #include "../../utils/Await.hpp"
+#include "clegmed/plugins/shortcuts.hpp"
 
 TEST(FlowGraphTest, GenericFlowGraphTest) {
     //Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
 
     const auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
@@ -32,7 +33,7 @@ TEST(FlowGraphTest, GenericFlowGraphTest) {
 
 TEST(FlowGraphTest, PipeFlowGraphTest) {
     //Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
 
     const auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
@@ -55,8 +56,8 @@ TEST(FlowGraphTest, PipeFlowGraphTest) {
 
 TEST(FlowGraphTest, RealFlowGraphTest) {
     //Arrange
-    using namespace clegmed::plugins::generic;
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
+
     const auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
     //Act

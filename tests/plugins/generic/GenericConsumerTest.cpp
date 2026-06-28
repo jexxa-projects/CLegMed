@@ -1,12 +1,13 @@
 #include <string>
 
+#include "clegmed/plugins/shortcuts.hpp"
 #include "clegmed/plugins/generic/GenericConsumer.hpp"
 #include "gtest/gtest.h"
 
 
 TEST(GenericPluginsTest, StoreConsumer) {
     // Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
     const auto message = "Hello World";
     std::vector<std::string> data_storage;
 
@@ -22,7 +23,7 @@ TEST(GenericPluginsTest, StoreConsumer) {
 
 TEST(GenericPluginsTest, DiscardConsumer) {
     // Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
     const auto message = "Hello World";
 
     auto object_under_test = discard<std::string>();
@@ -34,7 +35,7 @@ TEST(GenericPluginsTest, DiscardConsumer) {
 
 TEST(GenericPluginsTest, LogInfoConsumer) {
     // Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
     const auto message = "Hello World";
 
     testing::internal::CaptureStdout();

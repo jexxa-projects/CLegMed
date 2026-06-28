@@ -1,11 +1,12 @@
 #include <string>
 
 #include "clegmed/plugins/generic/GenericProcessor.hpp"
+#include "clegmed/plugins/shortcuts.hpp"
 #include "gtest/gtest.h"
 
 TEST(GenericPluginsTest, PassThroughProcessor) {
     // Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
     const auto message = "Hello World";
     std::vector<std::string> data_storage;
 
@@ -26,7 +27,7 @@ TEST(GenericPluginsTest, PassThroughProcessor) {
 
 TEST(GenericPluginsTest, TraceInfoPorcessor) {
     // Arrange
-    using namespace clegmed::plugins::generic;
+    using namespace clegmed::shortcuts;
 
     std::vector<std::string> data_storage;
     const auto message = "Hello World";
