@@ -7,7 +7,7 @@ bool await_condition(const std::chrono::milliseconds timeout, auto condition) {
 
     while (true) {
         if (condition()) {
-            return true; // Bedingung erfüllt!
+            return true;
         }
 
         if (std::chrono::steady_clock::now() - start_zeit >= timeout) {
