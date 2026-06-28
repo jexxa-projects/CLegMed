@@ -1,4 +1,4 @@
-# Software Requirements Specification (SRS) - clegmed v0.1.0
+# Software Requirements Specification (SRS) - clegmed v0.1.2
 
 This document serves as the single source of truth for software requirements. All functional code changes must trace back to an ID in this document.
 
