@@ -61,7 +61,7 @@ namespace clegmed::core {
         }
 
     private:
-        Strategy m_strategy;
+        [[no_unique_address]] Strategy m_strategy;
         OutputPipe<OutputData> m_output_pipe = OutputPipe<OutputData>(*this);
     };
 

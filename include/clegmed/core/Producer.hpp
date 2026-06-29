@@ -44,7 +44,7 @@ namespace clegmed::core {
         }
 
     private:
-        ProducerStrategy m_strategy;
+        [[no_unique_address]] ProducerStrategy m_strategy;
         OutputPipe<OutputData> m_outputPipe = OutputPipe<OutputData>(*this);
     };
 

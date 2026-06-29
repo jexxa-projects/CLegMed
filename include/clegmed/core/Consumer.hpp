@@ -33,7 +33,7 @@ namespace clegmed::core {
             }
         }
     private:
-        ConsumerStrategy m_strategy;
+        [[no_unique_address]] ConsumerStrategy m_strategy;
     };
 
     template<typename ConsumerStrategy>
