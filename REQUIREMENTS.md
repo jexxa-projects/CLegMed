@@ -102,3 +102,7 @@ This document serves as the single source of truth for software requirements. Al
 *   **[CHORE-003-B] Standard compliant (OS-Source)**
     The project shall provide a dedicated cmake-directory for header only components. The core package shall provide utils, 
     core and generic plugins.
+
+## 🔒 [CHORE-004] Static Source Code Analysis  
+*   **[CHORE-004-A] SonarCloud**  
+    The project shall use SonarCloud for static source code analysis 
