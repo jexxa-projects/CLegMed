@@ -110,7 +110,7 @@ namespace clegmed::core {
         }
 
         void startRepeat(const std::stop_token& stoken) {
-            for (int i = 0; i < m_config.repeat_count; ++i) {
+            for (size_t i = 0; i < m_config.repeat_count; ++i) {
                 std::get<0>(m_pipeline).produce();
                 if (stoken.stop_requested()) {
                     break;
