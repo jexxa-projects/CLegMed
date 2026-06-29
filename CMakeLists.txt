@@ -32,6 +32,19 @@ target_link_libraries(clegmed_core INTERFACE
 # ==============================================================================
 # 5. TEST SUITE
 # ==============================================================================
+
+if(MSVC)
+    add_compile_options(/W4) # /WX weggelassen
+else()
+    add_compile_options(
+            -Wall
+            -Wextra
+            -Wpedantic
+            -Wshadow
+            -Wconversion
+    )
+endif()
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     enable_testing()
     add_subdirectory(tests)
