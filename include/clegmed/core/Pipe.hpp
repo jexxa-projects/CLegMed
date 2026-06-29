@@ -8,8 +8,8 @@ namespace clegmed::core {
         l.outputPipe();
         r.inputPipe();
     }
-    decltype(auto) operator|(TLeft&& left, TRight&& right) {
-        left.outputPipe().connect(right.inputPipe()); //NOSONAR - left is not used for forwarding
+    decltype(auto) operator|(TLeft&& left, TRight&& right) { //NOSONAR - left is not used for forwarding
+        left.outputPipe().connect(right.inputPipe());
         return std::forward<TRight>(right);
     }
 }
