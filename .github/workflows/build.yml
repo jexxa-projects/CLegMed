@@ -20,11 +20,11 @@ jobs:
         with:
           cmake-version: '4.x'
 
-      # 1. Benötigte Tools installieren (Compiler, CMake und Gcovr für die Testabdeckung)
+      # 1. System-Tools und GCC 14 + Gcov 14 installieren
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential gcovr
+          sudo apt-get install -y build-essential gcc-14 g++-14 gcovr
 
       # 2. SonarCloud Build Wrapper installieren
       - name: Install Build Wrapper
@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: echo "build-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-      # 3. CMake konfigurieren (mit Code Coverage Flags)
+      # 3. CMake konfigurieren (mit -O0 -g Flags zur Behebung von Release-Optimierungsproblemen)
       - name: Configure CMake
         run: >
           cmake -B ${{ steps.strings.outputs.build-dir }}
@@ -44,23 +44,28 @@ jobs:
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_CXX_STANDARD=23
           -DCMAKE_CXX_STANDARD_REQUIRED=ON
-          -DCMAKE_CXX_FLAGS="--coverage"
+          -DCMAKE_CXX_FLAGS="--coverage -O0 -g"
           -S ${{ github.workspace }}
 
-      # 6. Projekt kompilieren
+      # 4. Projekt kompilieren (WICHTIG: Wieder in den Build Wrapper eingepackt!)
       - name: Build Project
-        run: cmake --build ${{ steps.strings.outputs.build-dir }} --config Release
+        run: |
+          build-wrapper-linux-x86-64 --out-dir bw-output cmake --build ${{ steps.strings.outputs.build-dir }} --config Release
 
-      # 7. Tests ausführen
+      # 5. Tests ausführen
       - name: Run Tests
         working-directory: ${{ steps.strings.outputs.build-dir }}
         run: ctest --build-config Release
 
-
-      # 6. Coverage-Rohdaten in das SonarQube-XML-Format konvertieren
+      # 6. Coverage-Bericht generieren (Mit gcov-14 Fix und Ausschluss von Drittanbieter-Code)
       - name: Generate Coverage Report
         run: |
-          gcovr --sonarqube build/coverage.xml -r . --object-directory build
+          gcovr --sonarqube build/coverage.xml \
+            -r . \
+            --object-directory ${{ steps.strings.outputs.build-dir }} \
+            --gcov-executable gcov-14 \
+            --exclude '.*/_deps/.*' \
+            --exclude '.*/tests/.*'
 
       # 7. SonarCloud Scan ausführen und die generierten Berichte übergeben
       - name: SonarQube Scan
