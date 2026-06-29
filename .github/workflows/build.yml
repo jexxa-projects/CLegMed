@@ -15,11 +15,16 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones disabled for better analysis relevancy
 
+      - name: Setup CMake 4
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.x'
+
       # 1. Benötigte Tools installieren (Compiler, CMake und Gcovr für die Testabdeckung)
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake gcovr
+          sudo apt-get install -y build-essential gcovr
 
       # 2. SonarCloud Build Wrapper installieren
       - name: Install Build Wrapper
