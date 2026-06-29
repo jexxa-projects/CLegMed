@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0  # Shallow clones disabled for better analysis relevancy
 
       - name: Setup CMake 4
-        uses: jwlawson/actions-setup-cmake@v2
+        uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3
         with:
           cmake-version: '4.x'
 
@@ -28,7 +28,7 @@ jobs:
 
       # 2. SonarCloud Build Wrapper installieren
       - name: Install Build Wrapper
-        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@713881670b6b3676cda39549040e2d88c70d582e
 
       - name: Set Build Directory
         id: strings
@@ -72,7 +72,7 @@ jobs:
 
       # 7. SonarCloud Scan ausführen und die generierten Berichte übergeben
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:

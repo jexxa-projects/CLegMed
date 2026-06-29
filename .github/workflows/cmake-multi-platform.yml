@@ -24,7 +24,7 @@ jobs:
 
       # 3. Garantiert CMake 4 installieren
       - name: Setup CMake 4
-        uses: jwlawson/actions-setup-cmake@v2
+        uses: jwlawson/actions-setup-cmake@0d6a7d60b009d01c9e7523be22153ff8f19460d3
         with:
           cmake-version: '4.x'
 
