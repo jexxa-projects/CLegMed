@@ -35,8 +35,10 @@ TEST(CLegMedTest, StartStopMultitpleFlowGraphs) {
 }
 
 
+class CLegMedSignalTest : public ::testing::TestWithParam<int> {
 
-TEST(CLegMedTest, RunFlowGraphs) {
+};
+TEST_P(CLegMedSignalTest, RunFlowGraphs) {
     //Arrange
     using namespace clegmed::core;
     std::vector<std::string> data_storage_1;
@@ -66,17 +68,23 @@ TEST(CLegMedTest, RunFlowGraphs) {
     }));
     EXPECT_GE(data_storage_1.size(), 10);
 
+    int current_signal = GetParam();
+
     {
         SCOPED_TRACE("Send Shutdown-Signal to CLegMed");
         EXPECT_TRUE(m_thread_ptr->joinable());
 
-        std::raise(SIGINT);
+        std::raise(current_signal);
     }
     if (m_thread_ptr->joinable()) {
         m_thread_ptr->join();
     }
 }
-
+INSTANTIATE_TEST_SUITE_P(
+    SignalTests,
+    CLegMedSignalTest,
+    ::testing::Values(SIGINT, SIGTERM, SIGHUP)
+);
 TEST(CLegMedTest, UseArgv) {
     //Arrange
     using namespace clegmed::core;
