@@ -30,22 +30,32 @@ jobs:
       - name: Install Build Wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v4
 
+      - name: Set Build Directory
+        id: strings
+        shell: bash
+        run: echo "build-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
       # 3. CMake konfigurieren (mit Code Coverage Flags)
       - name: Configure CMake
-        run: |
-          mkdir build
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+        run: >
+          cmake -B ${{ steps.strings.outputs.build-dir }}
+          -DCMAKE_CXX_COMPILER=g++-14
+          -DCMAKE_C_COMPILER=gcc-14
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_CXX_STANDARD=23
+          -DCMAKE_CXX_STANDARD_REQUIRED=ON
+          -DCMAKE_CXX_FLAGS="--coverage
+          -S ${{ github.workspace }}
 
-      # 4. Framework bauen (Überwacht durch den Build Wrapper)
-      - name: Build with Build Wrapper
-        run: |
-          build-wrapper-linux-x86-64 --out-dir bw-output cmake --build build
+      # 6. Projekt kompilieren
+      - name: Build Project
+        run: cmake --build ${{ steps.strings.outputs.build-dir }} --config Release
 
-      # 5. Unit Tests ausführen, um Coverage-Rohdaten zu generieren
+      # 7. Tests ausführen
       - name: Run Tests
-        run: |
-          cd build
-          ctest --output-on-failure
+        working-directory: ${{ steps.strings.outputs.build-dir }}
+        run: ctest --build-config Release
+
 
       # 6. Coverage-Rohdaten in das SonarQube-XML-Format konvertieren
       - name: Generate Coverage Report
