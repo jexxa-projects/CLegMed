@@ -15,13 +15,12 @@ namespace clegmed::core {
 
         template <typename InputPipeType>
         void connect(InputPipeType&& input_pipe) {
-            // Speichert die Verbindung dauerhaft im Member
             m_input_pipe = std::forward<InputPipeType>(input_pipe);
         }
 
 
         void forward(T&& data) noexcept {
-            if (m_input_pipe) { // Prüft zur Laufzeit, ob verbunden
+            if (m_input_pipe) {
                 m_input_pipe(std::move(data));
             } else {
                 std::cerr << "OutputPipe is not connected -> Discard data  " << data << std::endl;

@@ -69,10 +69,10 @@ TEST(FlowGraphTest, EveryFlowGraphTest) {
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
-    .every(std::chrono::milliseconds(10))
-    .from([] { return "Hello";})
-    .then([](const std::string &input){ return input + " World";})
-    .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
+        .every(std::chrono::milliseconds(10))
+        .from([] { return "Hello";})
+        .then([](const std::string &input){ return input + " World";})
+        .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
 
     //Act
@@ -94,10 +94,10 @@ TEST(FlowGraphTest, FailedEveryFlowGraphTest) {
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
-    .every(std::chrono::seconds(10))
-    .from([] { return "Hello";})
-    .then([](const std::string &input){ return input + " World";})
-    .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
+        .every(std::chrono::seconds(10))
+        .from([] { return "Hello";})
+        .then([](const std::string &input){ return input + " World";})
+        .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
 
     //Act
