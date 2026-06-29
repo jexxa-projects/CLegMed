@@ -5,15 +5,54 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   build:
     name: Analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Shallow clones disabled for better analysis relevancy
+
+      # 1. Benötigte Tools installieren (Compiler, CMake und Gcovr für die Testabdeckung)
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake gcovr
+
+      # 2. SonarCloud Build Wrapper installieren
+      - name: Install Build Wrapper
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v4
+
+      # 3. CMake konfigurieren (mit Code Coverage Flags)
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+
+      # 4. Framework bauen (Überwacht durch den Build Wrapper)
+      - name: Build with Build Wrapper
+        run: |
+          build-wrapper-linux-x86-64 --out-dir bw-output cmake --build build
+
+      # 5. Unit Tests ausführen, um Coverage-Rohdaten zu generieren
+      - name: Run Tests
+        run: |
+          cd build
+          ctest --output-on-failure
+
+      # 6. Coverage-Rohdaten in das SonarQube-XML-Format konvertieren
+      - name: Generate Coverage Report
+        run: |
+          gcovr --sonarqube build/coverage.xml -r . --object-directory build
+
+      # 7. SonarCloud Scan ausführen und die generierten Berichte übergeben
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995 # v8.1.0
+        uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.cfamily.compile-commands=bw-output/compile_commands.json
+            -Dsonar.coverageReportPaths=build/coverage.xml
