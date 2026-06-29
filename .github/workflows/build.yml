@@ -64,8 +64,11 @@ jobs:
             -r . \
             --object-directory ${{ steps.strings.outputs.build-dir }} \
             --gcov-executable gcov-14 \
+            --gcov-ignore-errors=no_working_dir_found \
             --exclude '.*/_deps/.*' \
+            --exclude '.*/CMakeFiles/.*' \
             --exclude '.*/tests/.*'
+
 
       # 7. SonarCloud Scan ausführen und die generierten Berichte übergeben
       - name: SonarQube Scan
