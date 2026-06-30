@@ -57,7 +57,7 @@ jobs:
         working-directory: ${{ steps.strings.outputs.build-dir }}
         run: ctest --build-config Release
 
-      # 6. Coverage-Bericht generieren (Mit gcov-14 Fix und Ausschluss von Drittanbieter-Code)
+      # 6. Coverage-Bericht generieren (Mit gcov-14 Fix, Ausschluss von Drittanbieter-Code und default-Methoden-Filter)
       - name: Generate Coverage Report
         run: |
           gcovr --exclude-throw-branches --exclude-unreachable-branches --sonarqube build/coverage.xml \
@@ -65,6 +65,7 @@ jobs:
             --object-directory ${{ steps.strings.outputs.build-dir }} \
             --gcov-executable gcov-14 \
             --gcov-ignore-errors=no_working_dir_found \
+            --exclude-lines-by-pattern '.*=\s*default\s*;' \
             --exclude '.*/_deps/.*' \
             --exclude '.*/CMakeFiles/.*' \
             --exclude '.*/tests/.*'
