@@ -17,4 +17,5 @@ target_sources(clegmed_core_base INTERFACE
         include/clegmed/core/flowgraph/FlowGraph.hpp
         include/clegmed/core/flowgraph/FlowGraphConfig.hpp
         include/clegmed/core/flowgraph/ExecutableGraph.hpp
+        include/clegmed/core/detail/SignalHandler.hpp
 )

@@ -6,19 +6,9 @@
 #include "clegmed/plugins/generic/GenericConsumer.hpp"
 #include "flowgraph/ExecutableGraph.hpp"
 #include "../utils/Signal.hpp"
+#include "detail/SignalHandler.hpp"
 
 
-inline static std::binary_semaphore g_signal_semaphore{0};
-inline static std::atomic g_received_signal{0};
-
-
-// Signal handling
-extern "C" inline void handle_shutdown_signals(const int signal) {
-    if (signal == SIGINT || signal == SIGTERM || signal == SIGHUP) {
-        g_received_signal = signal;
-        g_signal_semaphore.release();
-    }
-}
 namespace clegmed::core {
 
     template <typename>
@@ -95,11 +85,11 @@ namespace clegmed::core {
                 "Application {} successfully started", programName()
                 );
 
-            g_signal_semaphore.acquire();
+            detail::wait_for_signal();
 
             utils::Logger::log(
                 utils::LogLevel::INFO,
-                "Signal {} received -> Stop the application ", utils::safe_signal_string(g_received_signal.load()));
+                "Signal {} received -> Stop the application ", utils::safe_signal_string(detail::get_received_signal()));
 
             stop();
 
