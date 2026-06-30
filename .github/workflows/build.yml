@@ -60,7 +60,7 @@ jobs:
       # 6. Coverage-Bericht generieren (Mit gcov-14 Fix und Ausschluss von Drittanbieter-Code)
       - name: Generate Coverage Report
         run: |
-          gcovr --exclude-throw-branches --sonarqube build/coverage.xml \
+          gcovr --exclude-throw-branches --exclude-unreachable-branches --sonarqube build/coverage.xml \
             -r . \
             --object-directory ${{ steps.strings.outputs.build-dir }} \
             --gcov-executable gcov-14 \
