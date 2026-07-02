@@ -1,3 +1,6 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![GitHub Release](https://img.shields.io/github/v/release/jexxa-projects/CLegMed)
+
 [![CMake 4 Linux CI (C++23)](https://github.com/jexxa-projects/CLegMed/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/jexxa-projects/CLegMed/actions/workflows/cmake-multi-platform.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jexxa-projects_CLegMed&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jexxa-projects_CLegMed)
 # clegmed (v0.1.2)
