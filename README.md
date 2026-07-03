@@ -14,7 +14,7 @@ specifically tailored for resource-constrained IoT, embedded systems, and real-t
 
 ---
 
-## 🩺 Regulatory Compliance & Quality Standards
+## ⚖️ Regulatory Compliance & Quality Standards
 
 *   **Software Risk Classification:** Medium-Risk Profile (Standard Target)
 *   **Design Paradigm:** Defensive Programming, Object Ownership Semantics, Zero-Allocation Core.
@@ -52,6 +52,9 @@ int main(int argc, char** argv) {
 }
 
 ```
+
+## 📚 Ecosystem & Docs
+*   [clegmed-template](https://github.com/jexxa-projects/clegmed_template) — C++ copier-template for quick start
 
 ---
 
