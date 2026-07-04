@@ -9,8 +9,8 @@ int main(int argc, char** argv) {
     auto clegmed = CLegMed(argc, argv,
         FlowGraph{}
             .every(2s)
-            .from(emit("Hello World"))
-            .then(passThrough())
+            .from(emit("Hello "))
+            .then(append("World"))
             .consumeWith(logInfo())
     );
 

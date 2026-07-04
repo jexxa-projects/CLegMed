@@ -37,20 +37,20 @@ To ensure deterministic behavior and meet qualification standards, the project u
 ```C++     
 #include "clegmed/plugins/shortcuts.hpp"
 
+
 int main(int argc, char** argv) {
     using namespace clegmed::shortcuts;
 
     auto clegmed = CLegMed(argc, argv,
         FlowGraph{}
             .every(2s)
-            .from(emit("Hello World"))
-            .then(passThrough())
+            .from(emit("Hello "))
+            .then(append("World"))
             .consumeWith(logInfo())
     );
 
     clegmed.run();
 }
-
 ```
 
 ## 📚 Ecosystem & Docs
