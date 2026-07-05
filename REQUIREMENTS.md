@@ -80,7 +80,19 @@ This document serves as the single source of truth for software requirements. Al
 * **[REQ-007-B] Log Filter**
   * Provide consumer und processor filter for logging
 
----
+## 🧩 [REQ-008] Repository & Persistence Specifications
+* **[REQ-008-A] Header-Only Implementation** 
+  The repository and pool logic shall be implemented as a header-only library to ensure 
+  zero-precompilation and easy integration.
+* **[REQ-008-B] Static Polymorphism** 
+  The framework shall avoid runtime inheritance; repository interfaces shall be enforced via C++23 Concepts or 
+  template constraints.
+* **[REQ-008-C] Centralized Repository Pool**
+  A RepositoryPool shall act as a service locator, managing the lifecycle and providing type-safe access to 
+  registered repositories.
+* **[REQ-008-D] Decoupled Dependency Lookup**
+  Filters shall not instantiate repositories but request them from the RepositoryPool using compile-time types 
+  or unique identifiers.
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
 
