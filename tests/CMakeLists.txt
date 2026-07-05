@@ -24,6 +24,8 @@ FetchContent_Declare(
 set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(google_benchmark)
 
+add_subdirectory(utils)
 add_subdirectory(core)
 add_subdirectory(plugins/generic)
-add_subdirectory(utils)
+add_subdirectory(plugins/persistence)
+

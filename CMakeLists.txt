@@ -16,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(cmake/utils.cmake)
 include(cmake/core.cmake)
 include(cmake/plugins.generic.cmake)
+include(cmake/plugins.persistence.cmake)
 
 # ==============================================================================
 # 4. DAS ZUSAMMENFASSENDE CORE-TARGET (Neu für den Header-Only-Verbund)
@@ -27,6 +28,7 @@ target_link_libraries(clegmed_core INTERFACE
         clegmed_utils
         clegmed_core_base
         clegmed_plugins_generic
+        clegmed_plugins_persistence
 )
 
 # ==============================================================================
@@ -83,6 +85,8 @@ install(TARGETS
         clegmed_core_base
         clegmed_utils
         clegmed_plugins_generic
+        clegmed_plugins_persistence
+
         EXPORT clegmedTargets
         FILE_SET HEADERS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
