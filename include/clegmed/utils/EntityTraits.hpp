@@ -8,7 +8,7 @@ namespace clegmed::utils {
     inline constexpr bool always_false = false;
 
     template<typename T>
-    concept HasDefaultIdMethod = requires(const T& a) {
+    concept hasDefaultIdMethod = requires(const T& a) {
         { a.aggregateId() };
     };
 
@@ -18,8 +18,8 @@ namespace clegmed::utils {
          * @brief Extrahiert die ID.
          * Versucht zuerst aggregate_id(), ansonsten harter Fehler.
          */
-        static auto get_id(const T& obj) {
-            if constexpr (HasDefaultIdMethod<T>) {
+        static auto getId(const T& obj) {
+            if constexpr (hasDefaultIdMethod<T>) {
                 return obj.aggregateId();
             } else {
                 static_assert(always_false<T>,
@@ -59,5 +59,15 @@ namespace clegmed::utils {
         requires(const T& a) {
         { EntityTraits<T>::getId(a) };
         };
+
+    template<typename T>
+    using EntityId_t = std::decay_t<decltype(EntityTraits<T>::getId(std::declval<T>()))>;
+
+    template<typename T>
+    using EntityView_t = EntityHandle<const T, std::shared_lock<std::shared_mutex>>;
+
+    template<typename T>
+    using EntityHandle_t = EntityHandle<T, std::shared_lock<std::shared_mutex>>;
+
 
 }
