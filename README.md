@@ -14,14 +14,6 @@ specifically tailored for resource-constrained IoT, embedded systems, and real-t
 
 ---
 
-## ⚖️ Regulatory Compliance & Quality Standards
-
-*   **Software Risk Classification:** Medium-Risk Profile (Standard Target)
-*   **Design Paradigm:** Defensive Programming, Object Ownership Semantics, Zero-Allocation Core.
-*   **Traceability Requirement:** Every functional code modification must be tied to a requirement ID defined in `REQUIREMENTS.md`. Commits are automatically verified via a local `commit-msg` Git-Hook.
-
----
-
 ## 🛠️ Tech Stack & Tooling
 
 To ensure deterministic behavior and meet qualification standards, the project utilizes a highly controlled toolchain:
