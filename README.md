@@ -116,18 +116,13 @@ If your message does not contain a valid `[REQ-XXXX]`, `[BUG-XXXX]`, or `[CHORE-
 ---
 
 ## Release
-* Configure release mode
-  ```shell
-   cmake -B build -DCMAKE_BUILD_TYPE=Release
-  ```
 
-* Compile
-  ```shell
-   make --build build --config Release
-  ```
+As a header only library, there is no need to create a release. Instead, we use tagging on GitHub at the moment, 
+so that fetch-content can be used to fetch the latest release.
 
-* Create archive
+* Create release
+  Adjust the version in `CMakeLists.txt` validate `REQUIREMENTS.md` and create a tag with the new version number.
   ```shell
-    cd build
-    cpack -C Release
-  ```
+      git tag -a v1.0.0 -m "Release version 1.0.0 [CHORE-001]"
+      git push origin v1.0.0  ```
+

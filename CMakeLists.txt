@@ -2,7 +2,7 @@
 # 1. PREAMBLE & REQUIREMENTS
 # ==============================================================================
 cmake_minimum_required(VERSION 4.1)
-project(clegmed VERSION 0.1.1 LANGUAGES CXX)
+project(clegmed VERSION 0.1.2 LANGUAGES CXX)
 
 # ==============================================================================
 # 2. GLOBAL SETTINGS & COMPILER OPTIONS
