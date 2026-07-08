@@ -13,7 +13,9 @@ namespace clegmed::plugins::persistence {
         std::map<id_type, Entity> m_storage;
 
     public:
-        void init() {}
+        void init() {
+            //We do not need to do anything here
+        }
 
         void remove(const id_type& id) {
             std::unique_lock lock(m_mutex);
@@ -37,8 +39,7 @@ namespace clegmed::plugins::persistence {
             using HandleType = utils::EntityHandle_t<Entity>;
             std::shared_lock lock(m_mutex);
 
-            auto it = m_storage.find(id);
-            if (it != m_storage.end()) {
+            if ( auto it = m_storage.find(id); it != m_storage.end() ) {
                 return std::optional<HandleType>(std::in_place, std::move(lock), it->second);
             }
 
