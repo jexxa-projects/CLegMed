@@ -36,7 +36,7 @@ namespace clegmed::utils {
         T& entity_;
 
     public:
-        EntityHandle(LockType&& lock, T& entity)
+        EntityHandle(LockType&& lock, T& entity) noexcept
             : lock_(std::move(lock)), entity_(entity) {}
 
         T* operator->() { return &entity_; }
