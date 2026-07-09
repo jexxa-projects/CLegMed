@@ -53,7 +53,7 @@ namespace clegmed::plugins::persistence {
         }
 
 
-        void update(utils::EntityHandle_t<Entity>&& entity_handle) {
+        void update(utils::EntityHandle_t<Entity> entity_handle) {
             (*entity_handle)->lock().unlock();
         }
 

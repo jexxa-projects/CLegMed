@@ -2,10 +2,15 @@
 #pragma once
 #include <algorithm>
 #include <concepts>
+#include <shared_mutex>
 
 namespace clegmed::utils {
     template<typename T>
     inline constexpr bool always_false = false;
+
+    template <typename T, typename Inner>
+    concept IsOptionalOf = std::same_as<T, std::optional<Inner>>;
+
 
     template<typename T>
     concept hasDefaultIdMethod = requires(const T& a) {
