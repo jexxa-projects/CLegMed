@@ -45,7 +45,7 @@ namespace clegmed::plugins::persistence {
             if (auto it = m_storage.find(id); it != m_storage.end()) {
                 return std::optional<HandleType>(std::in_place, std::move(lock), it->second);
             }
-            return std::nullopt;
+            return std::optional<HandleType>{};
         }
 
         [[nodiscard]] auto getAll() const {
