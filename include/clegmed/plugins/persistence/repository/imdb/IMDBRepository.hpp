@@ -55,7 +55,7 @@ namespace clegmed::plugins::persistence {
         }
 
 
-        void update(utils::EntityHandle_t<Entity> _) {
+        void update(const utils::EntityHandle_t<Entity>& _) {
             // Nothing to be done - just to fulfill the concept
         }
 
