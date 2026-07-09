@@ -4,6 +4,7 @@
 #include <shared_mutex>
 #include "clegmed/utils/EntityTraits.hpp"
 
+// TODO - Verify locking modell. since we will also support DBs, we will finally have Last Write Wins situation.
 namespace clegmed::plugins::persistence {
     template<typename Entity>
     class IMDBRepository {
@@ -32,29 +33,30 @@ namespace clegmed::plugins::persistence {
 
         void add(Entity&& entity) {
             std::unique_lock lock(m_mutex);
-            m_storage.emplace(utils::EntityTraits<Entity>::getId(std::move(entity)), std::move(entity));
+            // extract ID before move to avoid UB
+            auto id = utils::EntityTraits<Entity>::getId(entity);
+            m_storage.emplace(id, std::move(entity));
         }
 
-        [[nodiscard]] auto get(const id_type& id)  {
+        [[nodiscard]] auto get(const id_type& id) {
             using HandleType = utils::EntityHandle_t<Entity>;
-            std::shared_lock lock(m_mutex);
 
-            if ( auto it = m_storage.find(id); it != m_storage.end() ) {
+            std::shared_lock lock(m_mutex);
+            if (auto it = m_storage.find(id); it != m_storage.end()) {
                 return std::optional<HandleType>(std::in_place, std::move(lock), it->second);
             }
-
-            return std::optional<HandleType>(std::nullopt);
+            return std::nullopt;
         }
 
         [[nodiscard]] auto getAll() const {
-            std::unique_lock lock(m_mutex);
+            std::shared_lock lock(m_mutex);
 
             return m_storage | std::views::keys | std::ranges::to<std::vector<id_type>>();
         }
 
 
-        void update(utils::EntityHandle_t<Entity> entity_handle) {
-            (*entity_handle)->lock().unlock();
+        void update(utils::EntityHandle_t<Entity> _) {
+            // Nothing to be done - just to fulfill the concept
         }
 
     };

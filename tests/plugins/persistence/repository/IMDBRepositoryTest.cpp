@@ -24,38 +24,23 @@ static_assert(isRepository<IMDBRepository<Customer>, Customer>,
 
 
 
-TEST(IMDBRepositoryTest, RepositoryConcept) {
-    // Arrange
-    auto repository = clegmed::plugins::persistence::IMDBRepository<Customer>();
-
-    // Act
-    repository.add(Customer(1, "Test"));
-    auto customer = repository.get(1);
-
-    std::cout << repository.get(1)
-                 .transform([](auto const& h) { return h->getName(); })
-                 .value_or("Customer Not Found")
-              << std::endl;
-    // Assert: Validate if passed
-    //EXPECT_EQ(repository.get(1), customer);
-    //EXPECT_EQ(data_storage[0], message);
-}
-
-
-
 TEST(IMDBRepositoryTest, StoreConsumer) {
     // Arrange
     auto repository = clegmed::plugins::persistence::IMDBRepository<Customer>();
 
     // Act
     repository.add(Customer(1, "Test"));
-    auto customer = repository.get(1);
+
+    auto customer_handle = repository.get(1);
 
     std::cout << repository.get(1)
                  .transform([](auto const& h) { return h->getName(); })
                  .value_or("Customer Not Found")
               << std::endl;
+
     // Assert: Validate if passed
-    //EXPECT_EQ(repository.get(1), customer);
-    //EXPECT_EQ(data_storage[0], message);
+    EXPECT_EQ(1, (*customer_handle)->aggregateId());
+    EXPECT_EQ(1, repository.getAll().size());
 }
+
+
