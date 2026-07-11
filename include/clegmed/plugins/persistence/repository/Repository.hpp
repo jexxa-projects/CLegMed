@@ -8,6 +8,7 @@
 namespace clegmed::plugins::persistence {
 
 
+
     template <typename RepositoryType, typename Entity>
     concept isRepository =
         utils::isEntity<Entity> &&
@@ -15,15 +16,15 @@ namespace clegmed::plugins::persistence {
             RepositoryType& repository,
             const utils::EntityId_t<Entity>& entity_id,
             Entity&& entity,
-            utils::EntityHandle_t<Entity>&& handle
+            utils::EntityHandle<Entity>&& handle
         )
     {
         { repository.init() }                           -> std::same_as<void>;
         { repository.remove(entity_id) }                -> std::same_as<void>;
         { repository.removeAll() }                      -> std::same_as<void>;
         { repository.getAll() }                         -> std::ranges::range;
-        { repository.get(entity_id) }                   -> utils::IsOptionalOf<utils::EntityHandle_t<Entity>>;
+        { repository.get(entity_id) }                   -> std::same_as<utils::EntityHandle<Entity>>;
         { repository.add(std::declval<Entity&&>()) }    -> std::same_as<void>;
-        { repository.update(handle) }                   -> std::same_as<void>;
+        { repository.update(entity) }                   -> std::same_as<void>;
     };
 }

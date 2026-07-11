@@ -2,8 +2,7 @@
 #pragma once
 #include <algorithm>
 #include <concepts>
-#include <shared_mutex>
-
+#include "OptionalReference.hpp"
 namespace clegmed::utils {
     template<typename T>
     inline constexpr bool always_false = false;
@@ -35,28 +34,6 @@ namespace clegmed::utils {
         }
     };
 
-    template<typename T, typename LockType>
-    class EntityHandle {
-        LockType lock_;
-        T& entity_;
-
-    public:
-        EntityHandle(LockType&& lock, T& entity) noexcept
-            : lock_(std::move(lock)), entity_(entity) {}
-
-        T* operator->() { return &entity_; }
-        const T* operator->() const { return &entity_; }
-
-        T& get() { return entity_; }
-        LockType& lock() { return lock_; }
-
-        // Move only
-        EntityHandle(const EntityHandle&) = delete;
-        EntityHandle(EntityHandle&&) = default;
-    };
-
-
-
     template <typename T>
     concept isEntity =
         std::move_constructible<T> &&
@@ -65,14 +42,15 @@ namespace clegmed::utils {
         { EntityTraits<T>::getId(a) };
         };
 
+
+    template<typename Entity>
+    using EntityHandle = optional<Entity&>;
+
+    template<typename Entity>
+    using EntityCollection = std::vector<std::reference_wrapper<Entity>>;
+
     template<typename T>
     using EntityId_t = std::decay_t<decltype(EntityTraits<T>::getId(std::declval<T>()))>;
-
-    template<typename T>
-    using EntityView_t = EntityHandle<const T, std::shared_lock<std::shared_mutex>>;
-
-    template<typename T>
-    using EntityHandle_t = EntityHandle<T, std::shared_lock<std::shared_mutex>>;
 
 
 }

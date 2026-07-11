@@ -21,7 +21,8 @@ include(cmake/plugins.persistence.cmake)
 # ==============================================================================
 # 4. DAS ZUSAMMENFASSENDE CORE-TARGET (Neu für den Header-Only-Verbund)
 # ==============================================================================
-add_library(clegmed_core INTERFACE)
+add_library(clegmed_core INTERFACE
+        include/clegmed/utils/OptionalReference.hpp)
 add_library(clegmed::core ALIAS clegmed_core)
 
 target_link_libraries(clegmed_core INTERFACE
