@@ -93,6 +93,9 @@ This document serves as the single source of truth for software requirements. Al
 * **[REQ-008-D] Decoupled Dependency Lookup**
   Filters shall not instantiate repositories but request them from the RepositoryPool using compile-time types 
   or unique identifiers.
+* **[REQ-008-E] Locking model**
+  To ensure a simplified repository API, the locking model should only guarantee a __Last Write Wins__ situation. 
+
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
 
