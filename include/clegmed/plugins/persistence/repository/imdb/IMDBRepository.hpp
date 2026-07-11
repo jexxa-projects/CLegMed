@@ -13,7 +13,7 @@ namespace clegmed::plugins::persistence {
         std::map<id_type, Entity> m_storage;
 
     public:
-        void init() {
+        void init() { // NOLINT(readability-convert-member-functions-to-static)
             //We do not need to do anything here
         }
 
@@ -39,7 +39,7 @@ namespace clegmed::plugins::persistence {
             auto [it, inserted] = m_storage.try_emplace(id, std::move(entity));
 
             if (!inserted) {
-                throw std::invalid_argument("Entity with given ID alread exists!");
+                throw std::invalid_argument("Entity with given ID already exists!");
             }
         }
 
@@ -61,7 +61,7 @@ namespace clegmed::plugins::persistence {
         }
 
 
-        void update(const Entity& _) {
+        void update(const Entity& ) {  // NOLINT(readability-convert-member-functions-to-static)
             // Nothing to be done - just to fulfill the concept
         }
 
