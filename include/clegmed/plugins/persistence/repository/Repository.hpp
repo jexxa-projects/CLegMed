@@ -26,4 +26,4 @@ namespace clegmed::plugins::persistence {
     concept isRepository =
         utils::isEntity<Entity> &&
         RepositoryInterface<RepositoryType, Entity>;
-};
+}
