@@ -15,6 +15,7 @@ This document serves as the single source of truth for software requirements. Al
 | **[REQ-005]**   | FlowGraph class to manage filters                             | **VERIFIED** | tests in `GenericFlowGraphTest` and `FlowGraphTest`                  |                                                                     |
 | **[REQ-006]**   | Managing class to manage all FlowGraphs within an application | **VERIFIED** | tests in `CLegMedTest`                                               |                                                                     |
 | **[REQ-007]**   | Logging support                                               | **VERIFIED** | tests in `LoggerTest`, `GenericProcessorTest`, `GenericConsumerTest` |                                                                     |
+| **[REQ-008]**   | Repository & Persistence Specifications                       | **ACCEPTED** |                                                                      |                                                                     |  
 
 
 ---
@@ -87,12 +88,12 @@ This document serves as the single source of truth for software requirements. Al
 * **[REQ-008-B] Static Polymorphism** 
   The framework shall avoid runtime inheritance; repository interfaces shall be enforced via C++23 Concepts or 
   template constraints.
-* **[REQ-008-C] Centralized Repository Pool**
-  A RepositoryPool shall act as a service locator, managing the lifecycle and providing type-safe access to 
-  registered repositories.
-* **[REQ-008-D] Decoupled Dependency Lookup**
+* ~~**[REQ-008-C] Centralized Repository Pool**~~
+  ~~A RepositoryPool shall act as a service locator, managing the lifecycle and providing type-safe access to 
+  registered repositories.~~ → Discarded. We will use Pure DI to avoid dynamic polymorphism and external dependencies.
+* ~~**[REQ-008-D] Decoupled Dependency Lookup**
   Filters shall not instantiate repositories but request them from the RepositoryPool using compile-time types 
-  or unique identifiers.
+  or unique identifiers.~~ → Discarded. We will use Pure DI to avoid dynamic polymorphism and external dependencies.
 * **[REQ-008-E] Locking model**
   To ensure a simplified repository API, the locking model should only guarantee a __Last Write Wins__ situation. 
 
