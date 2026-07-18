@@ -1,5 +1,6 @@
 #pragma once
 #include "Filter.hpp"
+#include "clegmed/utils/Logger.hpp"
 #include <functional>
 #include <utility>
 
@@ -23,7 +24,11 @@ namespace clegmed::core {
             if (m_input_pipe) {
                 m_input_pipe(std::move(data));
             } else {
-                std::cerr << "OutputPipe is not connected -> Discard data  " << data << std::endl;
+                utils::Logger::log(
+                    utils::LogLevel::ERROR,
+                    "OutputPipe of filter '{}' is not connected -> Discard data",
+                    m_filter.name()
+                    );
             }
         }
 

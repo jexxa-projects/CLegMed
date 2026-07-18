@@ -1,23 +1,12 @@
+#include "../fixtures/Customer.hpp"
 #include "clegmed/plugins/shortcuts.hpp"
 #include "clegmed/plugins/persistence/repository/Repository.hpp"
 #include "clegmed/plugins/persistence/repository/imdb/IMDBRepository.hpp"
 #include "gtest/gtest.h"
 
 
-class Customer {
-    int m_id;
-    std::string m_name;
-public:
-    Customer(const int id, std::string name) : m_id(id), m_name(std::move(name)) {}
-    Customer(const Customer&) = delete;
-    Customer(Customer&&) = default;
-
-    void setName(std::string name)            { m_name = std::move(name); }
-    [[nodiscard]] std::string getName() const { return m_name; }
-    [[nodiscard]] int aggregateId()     const { return m_id; }
-};
-
 using namespace clegmed::plugins::persistence;
+using namespace clegmed::plugins::persistence::fixtures;
 
 static_assert(isRepository<IMDBRepository<Customer>, Customer>,
     "InMemoryRepository must fulfill the isRepository concept!");
@@ -26,7 +15,7 @@ static_assert(isRepository<IMDBRepository<Customer>, Customer>,
 
 TEST(IMDBRepositoryTest, StoreCustomer) {
     // Arrange
-    auto object_under_test = clegmed::plugins::persistence::IMDBRepository<Customer>();
+    auto object_under_test = IMDBRepository<Customer>();
     constexpr auto customer_count = 10;
     constexpr auto customer_name = "HelloWorld";
 

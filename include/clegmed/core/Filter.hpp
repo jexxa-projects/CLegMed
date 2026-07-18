@@ -1,5 +1,7 @@
 #pragma once
 #include <utility>
+#include <string>
+#include <typeinfo>
 
 namespace clegmed::core{
     /**
@@ -75,6 +77,10 @@ namespace clegmed::core{
         template<typename Self>
         auto&& self(this Self&& explicit_this) {
             return std::forward<Self>(explicit_this);
+        }
+
+        [[nodiscard]]std::string name() const {
+            return typeid(*this).name();
         }
     };
 } // clegmed

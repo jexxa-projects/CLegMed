@@ -26,8 +26,10 @@ namespace clegmed::core {
         ~Processor() override = default;
         Processor(Processor&&) noexcept = default;
         Processor& operator=(Processor&&) noexcept = default;
+
         auto inputPipe() {
-            return [this](InputData data) { this->process(std::move(data)); };
+            return [this]<typename T>requires std::is_convertible_v<T, InputData>(T&& data)
+                { this->process(std::forward<T>(data)); };
         }
 
         template<typename Self>
@@ -35,29 +37,45 @@ namespace clegmed::core {
             return std::forward<Self>(explicit_this).m_output_pipe;
         }
 
-        void process(InputData input_data) noexcept
+        template<typename T>
+        requires std::is_convertible_v<T, InputData>
+        void process(T&& input_data) noexcept
         {
             std::optional<std::expected<OutputData, std::exception_ptr>> pipeline_result;
 
-            if constexpr (std::is_invocable_v<Strategy, const InputData&, OutputPipe<OutputData>&>) {
-                return m_strategy(std::move(input_data), m_output_pipe);
-            } else if constexpr (std::is_invocable_r_v<OutputData, Strategy, const InputData&>) {
-                pipeline_result.emplace( m_strategy(std::move(input_data)) );
-            } else {
+            // 1. get cleaned type without references
+            using DecayedT = std::decay_t<T>;
+
+            // 2. Check against const Lvalue-Ref, for read-only filter
+            if constexpr (
+                std::is_invocable_v<Strategy, const DecayedT&, OutputPipe<OutputData>&> ||
+                std::is_invocable_v<Strategy, T&&, OutputPipe<OutputData>&>)
+            {
+                m_strategy(std::forward<T>(input_data), m_output_pipe);
+                return;
+            }
+            else if constexpr (
+                std::is_invocable_v<Strategy, const DecayedT&> ||
+                std::is_invocable_v<Strategy, T&&>)
+            {
+                pipeline_result.emplace(m_strategy(std::forward<T>(input_data)));
+            }
+            else {
                 static_assert(false,
                     "❌ ARCHITECTURE-ERROR: Given ProcessStrategy neither uses "
                     "Piped-Signature (Input, Pipe&) nor 1:1-signature (Input).");
             }
 
+
             //TODO: Actually, we do not know how to handle errors in general
             if (!pipeline_result.has_value()) {
-                std::cerr << "Pipeline Error: error occurred . TODO implement error handling"  << std::endl;
+                utils::Logger::log(utils::LogLevel::ERROR,
+                    "Pipeline Error: error occurred . TODO implement error handling"
+                    );
                 exit(EXIT_FAILURE);
             }
 
-            if constexpr (std::is_invocable_r_v<OutputData, Strategy, const InputData&>) {
-                m_output_pipe.forward(std::move(*pipeline_result.value()));
-            }
+            m_output_pipe.forward(std::move(*pipeline_result.value()));
         }
 
     private:

@@ -10,6 +10,7 @@ add_executable(clegmed_core_test
         CLegMedTest.cpp
 )
 target_link_libraries(clegmed_core_test PRIVATE
+        clegmed::utils
         clegmed::core
         gtest
         gtest_main
@@ -24,6 +25,7 @@ add_executable(clegmed_benchmarks
         ../../include/clegmed/utils/Signal.hpp
 )
 target_link_libraries(clegmed_benchmarks PRIVATE
+        clegmed::utils
         clegmed::core
         benchmark::benchmark
 )

@@ -21,17 +21,26 @@ namespace clegmed::core {
         Consumer(Consumer&&) noexcept = default;
         Consumer& operator=(Consumer&&) noexcept = default;
 
+
         auto inputPipe() {
-            return [this](InputData data) { this->consume(std::move(data)); };
+            return [this]<typename T> requires std::is_convertible_v<T, InputData> (T&& data) {
+                this->consume(std::forward<T>(data));
+            };
         }
-        void consume(InputData input_data) {
-            if constexpr (std::is_invocable_r_v<void, ConsumerStrategy, const InputData&>) {
-                m_strategy(std::move(input_data));
-            }  else { static_assert(false,
+
+        template<typename T>
+        requires std::is_convertible_v<T, InputData>
+        void consume(T&& input_data) {
+            if constexpr (std::is_invocable_r_v<void, ConsumerStrategy, T&&>) {
+                m_strategy(std::forward<T>(input_data));
+            } else {
+                static_assert(false,
                     "❌ ARCHITECTURE-ERROR: Given ConsumerStrategy does not use "
                     "1:1-signature (Input).");
             }
         }
+
+
     private:
         [[no_unique_address]] ConsumerStrategy m_strategy;
     };

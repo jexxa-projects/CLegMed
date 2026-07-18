@@ -4,6 +4,8 @@
 
 add_executable(clegmed_plugins_persistence_test
         repository/IMDBRepositoryTest.cpp
+        generic/PersistentConsumerTest.cpp
+        fixtures/Customer.hpp
 )
 target_link_libraries(clegmed_plugins_persistence_test PRIVATE
         clegmed::core
