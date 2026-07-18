@@ -15,7 +15,7 @@ This document serves as the single source of truth for software requirements. Al
 | **[REQ-005]**   | FlowGraph class to manage filters                             | **VERIFIED** | tests in `GenericFlowGraphTest` and `FlowGraphTest`                  |                                                                     |
 | **[REQ-006]**   | Managing class to manage all FlowGraphs within an application | **VERIFIED** | tests in `CLegMedTest`                                               |                                                                     |
 | **[REQ-007]**   | Logging support                                               | **VERIFIED** | tests in `LoggerTest`, `GenericProcessorTest`, `GenericConsumerTest` |                                                                     |
-| **[REQ-008]**   | Repository & Persistence Specifications                       | **ACCEPTED** |                                                                      |                                                                     |  
+| **[REQ-008]**   | Repository & Persistence Specifications                       | **VERIFIED** | tests in `persistence`                                               | [d1d8155](https://github.com/jexxa-projects/CLegMed/commit/d1d8155) |     
 
 
 ---
