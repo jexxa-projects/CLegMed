@@ -29,27 +29,13 @@ namespace clegmed::core {
         }
 
         void produce() {
-            if constexpr (std::is_invocable_v<ProducerStrategy, OutputPipe<OutputData>&>) {
-                m_strategy(m_outputPipe);
-            } else if constexpr (std::is_invocable_v<ProducerStrategy>) {
-                OutputData result = m_strategy();
-                m_outputPipe.forward(std::move(result));
-            } else {
-                static_assert(false,
-                    "❌ ARCHITECTURE-ERROR: Given ProducerStrategy neither uses "
-                    "Piped-Signature (Pipe&) nor 1:1-signature ().");
-            }
-        }
-
-        void produce2() {
             // 1. Piped-Signatur (1:n) (Strategy writes directly to the output-pipe)
             if constexpr (std::is_invocable_v<ProducerStrategy, OutputPipe<OutputData>&>) {
                 m_strategy(m_outputPipe);
             }
             // 2. 1:1-Signatur (Strategy returns a value that fits to OutputData)
             else if constexpr (std::is_invocable_r_v<OutputData, ProducerStrategy>) {
-                decltype(auto) result = m_strategy();
-                m_outputPipe.forward(std::forward<decltype(result)>(result));
+                m_outputPipe.forward(std::forward<ProducerStrategy>(m_strategy)());
             }
             else {
                 static_assert(false,
