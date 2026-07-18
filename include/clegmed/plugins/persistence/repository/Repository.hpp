@@ -6,7 +6,6 @@
 
 namespace clegmed::plugins::persistence {
 
-
     template <typename Repository, typename Entity>
     concept RepositoryInterface = requires(
         Repository& repository,
@@ -22,8 +21,21 @@ namespace clegmed::plugins::persistence {
         { repository.update(entity) }                       -> std::same_as<void>;
     };
 
+    // Entity type extractor
+    template <typename T>
+    struct extract_entity;
+
+    template <template <typename...> class Repo, typename EntityType, typename... Args>
+    struct extract_entity<Repo<EntityType, Args...>> {
+        using type = EntityType;
+    };
+
+    template <typename T>
+    using extract_entity_t = extract_entity<T>::type;
+
     template <typename RepositoryType, typename Entity>
     concept isRepository =
+        requires { typename extract_entity_t<RepositoryType>; } &&
         utils::isEntity<Entity> &&
         RepositoryInterface<RepositoryType, Entity>;
 }

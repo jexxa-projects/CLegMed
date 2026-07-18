@@ -14,10 +14,11 @@ using namespace clegmed::plugins::persistence::fixtures;
 
 TEST(PersistentConsumerTest, PersistCustomer) {
     // Arrange
-    auto repository = IMDBRepository<Customer>();
-    repository.init();
     constexpr auto customer_name = "HelloWorld";
-    auto object_under_test = persistentStore<IMDBRepository<Customer>, Customer>(repository);
+    auto repository = IMDBRepository<Customer>{};
+    repository.init();
+
+    auto object_under_test = persistentStore(repository);
 
     // Act
     object_under_test.consume(Customer(1, customer_name));
@@ -29,8 +30,9 @@ TEST(PersistentConsumerTest, PersistCustomer) {
 TEST(PersistentConsumerTest, PersistCustomerFlowGraph) {
     // Arrange
     using namespace clegmed::shortcuts;
-    auto repository = IMDBRepository<Customer>();
+    auto repository = IMDBRepository<Customer>{};
     repository.init();
+
     size_t max_count = 10;
     auto counter = std::atomic(0);
     auto producer = [&counter] { return Customer(++counter, "HelloWorld"); };
@@ -38,7 +40,7 @@ TEST(PersistentConsumerTest, PersistCustomerFlowGraph) {
     auto clegmed = CLegMed(
         FlowGraph{}.repeat(max_count)
         .from(producer)
-        .consumeWith(persistentStore<IMDBRepository<Customer>, Customer>(repository))
+        .consumeWith(persistentStore(repository))
     );
 
     // Act
