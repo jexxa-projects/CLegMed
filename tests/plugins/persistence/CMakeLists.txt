@@ -5,6 +5,7 @@
 add_executable(clegmed_plugins_persistence_test
         repository/IMDBRepositoryTest.cpp
         generic/PersistentConsumerTest.cpp
+        timer/TimerUtilsTest.cpp
         timer/PersistentTimerTest.cpp
         fixtures/Customer.hpp
 )

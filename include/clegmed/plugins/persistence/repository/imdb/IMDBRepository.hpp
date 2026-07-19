@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <ranges>
 #include <shared_mutex>
 #include "clegmed/utils/EntityTraits.hpp"
 

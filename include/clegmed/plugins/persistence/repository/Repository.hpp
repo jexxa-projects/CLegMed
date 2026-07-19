@@ -38,4 +38,5 @@ namespace clegmed::plugins::persistence {
         requires { typename extract_entity_t<RepositoryType>; } &&
         utils::isEntity<Entity> &&
         RepositoryInterface<RepositoryType, Entity>;
+
 }
