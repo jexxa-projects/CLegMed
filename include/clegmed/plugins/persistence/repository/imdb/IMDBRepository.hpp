@@ -3,6 +3,7 @@
 #include <map>
 #include <ranges>
 #include <shared_mutex>
+#include <mutex>
 #include "clegmed/utils/EntityTraits.hpp"
 
 namespace clegmed::plugins::persistence {
