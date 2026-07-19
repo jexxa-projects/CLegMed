@@ -98,6 +98,15 @@ This document serves as the single source of truth for software requirements. Al
   To ensure a simplified repository API, the locking model should only guarantee a __Last Write Wins__ situation. 
 
 
+🧩 [REQ-009] Persistent Timer Filter
+* [REQ-009-A] The framework shall provide a filter that functions as a persistent
+  timer, generating a defined time window based on a specific configuration.
+  **Description:** The filter shall accept a timer configuration (TimerConfig) as input, 
+  containing a unique timer-id and a start time. The filter shall produce a time interval 
+  (TimeInterval) as output, defined by a start point (begin), an end point (end), 
+  and the corresponding TimerID. This interval describes the active time window of the timer. 
+  The associated components should reside in a dedicated namespace to ensure a clean separation of the filter logic.
+
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
 
 *   **[CHORE-001-A] Documentation**  
