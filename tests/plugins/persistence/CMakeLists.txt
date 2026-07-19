@@ -5,6 +5,7 @@
 add_executable(clegmed_plugins_persistence_test
         repository/IMDBRepositoryTest.cpp
         generic/PersistentConsumerTest.cpp
+        timer/PersistentTimerTest.cpp
         fixtures/Customer.hpp
 )
 target_link_libraries(clegmed_plugins_persistence_test PRIVATE
@@ -19,5 +20,6 @@ target_link_libraries(hello_world PRIVATE
         clegmed::core
         clegmed::plugins
         clegmed::utils
+        clegmed::plugins::persistence
 )
 

@@ -7,5 +7,8 @@ target_sources(clegmed_plugins_persistence INTERFACE
         FILES
         include/clegmed/plugins/persistence/repository/Repository.hpp
         include/clegmed/plugins/persistence/repository/imdb/IMDBRepository.hpp
-        include/clegmed/plugins/persistence/generic/PersistenteConsumer.hpp
+        include/clegmed/plugins/persistence/generic/PersistentConsumer.hpp
+        include/clegmed/plugins/persistence/timer/PersistentTimer.hpp
+        include/clegmed/plugins/persistence/timer/TimerUtils.hpp
+
 )
