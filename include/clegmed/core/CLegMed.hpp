@@ -1,6 +1,5 @@
 #pragma once
 #include <csignal>
-#include <semaphore>
 #include <vector>
 
 #include "clegmed/plugins/generic/GenericConsumer.hpp"
