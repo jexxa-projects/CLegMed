@@ -25,9 +25,7 @@ namespace clegmed::plugins::persistence {
         }
 
         void nextTimeInterval(core::OutputPipe<TimeInterval>& output_pipe) {
-            std::cout << "nextTimeInterval()" << std::endl;
-            auto timer_state = m_repository.get(m_timer_config.timer_id);
-            if (timer_state.has_value()) {
+            if (auto timer_state = m_repository.get(m_timer_config.timer_id); timer_state.has_value()) {
                 const time_point_t now = std::chrono::system_clock::now();
 
                 output_pipe.forward(TimeInterval{.begin = timer_state->last_time_interval.end, .end = now});
@@ -37,7 +35,7 @@ namespace clegmed::plugins::persistence {
 
                 m_repository.update(timer_state.value());
             } else {
-                std::cout << "Warning timer_state is missing " << std::endl;
+                utils::Logger::log(utils::LogLevel::ERROR, "TimerState is missing");
             }
 
         }
