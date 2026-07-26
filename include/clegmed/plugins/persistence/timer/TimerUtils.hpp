@@ -1,8 +1,11 @@
 #pragma once
 #include <chrono>
+
+#include "clegmed/core/Processor.hpp"
 #include "clegmed/utils/EntityTraits.hpp"
 
 namespace clegmed::plugins::persistence {
+
     struct TimerId {
         std::string timer_id;
         auto operator<=>(const TimerId&) const = default;
@@ -55,8 +58,20 @@ namespace clegmed::plugins::persistence {
         auto operator<=>(const TimerState&) const = default;
     };
 
+    [[nodiscard]] auto startWithLookBack(std::convertible_to<std::chrono::nanoseconds> auto duration ) {
+        auto lambda_strategy = [duration](const TimeInterval& time_interval) {
+            using ClockDuration = decltype(time_interval.begin)::duration;
 
-};
+            auto casted_duration = std::chrono::duration_cast<ClockDuration>(duration);
+
+            return TimeInterval(time_interval.begin - casted_duration, time_interval.end);
+        };
+
+        return core::make_processor(lambda_strategy);
+    }
+
+
+}
 
 template <>
 struct clegmed::utils::EntityTraits<clegmed::plugins::persistence::TimerState> {

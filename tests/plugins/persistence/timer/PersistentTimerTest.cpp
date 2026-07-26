@@ -31,6 +31,38 @@ TEST(PersistentTimerTest, PersistentTimerGraph) {
     auto interval = 2ms;
 
     auto repository = IMDBRepository<TimerState>();
+    const auto timer_config = TimerConfig::timerConfigOf(TimerId{"TestTimer"});
+
+    auto result = std::vector<TimeInterval>{};
+    auto consumer = [&interval, &result] (const TimeInterval& time_interval) {
+        // We check if that the interval is at least 'interval'. Note! the first time_interval could have smaller
+        // interval because the flow graph immediately starts and does not wait for 'interval' for the first run
+        if (time_interval.end - time_interval.begin >= interval) {
+            result.push_back(time_interval);
+        }
+    };
+
+    auto clegmed = CLegMed(
+        FlowGraph{}
+        .every(interval)
+        .from(PersistentTimer(timer_config, repository))
+        .consumeWith(consumer)
+    );
+
+    //Act
+    clegmed.start();
+
+    //Assert
+    EXPECT_TRUE(await_condition(interval * 15, [&result]  {return result.size() > 10;}));
+    clegmed.stop();
+}
+
+
+TEST(PersistentTimerTest, PersistentTimerWithLookback) {
+    //Arrange
+    auto interval = 2ms;
+
+    auto repository = IMDBRepository<TimerState>();
     auto timer_config = TimerConfig::timerConfigOf(TimerId{"TestTimer"});
     auto object_under_test = PersistentTimer(timer_config, repository);
 
@@ -46,7 +78,9 @@ TEST(PersistentTimerTest, PersistentTimerGraph) {
     auto clegmed = CLegMed(
         FlowGraph{}
         .every(interval)
-        .from(std::move(object_under_test))
+        .from(PersistentTimer(timer_config, repository))
+        .then(startWithLookBack(5s))
+        .then(passThrough())
         .consumeWith(consumer)
     );
 

@@ -98,6 +98,16 @@ namespace clegmed::core {
         );
     }
 
+    template <typename InputData,  typename ProcessorStrategy>
+    [[nodiscard]] auto make_processor(ProcessorStrategy&& strategy) {
+        using DecayedStrategy = std::decay_t<ProcessorStrategy>;
+
+        return Processor<InputData, InputData, DecayedStrategy>(
+            std::forward<ProcessorStrategy>(strategy)
+        );
+    }
+
+
     template <typename ProcessorStrategy>
     [[nodiscard]] auto make_piped_processor(ProcessorStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;

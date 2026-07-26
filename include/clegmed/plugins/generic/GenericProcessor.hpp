@@ -1,7 +1,6 @@
 #pragma once
 #include <concepts>
 #include <string>
-#include <vector>
 #include "../../core/Processor.hpp"
 #include "../../utils/Logger.hpp"
 
@@ -35,25 +34,28 @@ namespace clegmed::plugins::generic {
         return core::make_processor(lambda_strategy);
     }
 
-    struct PassThroughFactory {
-        template <typename InputData>
-        [[nodiscard]] auto build() const {
-            auto lambda_strategy = [](const InputData& input_data) -> InputData {
-                return input_data;
-            };
-            return core::make_processor(std::move(lambda_strategy));
-        }
-    };
-
     /**
      * Passthrough filter
      * @tparam InputData
      * @return
      */
-    [[nodiscard]] inline auto passThrough() {
-        return PassThroughFactory{};
-    }
+    template <typename InputData = void>
+    [[nodiscard]] auto passThrough() {
 
+        // Fall A: Aufruf im isolierten Unit-Test MIT Typ -> passThrough<std::string>()
+        if constexpr (!std::is_same_v<InputData, void>) {
+            auto lambda_strategy = [](const InputData& input) -> InputData { return input; };
+            return core::make_processor<InputData>(std::move(lambda_strategy));
+        }
+
+        // Fall B: Aufruf in der Pipeline OHNE Typ -> .then(passThrough())
+        // Gibt ein generisches Lambda mit C++20/C++23 Template-Kopf zurück!
+        else {
+            return []<typename T>(T&& input_data) {
+                return std::forward<T>(input_data);
+            };
+        }
+    }
 
     template<typename T = std::string>
     [[nodiscard]] auto traceInfo() {
