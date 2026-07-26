@@ -56,37 +56,6 @@ namespace clegmed::core {
             }
         }
 
-   /*     template<typename Processor>
-        auto then(Processor &&processor) && {
-            using DecayedProcessor = std::decay_t<Processor>;
-            using LastFilter = std::tuple_element_t<sizeof...(Filters) - 1, std::tuple<Filters...>>;
-            using PreviousOutputType = extract_output_type_t<LastFilter>;
-
-            if constexpr (requires { { processor.template build<PreviousOutputType>() }; })
-            {
-                auto concrete_processor = std::forward<Processor>(processor).template build<PreviousOutputType>();
-                return std::move(*this).then(std::move(concrete_processor));
-            } else if constexpr (
-                requires { typename DecayedProcessor::PassThroughFactory; } ||
-                requires { { processor.template build<PreviousOutputType>() }; })
-            {
-                auto concrete_processor = std::forward<Processor>(processor).template build<PreviousOutputType>();
-                return std::move(*this).then(std::move(concrete_processor));
-            } else if constexpr (is_filter_v<DecayedProcessor>) {
-                auto new_tuple = std::tuple_cat(
-                    std::move(m_pipeline),
-                    std::tuple<DecayedProcessor>{std::forward<Processor>(processor)}
-                );
-
-                return PipelineBuilder<Filters..., DecayedProcessor>(
-                    std::move(new_tuple),
-                    m_config
-                );
-            } else {
-                return std::move(*this).then(make_processor(std::forward<Processor>(processor)));
-            }
-
-        }*/
         template<typename Processor>
         auto then(Processor &&processor) && {
             using DecayedProcessor = std::decay_t<Processor>;
@@ -96,15 +65,13 @@ namespace clegmed::core {
             // Case 1: Handle lambda expression
             if constexpr (std::is_invocable_v<DecayedProcessor, decltype(std::declval<PreviousOutputType>())>)
             {
-                // Unter-Weiche A: Das Lambda ist SPEZIFISCH (besitzt einen festen operator())
+                // Case 1.A: Lambda ist defined with its types -> operator() exist -> we call make_processor without type
                 if constexpr (requires { &DecayedProcessor::operator(); }) {
-                    // Nutzt Ihre automatische function_traits-Ableitung
                     auto concrete_processor = make_processor(std::forward<Processor>(processor));
                     return std::move(*this).then(std::move(concrete_processor));
                 }
-                // Unter-Weiche B: Das Lambda ist GENERISCH (wie Ihr neues passThrough())
+                // Case 2.A:  Lambda is generic -> assume that InputType and OutputType is identical -> we call make_processor with type
                 else {
-                    // Wir zwingen das generische Lambda auf den Typ des Vorgängers!
                     auto concrete_processor = make_processor<PreviousOutputType>(std::forward<Processor>(processor));
                     return std::move(*this).then(std::move(concrete_processor));
                 }
@@ -123,7 +90,7 @@ namespace clegmed::core {
                     m_config
                 );
             }
-            // Fallback: Für alle restlichen, unkonventionellen Funktionsobjekte
+            // Fallback: For all other cases, we try make_processor
             else
             {
                 return std::move(*this).then(make_processor(std::forward<Processor>(processor)));

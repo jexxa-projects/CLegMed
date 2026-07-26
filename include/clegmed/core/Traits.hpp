@@ -40,7 +40,6 @@ namespace clegmed::core::detail {
         using type = T;
     };
 
-    // Komfort-Alias bleibt identisch
     template <typename T>
     using extract_pipe_type_t = extract_pipe_type<T>::type;
 
