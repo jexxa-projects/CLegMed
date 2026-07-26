@@ -61,6 +61,9 @@ TEST(PersistentTimerTest, PersistentTimerGraph) {
 TEST(PersistentTimerTest, PersistentTimerWithLookback) {
     //Arrange
     auto interval = 2ms;
+    auto lookBackWindow = 5s;
+    auto lookAheadWindow = 10s;
+
 
     auto repository = IMDBRepository<TimerState>();
     auto timer_config = TimerConfig::timerConfigOf(TimerId{"TestTimer"});
@@ -79,7 +82,8 @@ TEST(PersistentTimerTest, PersistentTimerWithLookback) {
         FlowGraph{}
         .every(interval)
         .from(PersistentTimer(timer_config, repository))
-        .then(startWithLookBack(5s))
+        .then(startWithLookBack(lookBackWindow))
+        .then(endWithLookAhead(lookAheadWindow))
         .then(passThrough())
         .consumeWith(consumer)
     );
@@ -89,5 +93,7 @@ TEST(PersistentTimerTest, PersistentTimerWithLookback) {
 
     //Assert
     EXPECT_TRUE(await_condition(interval * 15, [&result]  {return result.size() > 10;}));
+    EXPECT_EQ(timer_config.start_time - lookBackWindow, result[0].begin);
+    EXPECT_GE(timer_config.start_time + interval + lookAheadWindow, result[0].end);
     clegmed.stop();
 }

@@ -71,6 +71,18 @@ namespace clegmed::plugins::persistence {
     }
 
 
+    [[nodiscard]] auto endWithLookAhead(std::convertible_to<std::chrono::nanoseconds> auto duration ) {
+        auto lambda_strategy = [duration](const TimeInterval& time_interval) {
+            using ClockDuration = decltype(time_interval.begin)::duration;
+
+            auto casted_duration = std::chrono::duration_cast<ClockDuration>(duration);
+
+            return TimeInterval(time_interval.begin, time_interval.end + casted_duration);
+        };
+
+        return core::make_processor(lambda_strategy);
+    }
+
 }
 
 template <>
