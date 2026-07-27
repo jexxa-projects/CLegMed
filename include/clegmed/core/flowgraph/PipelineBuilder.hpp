@@ -12,11 +12,13 @@ namespace clegmed::core {
     template <typename T>
     struct extract_output_type {
         using type = decltype([](T*) {
-            if constexpr (requires { []<typename Out, typename Strat>(const Producer<Out, Strat>*) {}(static_cast<T*>(nullptr)); }) {
+            if constexpr (requires { []<typename Out, typename Strat>(const Producer<Out, Strat>*) {
+                /* Lambda implementation is empty because we just need to validate if it is a Producer*/
+            }(static_cast<T*>(nullptr)); }) {
                 return []<typename Out, typename Strat>(const Producer<Out, Strat>*) {
                     return std::type_identity<Out>{};
                 }(static_cast<T*>(nullptr));
-            } else {
+            } else { // We assume a Processor filter
                 return []<typename In, typename Out, typename Strat>(const Processor<In, Out, Strat>*) {
                     return std::type_identity<Out>{};
                 }(static_cast<T*>(nullptr));
