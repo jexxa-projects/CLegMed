@@ -46,7 +46,7 @@ namespace clegmed::plugins::persistence {
         TimeInterval last_time_interval;
 
         explicit TimerState(const TimerConfig& timer_config)
-        : timer_id(timer_config.timer_id), last_time_interval(timer_config.start_time, timer_config.start_time) {
+        : timer_id(timer_config.timer_id), last_time_interval{.begin = timer_config.start_time, .end = timer_config.start_time} {
         }
 
         TimerState(const TimerState&) = delete;
