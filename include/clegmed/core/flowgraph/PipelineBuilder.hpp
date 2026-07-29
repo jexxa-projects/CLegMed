@@ -13,7 +13,7 @@ namespace clegmed::core {
     template <typename Derived>
     inline constexpr bool is_filter_v = std::is_base_of_v<Filter, Derived>;
     // Hilfs-Trait um zu prüfen, ob ein Typ ein std::unique_ptr ist
-    template <typename T>
+    template <typename >
     struct is_unique_ptr : std::false_type {};
     template <typename T>
     struct is_unique_ptr<std::unique_ptr<T>> : std::true_type {};
@@ -21,19 +21,21 @@ namespace clegmed::core {
     inline constexpr bool is_unique_ptr_v = is_unique_ptr<T>::value;
 
     // Hilfs-Trait um zu prüfen, ob ein Typ ein std::unique_ptr ist
-    template <typename T>
+    template <typename >
     struct extract_ptr_element { using type = void; };
 
     template <typename T>
     struct extract_ptr_element<std::unique_ptr<T>> { using type = T; };
 
     template <typename T>
-    using extract_ptr_element_t = typename extract_ptr_element<T>::type;
+    using extract_ptr_element_t = extract_ptr_element<T>::type;
     // C++23 optimierte Typ-Extraktion für den Output
     template <typename T>
     struct extract_output_type {
         using type = decltype([](T*) {
-            if constexpr (requires { []<typename Out, typename Strat>(const Producer<Out, Strat>*) {}(static_cast<T*>(nullptr)); }) {
+            if constexpr (requires { []<typename Out, typename Strat>(const Producer<Out, Strat>*)
+                {/* Empty because we need the lambda just for inheritance validation*/}
+                (static_cast<T*>(nullptr)); }) {
                 return []<typename Out, typename Strat>(const Producer<Out, Strat>*) {
                     return std::type_identity<Out>{};
                 }(static_cast<T*>(nullptr));
