@@ -1,7 +1,5 @@
 #pragma once
-#include <iostream>
-#include <ostream>
-
+#include <memory>
 #include "Filter.hpp"
 #include "Traits.hpp"
 
