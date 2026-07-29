@@ -21,7 +21,7 @@ TEST(PersistentConsumerTest, PersistCustomer) {
     auto object_under_test = persistentStore(repository);
 
     // Act
-    object_under_test.consume(Customer(1, customer_name));
+    object_under_test->consume(Customer(1, customer_name));
 
     // Assert: Validate if passed
     EXPECT_EQ(1, repository.getAll().size());

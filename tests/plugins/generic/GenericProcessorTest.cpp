@@ -12,12 +12,12 @@ TEST(GenericPluginsTest, PassThroughProcessor) {
 
     auto object_under_test = passThrough<std::string>();
 
-    object_under_test.outputPipe().connect([&data_storage](std::string data) {
+    object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
     });
 
     // Act: Produce data
-    object_under_test.inputPipe()(message);
+    object_under_test->inputPipe()(message);
 
     // Assert: Validate if passed
     EXPECT_EQ(data_storage.size(), 1);
@@ -35,12 +35,12 @@ TEST(GenericPluginsTest, TraceInfoPorcessor) {
     testing::internal::CaptureStdout();
     auto object_under_test = traceInfo<std::string>();
 
-    object_under_test.outputPipe().connect([&data_storage](std::string data) {
+    object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
     });
 
     // Act/Assert: Produce data
-    object_under_test.inputPipe()(message);
+    object_under_test->inputPipe()(message);
     const std::string info_output = testing::internal::GetCapturedStdout();
     std::cout << info_output << std::endl;
 

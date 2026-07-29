@@ -48,7 +48,7 @@ namespace clegmed::plugins::persistence {
 
     template <typename Repository>
     [[nodiscard]] auto persistentTimer(const TimerConfig&  timer_config, Repository& repository) {
-        return PersistentTimer(timer_config, repository);
+        return std::make_unique<PersistentTimer<Repository>>(timer_config, repository);
     }
 
 

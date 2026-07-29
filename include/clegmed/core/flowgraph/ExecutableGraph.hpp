@@ -3,27 +3,26 @@
 #include <utility>
 #include <tuple>
 #include <thread>
-#include <iostream>
+#include <memory>
 #include "FlowGraphConfig.hpp"
-
 
 namespace clegmed::core {
 
     template <typename ... Filters>
     class ExecutableGraph {
-        std::tuple<Filters...> m_pipeline;
+        std::tuple<std::unique_ptr<Filters>...> m_pipeline;
         FlowGraphConfig m_config;
         std::unique_ptr<std::jthread> m_thread_ptr;
         std::condition_variable_any m_cv;
         std::mutex m_cv_mtx;
 
         template <size_t... Is>
-          void connect_pipes(std::index_sequence<Is...>) {
-            ((std::get<Is>(m_pipeline).outputPipe().connect(std::get<Is + 1>(m_pipeline).inputPipe())), ...);
+        void connect_pipes(std::index_sequence<Is...>) {
+            ((std::get<Is>(m_pipeline)->outputPipe().connect(std::get<Is + 1>(m_pipeline)->inputPipe())), ...);
         }
 
-        public:
-        ExecutableGraph(std::tuple<Filters...>&& pipeline, const FlowGraphConfig& config)
+    public:
+        ExecutableGraph(std::tuple<std::unique_ptr<Filters>...>&& pipeline, const FlowGraphConfig& config)
                 : m_pipeline(std::move(pipeline)), m_config(config) {
             constexpr size_t total_elements = sizeof...(Filters);
             static_assert(total_elements >= 2, "Pipeline requires at least one Producer and Consumer!");
@@ -56,15 +55,17 @@ namespace clegmed::core {
             stop();
         }
 
-
         void start() {
+            if (m_thread_ptr && m_thread_ptr->joinable()) {
+                return; // Verhindert mehrfaches Starten
+            }
+
             switch (m_config.type) {
                 case TriggerType::Every:
-                    m_thread_ptr =  std::make_unique<std::jthread>([this](const std::stop_token &stoken) {
+                    m_thread_ptr = std::make_unique<std::jthread>([this](const std::stop_token &stoken) {
                         this->startEvery(stoken);
-                });
+                    });
                     break;
-
                 case TriggerType::Repeat:
                     m_thread_ptr = std::make_unique<std::jthread>([this](const std::stop_token &stoken) {
                         this->startRepeat(stoken);
@@ -92,11 +93,10 @@ namespace clegmed::core {
             }
         }
 
-
     private:
         void startEvery(std::stop_token stoken) {
             while (!stoken.stop_requested()) {
-                std::get<0>(m_pipeline).produce();
+                std::get<0>(m_pipeline)->produce();
 
                 if (stoken.stop_requested()) {
                     break;
@@ -111,7 +111,7 @@ namespace clegmed::core {
 
         void startRepeat(const std::stop_token& stoken) {
             for (size_t i = 0; i < m_config.repeat_count; ++i) {
-                std::get<0>(m_pipeline).produce();
+                std::get<0>(m_pipeline)->produce();
                 if (stoken.stop_requested()) {
                     break;
                 }
@@ -120,15 +120,15 @@ namespace clegmed::core {
 
         void startAwait(const std::stop_token& stoken) {
             while (!stoken.stop_requested()) {
-                std::get<0>(m_pipeline).produce();
+                std::get<0>(m_pipeline)->produce();
                 if (stoken.stop_requested()) {
                     break;
                 }
             }
         }
-
     };
+
     template <typename... Args>
-    ExecutableGraph(std::tuple<Args...>, FlowGraphConfig) -> ExecutableGraph<Args...>;
+    ExecutableGraph(std::tuple<std::unique_ptr<Args>...>, FlowGraphConfig) -> ExecutableGraph<Args...>;
 
 }

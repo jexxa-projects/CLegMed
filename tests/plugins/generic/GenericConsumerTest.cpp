@@ -14,7 +14,7 @@ TEST(GenericPluginsTest, StoreConsumer) {
     auto object_under_test = store(data_storage);
 
     // Act: Produce data
-    object_under_test.inputPipe()(message);
+    object_under_test->inputPipe()(message);
 
     // Assert: Validate if passed
     EXPECT_EQ(data_storage.size(), 1);
@@ -29,7 +29,7 @@ TEST(GenericPluginsTest, DiscardConsumer) {
     auto object_under_test = discard<std::string>();
 
     // Act/Assert: Produce data
-    object_under_test.inputPipe()(message);
+    object_under_test->inputPipe()(message);
 }
 
 
@@ -42,7 +42,7 @@ TEST(GenericPluginsTest, LogInfoConsumer) {
     auto object_under_test = logInfo<std::string>();
 
     // Act/Assert: Produce data
-    object_under_test.inputPipe()(message);
+    object_under_test->inputPipe()(message);
     const std::string info_output = testing::internal::GetCapturedStdout();
 
     //Assert

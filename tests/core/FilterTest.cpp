@@ -4,13 +4,15 @@
 
 using namespace clegmed::core;
 
-class MockFilter : public Filter {
-public:
-    int value = 0;
+namespace {
+    class MockFilter : public Filter {
+    public:
+        int value = 0;
 
-    void modifyValue(const int v) { value = v; }
-    [[nodiscard]] int getValue() const { return value; }
-};
+        void modifyValue(const int v) { value = v; }
+        [[nodiscard]] int getValue() const { return value; }
+    };
+}
 
 // --- 1. COMPILE-TIME TESTS REQ-003-A ---
 
@@ -19,8 +21,8 @@ static_assert(!std::is_copy_constructible_v<Filter>, "REQ-003-A Violation: Filte
 static_assert(!std::is_copy_assignable_v<Filter>,    "REQ-003-A Violation: Filter must not be copy assignable!");
 
 // Validate if moving is enabled
-static_assert(std::is_move_constructible_v<Filter>, "REQ-003-A Violation: Filter must be moved constructible!");
-static_assert(std::is_move_assignable_v<Filter>,    "REQ-003-A Violation: Filter must be moved assignable!");
+static_assert(!std::is_move_constructible_v<Filter>, "REQ-003-A Violation: Filter must be moved constructible!");
+static_assert(!std::is_move_assignable_v<Filter>,    "REQ-003-A Violation: Filter must be moved assignable!");
 
 // Validate virtual destructor
 static_assert(std::has_virtual_destructor_v<Filter>, "REQ-003-A Violation: Filter must have a virtual destructor!");
@@ -28,17 +30,19 @@ static_assert(std::has_virtual_destructor_v<Filter>, "REQ-003-A Violation: Filte
 
 // --- 2. RUNTIME TESTS (GoogleTest Framework) ---
 
-class FilterTest : public testing::Test {
-protected:
-    template <typename Self>
-    auto&& getFilter(this Self&& explicit_this) {
-        // Bei Klassen-Attributen nutzt man std::forward auf das OBJEKT, nicht auf das Attribut selbst!
-        return std::forward<Self>(explicit_this).m_filter;
-    }
+namespace {
+    class FilterTest : public testing::Test {
+    protected:
+        template <typename Self>
+        auto&& getFilter(this Self&& explicit_this) {
+            // Bei Klassen-Attributen nutzt man std::forward auf das OBJEKT, nicht auf das Attribut selbst!
+            return std::forward<Self>(explicit_this).m_filter;
+        }
 
-private:
-    MockFilter m_filter;
-};
+    private:
+        MockFilter m_filter;
+    };
+}
 
 // Testet, ob self() auf einem non-const Objekt die veränderbare abgeleitete Klasse liefert
 TEST_F(FilterTest, SelfReturnsMutableDerivedReference) {

@@ -24,8 +24,6 @@ namespace clegmed::core {
         Processor() = delete;
         explicit  Processor(Strategy strategy) : m_strategy(std::move(strategy)) {}
         ~Processor() override = default;
-        Processor(Processor&&) noexcept = default;
-        Processor& operator=(Processor&&) noexcept = default;
 
         auto inputPipe() {
             return [this]<typename T>requires std::is_convertible_v<T, InputData>(T&& data)
@@ -89,24 +87,26 @@ namespace clegmed::core {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 
-        // Viel cleaner zu lesen:
         using InputData  = detail::function_traits<MemberPtr>::template argument_t<0>;
         using OutputData = detail::function_traits<MemberPtr>::result_type;
 
-        return Processor<InputData, OutputData, DecayedStrategy>(
+        using ConcreteProcessor = Processor<InputData, OutputData, DecayedStrategy>;
+
+        return std::make_unique<ConcreteProcessor>(
             std::forward<ProcessorStrategy>(strategy)
         );
     }
 
-    template <typename InputData,  typename ProcessorStrategy>
+
+    template <typename InputData, typename ProcessorStrategy>
     [[nodiscard]] auto make_processor(ProcessorStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;
+        using ConcreteProcessor = Processor<InputData, InputData, DecayedStrategy>;
 
-        return Processor<InputData, InputData, DecayedStrategy>(
+        return std::make_unique<ConcreteProcessor>(
             std::forward<ProcessorStrategy>(strategy)
         );
     }
-
 
     template <typename ProcessorStrategy>
     [[nodiscard]] auto make_piped_processor(ProcessorStrategy&& strategy) {
@@ -117,10 +117,11 @@ namespace clegmed::core {
         using PipeArg   = detail::function_traits<MemberPtr>::template argument_t<1>;
         using OutputData = detail::extract_pipe_type_t<PipeArg>;
 
-        return Processor<InputData, OutputData, DecayedStrategy>(
+        using ConcreteProcessor = Processor<InputData, OutputData, DecayedStrategy>;
+
+        return std::make_unique<ConcreteProcessor>(
             std::forward<ProcessorStrategy>(strategy)
         );
     }
-
 
 }

@@ -21,9 +21,9 @@ TEST(FlowGraphTest, GenericFlowGraphTest) {
     auto consumer = store(data_storage);
 
     //Act
-    producer.outputPipe().connect(processor.inputPipe());
-    processor.outputPipe().connect(consumer.inputPipe());
-    producer.produce();
+    producer->outputPipe().connect(processor->inputPipe());
+    processor->outputPipe().connect(consumer->inputPipe());
+    producer->produce();
 
     //Assert
     EXPECT_EQ(data_storage.size(), 1);
@@ -43,10 +43,10 @@ TEST(FlowGraphTest, PipeFlowGraphTest) {
     auto consumer = store(data_storage);
 
     //Act
-    producer | processor | consumer;
+    (*producer) | (*processor) | (*consumer);
 
     //Act
-    producer.produce();
+    producer->produce();
 
     //Assert
     EXPECT_EQ(data_storage.size(), 1);

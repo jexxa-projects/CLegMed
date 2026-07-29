@@ -20,8 +20,6 @@ namespace clegmed::core {
         ~Producer() override = default;
 
         explicit Producer(ProducerStrategy strategy) : Filter(), m_strategy(std::move(strategy)) {}
-        Producer(Producer&&) noexcept = default;
-        Producer& operator=(Producer&&) noexcept = default;
 
         template<typename Self >
         auto&& outputPipe(this Self&& explicit_this) {
@@ -49,15 +47,17 @@ namespace clegmed::core {
         OutputPipe<OutputData> m_outputPipe = OutputPipe<OutputData>(*this);
     };
 
-    template <typename  ProducerStrategy>
+    template <typename ProducerStrategy>
     [[nodiscard]] auto make_producer(ProducerStrategy&& producer_strategy) {
         using OutputData = std::invoke_result_t<ProducerStrategy>;
-        return Producer<OutputData, std::decay_t<ProducerStrategy>>(std::forward<ProducerStrategy>(producer_strategy));
+        using ConcreteProducer = Producer<OutputData, std::decay_t<ProducerStrategy>>;
+        return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
     }
 
-    template <typename OutputData, typename  ProducerStrategy>
+    template <typename OutputData, typename ProducerStrategy>
     [[nodiscard]] auto make_piped_producer(ProducerStrategy&& producer_strategy) {
-        return Producer<OutputData, std::decay_t<ProducerStrategy>>(std::forward<ProducerStrategy>(producer_strategy));
+        using ConcreteProducer = Producer<OutputData, std::decay_t<ProducerStrategy>>;
+        return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
     }
 
 

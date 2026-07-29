@@ -12,13 +12,13 @@ TEST(GenericPluginsTest, EmitProducer) {
 
     auto object_under_test = emit(message);
 
-    object_under_test.outputPipe().connect([&data_storage](std::string data) {
+    object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
     });
 
     // Act: Produce data
-    object_under_test.produce();
-    object_under_test.produce();
+    object_under_test->produce();
+    object_under_test->produce();
 
     // Assert: Validate if passed
     EXPECT_EQ(data_storage.size(), 2);

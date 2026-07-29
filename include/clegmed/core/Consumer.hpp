@@ -46,13 +46,16 @@ namespace clegmed::core {
     };
 
     template<typename ConsumerStrategy>
-    [[nodiscard]] auto make_consumer(ConsumerStrategy&& strategy) {
+ [[nodiscard]] auto make_consumer(ConsumerStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ConsumerStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
         using InputData = detail::function_traits<MemberPtr>::template argument_t<0>;
 
-        return Consumer<InputData, std::decay_t<ConsumerStrategy>>(std::forward<ConsumerStrategy>(strategy));
-    }
+        using ConcreteConsumer = Consumer<InputData, DecayedStrategy>;
 
+        return std::make_unique<ConcreteConsumer>(
+            std::forward<ConsumerStrategy>(strategy)
+        );
+    }
 
 }

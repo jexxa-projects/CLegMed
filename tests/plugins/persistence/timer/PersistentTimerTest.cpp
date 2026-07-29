@@ -16,11 +16,11 @@ TEST(PersistentTimerTest, PersistentTimer) {
     auto result = std::vector<TimeInterval>{};
     auto repository = IMDBRepository<TimerState>();
     auto timer_config = TimerConfig::timerConfigOf(TimerId{"TestTimer"});
-    auto object_under_test = PersistentTimer(timer_config, repository);
+    auto object_under_test = persistentTimer(timer_config, repository);
 
-    object_under_test.outputPipe().connect([&result](const TimeInterval time_interval){result.push_back(time_interval);});
+    object_under_test->outputPipe().connect([&result](const TimeInterval time_interval){result.push_back(time_interval);});
     //Act
-    object_under_test.produce();
+    object_under_test->produce();
 
     //Assert
     EXPECT_EQ(result.size(), 1);
@@ -45,7 +45,7 @@ TEST(PersistentTimerTest, PersistentTimerGraph) {
     auto clegmed = CLegMed(
         FlowGraph{}
         .every(interval)
-        .from(PersistentTimer(timer_config, repository))
+        .from(persistentTimer(timer_config, repository))
         .consumeWith(consumer)
     );
 
@@ -81,7 +81,7 @@ TEST(PersistentTimerTest, PersistentTimerWithLookback) {
     auto clegmed = CLegMed(
         FlowGraph{}
         .every(interval)
-        .from(PersistentTimer(timer_config, repository))
+        .from(persistentTimer(timer_config, repository))
         .then(startWithLookBack(lookBackWindow))
         .then(endWithLookAhead(lookAheadWindow))
         .then(passThrough())

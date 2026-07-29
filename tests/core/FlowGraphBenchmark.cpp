@@ -20,18 +20,18 @@ static void BM_FlowGraphThroughput(benchmark::State& state) {
         data_storage.push_back(data);
     };
 
-    auto producer = make_producer(producer_strategy);
-    auto processor = make_processor(processor_strategy);
-    auto consumer = make_consumer(consumer_strategy);
+    const auto producer = make_producer(producer_strategy);
+    const auto processor = make_processor(processor_strategy);
+    const auto consumer = make_consumer(consumer_strategy);
 
-    producer.outputPipe().connect(processor.inputPipe());
-    processor.outputPipe().connect(consumer.inputPipe());
+    producer->outputPipe().connect(processor->inputPipe());
+    processor->outputPipe().connect(consumer->inputPipe());
 
     int64_t items_processed = 0;
 
     // 2. Act
     for ([[maybe_unused]]auto _ : state) {
-        producer.produce();
+        producer->produce();
         items_processed++;
 
         // Verhindert Speicherüberlauf: Speicher regelmäßig leeren, ohne Kapazität zu verlieren

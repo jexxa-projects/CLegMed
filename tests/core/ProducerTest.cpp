@@ -11,12 +11,12 @@ TEST(CoreTest, ProducerSendsData) {
 
     auto object_under_test = make_producer(test_strategy);
 
-    object_under_test.outputPipe().connect([&data_storage](std::string data) {
+    object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
     });
 
     // Act: Put some data into the input pipe
-    object_under_test.produce();
+    object_under_test->produce();
 
     // Assert: Validate if passed
     EXPECT_EQ(data_storage.size(), 1);
@@ -33,12 +33,12 @@ TEST(CoreTest, ProducerSendsDataByOutputPipe) {
 
     auto object_under_test = make_piped_producer<std::string>(test_strategy);
 
-    object_under_test.outputPipe().connect([&data_storage](std::string data) {
+    object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
     });
 
     // Act: Put some data into the input pipe
-    object_under_test.produce();
+    object_under_test->produce();
 
     // Assert: Validate if passed
     EXPECT_EQ(data_storage.size(), 1);

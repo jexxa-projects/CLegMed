@@ -48,13 +48,13 @@ namespace clegmed::core{
          * @brief Move constructor is explicitly deleted.
          * @details Prevents slicing and pointer invalidation within active pipeline topologies.
          */
-        Filter(Filter&&) = default;
+        Filter(Filter&&) = delete;
 
         /**
          * @brief Move assignment operator is explicitly deleted.
          * @details Enforces immutability of the allocated filter structure during execution.
          */
-        Filter& operator=(Filter&&) = default;
+        Filter& operator=(Filter&&) = delete;
 
         /**
          * @brief Virtual destructor for proper cleanup of allocated resources.
