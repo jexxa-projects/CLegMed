@@ -52,7 +52,7 @@ namespace clegmed::core {
     template<typename... Filters>
     class PipelineBuilder {
         FlowGraphConfig m_config;
-        std::tuple<std::unique_ptr<Filters>...> m_pipeline;
+        [[no_unique_address]] std::tuple<std::unique_ptr<Filters>...> m_pipeline;
 
         template<typename... OtherFilters>
         friend class PipelineBuilder;
