@@ -1,4 +1,4 @@
-# Software Requirements Specification (SRS) - clegmed v0.1.4
+# Software Requirements Specification (SRS) - clegmed v0.1.5
 
 This document serves as the single source of truth for software requirements. All functional code changes must trace back to an ID in this document.
 
@@ -16,8 +16,9 @@ This document serves as the single source of truth for software requirements. Al
 | **[REQ-006]**   | Managing class to manage all FlowGraphs within an application | **VERIFIED** | tests in `CLegMedTest`                                               |                                                                     |
 | **[REQ-007]**   | Logging support                                               | **VERIFIED** | tests in `LoggerTest`, `GenericProcessorTest`, `GenericConsumerTest` |                                                                     |
 | **[REQ-008]**   | Repository & Persistence Specifications                       | **VERIFIED** | tests in `persistence`                                               | [d1d8155](https://github.com/jexxa-projects/CLegMed/commit/d1d8155) |     
+| **[REQ-009]**   | Persistent Timer Filter                                       | **VERIFIED** | tests in `persistence/timer`                                         | [0f8c909](https://github.com/jexxa-projects/CLegMed/commit/0f8c909) |     
 
-
+[REQ-009] 
 ---
 
 ## 🏗️ [REQ-001] Core Infrastructure & Verification Setup
