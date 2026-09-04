@@ -55,6 +55,18 @@ namespace clegmed::core {
             stop();
         }
 
+        template <size_t Index>
+        [[nodiscard]]decltype(auto) filter() {
+            static_assert(Index < sizeof...(Filters), "PipelineBuilder: Index out of bounds!");
+            return std::get<Index>(m_pipeline);
+        }
+
+        template <size_t Index>
+        [[nodiscard]] decltype(auto) filter() const {
+            static_assert(Index < sizeof...(Filters), "PipelineBuilder: Index out of bounds!");
+            return std::get<Index>(m_pipeline);
+        }
+
         void start() {
             if (m_thread_ptr && m_thread_ptr->joinable()) {
                 return; // Verhindert mehrfaches Starten

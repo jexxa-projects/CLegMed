@@ -2,6 +2,7 @@
 #include <utility>
 #include <string>
 #include <typeinfo>
+#include <memory>
 
 namespace clegmed::core{
     /**
@@ -25,6 +26,7 @@ namespace clegmed::core{
      * @b Requirement [REQ-003-A]
      */
     class Filter {
+        std::string m_properties;
     public:
         /**
         * @brief Default constructor for creating a Filter instance.
@@ -79,8 +81,18 @@ namespace clegmed::core{
             return std::forward<Self>(explicit_this);
         }
 
+        void withProperties(const std::string& properties) {
+            m_properties = properties;
+        }
+
+        [[nodiscard]] std::string properties() const {
+            return m_properties;
+        }
+
         [[nodiscard]]std::string name() const {
             return typeid(*this).name();
         }
     };
+
+    using FilterPtr = std::unique_ptr<Filter>;
 } // clegmed

@@ -81,3 +81,23 @@ TEST(FlowGraphTest, RealFlowGraphTest) {
 
 
 
+TEST(PropertiesTest, PropertiesTest) {
+    //Arrange
+    using namespace clegmed::shortcuts;
+    auto properties = "my-properties";
+
+    std::vector<std::string> data_storage;
+    //Act
+    auto flowgraph = FlowGraph{}
+    .every(std::chrono::milliseconds(10))
+    .from(emit("Hello")).withProperties(properties)
+    .then(append(" World"))
+    .consumeWith(store(data_storage));
+
+    //Act
+    auto result = flowgraph.filter<0>()->properties();
+
+    //Assert
+    EXPECT_EQ(result, properties);
+}
+
