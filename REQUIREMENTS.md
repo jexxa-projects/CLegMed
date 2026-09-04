@@ -129,8 +129,10 @@ This document serves as the single source of truth for software requirements. Al
     The project shall use CMake as its build system so that each target can be built independently. Especially, the build system should support 
     the separation of core and plugins to facilitate modular development and testing.
 *   **[CHORE-003-B] Standard compliant (OS-Source)**
-    The project shall provide a dedicated cmake-directory for header only components. The core package shall provide utils, 
+    The project shall provide a dedicated cmake-directory for header-only components. The core package shall provide utils, 
     core and generic plugins.
+*   **[CHORE-003-C] Project Info (OS-Source)**
+    The project shall provide a dedicated ProjectInfo.hpp file that contains version information and other project-related details.
 
 ## 🔒 [CHORE-004] Static Source Code Analysis  
 *   **[CHORE-004-A] SonarCloud**  
