@@ -60,6 +60,8 @@ This document serves as the single source of truth for software requirements. Al
     The FlowGraph class shall provide a fluent API to set up the final flow graph with explicit semantic from(<PRODUCER>), then(<PROCESSOR>), consumeWith(<CONSUMER>) 
 *   **[REQ-005-B] Producer specific methods**  
     The flow graph class shall provide methods for different producer types, such as every(), await() and repeat()
+*   **[REQ-005-C] Configuration**  
+    Within the semantic description, the flow graph should allow passing a name for a configuration that is passed to the filter (e.g., from (<producer>).withProperties(<unique string>) 
 
 ## 🧩 [REQ-006] Managing class to manage all FlowGraphs within an application 
 *   **[REQ-006-A] CLegMed**  
@@ -107,6 +109,7 @@ This document serves as the single source of truth for software requirements. Al
   (TimeInterval) as output, defined by a start point (begin), an end point (end), 
   and the corresponding TimerID. This interval describes the active time window of the timer. 
   The associated components should reside in a dedicated namespace to ensure a clean separation of the filter logic.
+
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
 
