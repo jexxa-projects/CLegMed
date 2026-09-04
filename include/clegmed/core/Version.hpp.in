@@ -1,0 +1,8 @@
+#pragma once
+
+// Automatisch von CMake generiert – nicht manuell bearbeiten!
+namespace clegmed::core {
+
+    inline constexpr const char* CLEGMED_VERSION     =  "@clegmed_VERSION_FULL@";
+
+} // namespace clegmed::core

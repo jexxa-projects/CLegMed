@@ -2,8 +2,50 @@
 # 1. PREAMBLE & REQUIREMENTS
 # ==============================================================================
 cmake_minimum_required(VERSION 4.1)
-project(clegmed VERSION 0.1.2 LANGUAGES CXX)
+project(clegmed VERSION 0.1.5 LANGUAGES CXX)
+set(clegmed_VERSION_FULL "${clegmed_VERSION}")
 
+find_package(Git QUIET)
+if(GIT_FOUND OR GIT_EXECUTABLE)
+    if(NOT GIT_EXECUTABLE)
+        set(GIT_EXECUTABLE "git")
+    endif()
+
+    # Den Hash auslesen
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} log -1 --format=%h
+            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+            OUTPUT_VARIABLE GIT_COMMIT_HASH
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_VARIABLE GIT_ERROR
+            ERROR_STRIP_TRAILING_WHITESPACE
+    )
+
+    # Den Status (dirty/clean) prüfen
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} status --porcelain
+            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+            OUTPUT_VARIABLE GIT_STATUS
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+    )
+
+    # Version zusammenbauen, falls wir einen Hash bekommen haben
+    if(GIT_COMMIT_HASH)
+        if(NOT GIT_STATUS STREQUAL "")
+            set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+git.${GIT_COMMIT_HASH}.dirty")
+        else()
+            set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+git.${GIT_COMMIT_HASH}")
+        endif()
+    else()
+        set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+git.unknown")
+        message(WARNING "Git konnte den Hash nicht lesen. Fehler: ${GIT_ERROR}")
+    endif()
+else()
+    set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+nogit")
+endif()
+
+message(STATUS "Generate Version: ${clegmed_VERSION_FULL}")
 # ==============================================================================
 # 2. GLOBAL SETTINGS & COMPILER OPTIONS
 # ==============================================================================

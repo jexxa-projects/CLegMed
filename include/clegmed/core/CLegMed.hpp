@@ -6,7 +6,7 @@
 #include "flowgraph/ExecutableGraph.hpp"
 #include "../utils/Signal.hpp"
 #include "detail/SignalHandler.hpp"
-
+#include "ProjectInfo.hpp"
 
 namespace clegmed::core {
 
@@ -97,7 +97,9 @@ namespace clegmed::core {
                 "Application {} successfully stopped ", programName());
 
         }
-
+        [[nodiscard]] static constexpr ProjectInfo info() noexcept {
+            return ProjectInfo{};
+        }
     private:
         static void registerSignalHandler() {
             std::signal(SIGINT, handle_shutdown_signals);

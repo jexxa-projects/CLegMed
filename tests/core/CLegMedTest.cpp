@@ -2,6 +2,19 @@
 #include "clegmed/core/flowgraph/FlowGraph.hpp"
 #include "gtest/gtest.h"
 #include "../utils/Await.hpp"
+#include "clegmed/plugins/shortcuts.hpp"
+
+TEST(CLegMedTest, ProjectInfo) {
+    //Arrange
+    using namespace clegmed::core;
+
+    //Act
+    auto projectInfo = CLegMed<>::info();
+
+    //Assert
+    std::cout << projectInfo.library_version << std::endl;
+    EXPECT_FALSE(projectInfo.library_version.empty());
+}
 
 TEST(CLegMedTest, StartStopMultitpleFlowGraphs) {
     //Arrange
@@ -80,6 +93,7 @@ TEST_P(CLegMedSignalTest, RunFlowGraphs) {
         m_thread_ptr->join();
     }
 }
+
 INSTANTIATE_TEST_SUITE_P(
     SignalTests,
     CLegMedSignalTest,
