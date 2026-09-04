@@ -2,6 +2,7 @@
 #pragma once
 #include <algorithm>
 #include <concepts>
+#include <vector>
 #include "OptionalReference.hpp"
 namespace clegmed::utils {
     template<typename T>
