@@ -121,8 +121,14 @@ As a header only library, there is no need to create a release. Instead, we use 
 so that fetch-content can be used to fetch the latest release.
 
 * Create release
-  Adjust the version in `CMakeLists.txt` validate `REQUIREMENTS.md` and create a tag with the new version number.
+  * Adjust the version in [`CLegMedVersion.hpp`](include/clegmed/core/CLegMedVersion.hpp) 
+  * Set `CLEGMED_VERSION_STATUS` to `""`   
+  * Validate `REQUIREMENTS.md` and commit your changes
+  * Create a tag with the new version number (e.g., `v1.0.0`).
   ```shell
       git tag -a v1.0.0 -m "Release version 1.0.0 [CHORE-001]"
-      git push origin v1.0.0  ```
-
+      git push origin v1.0.0
+    ```
+  * Adjust the version in [`CLegMedVersion.hpp`](include/clegmed/core/CLegMedVersion.hpp) to upcoming version 
+  * Set `CLEGMED_VERSION_STATUS` to `"-SNAPSHOT"`
+  * Commit your changes
