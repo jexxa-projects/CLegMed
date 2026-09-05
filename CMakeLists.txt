@@ -3,49 +3,73 @@
 # ==============================================================================
 cmake_minimum_required(VERSION 4.1)
 project(clegmed VERSION 0.1.5 LANGUAGES CXX)
-set(clegmed_VERSION_FULL "${clegmed_VERSION}")
+set(clegmed_VERSION_FULL ${clegmed_VERSION})
 
 find_package(Git QUIET)
 if(GIT_FOUND OR GIT_EXECUTABLE)
     if(NOT GIT_EXECUTABLE)
-        set(GIT_EXECUTABLE "git")
+        set(GIT_EXECUTABLE git)
     endif()
 
-    # Den Hash auslesen
+    # 1. Prüfen, ob der aktuelle Commit exakt ein Git-Tag ist
+    execute_process(
+            COMMAND ${GIT_EXECUTABLE} describe --tags --exact-match
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+            OUTPUT_VARIABLE GIT_TAG
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+    )
+
+    # 2. Den Hash auslesen
     execute_process(
             COMMAND ${GIT_EXECUTABLE} log -1 --format=%h
-            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             OUTPUT_VARIABLE GIT_COMMIT_HASH
             OUTPUT_STRIP_TRAILING_WHITESPACE
             ERROR_VARIABLE GIT_ERROR
             ERROR_STRIP_TRAILING_WHITESPACE
     )
 
-    # Den Status (dirty/clean) prüfen
+    # 3. Den Status (dirty/clean) prüfen
     execute_process(
             COMMAND ${GIT_EXECUTABLE} status --porcelain
-            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             OUTPUT_VARIABLE GIT_STATUS
             OUTPUT_STRIP_TRAILING_WHITESPACE
             ERROR_QUIET
     )
 
-    # Version zusammenbauen, falls wir einen Hash bekommen haben
+    # 4. Version zusammenbauen
     if(GIT_COMMIT_HASH)
+        # Suffix für ungespeicherte Änderungen bestimmen (+dirty)
         if(NOT GIT_STATUS STREQUAL "")
-            set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+git.${GIT_COMMIT_HASH}.dirty")
+            set(DIRTY_SUFFIX ".dirty")
         else()
-            set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+git.${GIT_COMMIT_HASH}")
+            set(DIRTY_SUFFIX "")
+        endif()
+
+        if(GIT_TAG)
+            # Wenn ein Tag existiert, kein -SNAPSHOT anhängen
+            if(DIRTY_SUFFIX)
+                set(clegmed_VERSION_FULL ${clegmed_VERSION}+git.${GIT_COMMIT_HASH}${DIRTY_SUFFIX})
+            else()
+                # Exakter Release-Stand (optional: nur ${clegmed_VERSION} nutzen)
+                set(clegmed_VERSION_FULL ${clegmed_VERSION})
+            endif()
+        else()
+            # Kein Tag -> SNAPSHOT-Version
+            set(clegmed_VERSION_FULL ${clegmed_VERSION}-SNAPSHOT+git.${GIT_COMMIT_HASH}${DIRTY_SUFFIX})
         endif()
     else()
-        set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+git.unknown")
-        message(WARNING "Git konnte den Hash nicht lesen. Fehler: ${GIT_ERROR}")
+        set(clegmed_VERSION_FULL ${clegmed_VERSION}-SNAPSHOT+git.unknown)
+        message(WARNING "Git could not read hash. Error: ${GIT_ERROR}")
     endif()
 else()
-    set(clegmed_VERSION_FULL "${clegmed_VERSION}-SNAPSHOT+nogit")
+    set(clegmed_VERSION_FULL ${clegmed_VERSION}-SNAPSHOT+nogit)
 endif()
 
-message(STATUS "Generate Version: ${clegmed_VERSION_FULL}")
+# Test-Ausgabe zur Kontrolle
+message(STATUS "Clegmed Full Version: ${clegmed_VERSION_FULL}")
 # ==============================================================================
 # 2. GLOBAL SETTINGS & COMPILER OPTIONS
 # ==============================================================================

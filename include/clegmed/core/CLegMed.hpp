@@ -6,7 +6,7 @@
 #include "flowgraph/ExecutableGraph.hpp"
 #include "../utils/Signal.hpp"
 #include "detail/SignalHandler.hpp"
-#include "ProjectInfo.hpp"
+#include "VersionInfo.hpp"
 
 namespace clegmed::core {
 
@@ -50,7 +50,7 @@ namespace clegmed::core {
             stop();
         }
 
-        [[nodiscard]] std::string_view programName() const noexcept {
+        [[nodiscard]] std::string_view applicationName() const noexcept {
             if (!m_argv.empty()) {
                 return m_argv[0];
             }
@@ -81,7 +81,7 @@ namespace clegmed::core {
             start();
             utils::Logger::log(
                 utils::LogLevel::INFO,
-                "Application {} successfully started", programName()
+                "Application {} successfully started", applicationName()
                 );
 
             detail::wait_for_signal();
@@ -94,11 +94,11 @@ namespace clegmed::core {
 
             utils::Logger::log(
                 utils::LogLevel::INFO,
-                "Application {} successfully stopped ", programName());
+                "Application {} successfully stopped ", applicationName());
 
         }
-        [[nodiscard]] static constexpr ProjectInfo info() noexcept {
-            return ProjectInfo{};
+        [[nodiscard]] VersionInfo versionInfo() const noexcept {
+            return VersionInfo(applicationName());
         }
     private:
         static void registerSignalHandler() {

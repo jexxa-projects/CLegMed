@@ -3,8 +3,8 @@ add_library(clegmed::core::base ALIAS clegmed_core_base)
 
 # 1. Datei in den Build-Ordner generieren (Bleibt so)
 configure_file(
-        include/clegmed/core/Version.hpp.in
-        ${CMAKE_CURRENT_BINARY_DIR}/include/clegmed/core/generated/Version.hpp
+        include/clegmed/core/CLegMedVersion.hpp.in
+        ${CMAKE_CURRENT_BINARY_DIR}/include/clegmed/core/generated/CLegMedVersion.hpp
 )
 
 # 2. Beide Include-Pfade für das Interface registrieren (WICHTIG!)

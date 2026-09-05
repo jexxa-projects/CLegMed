@@ -7,13 +7,16 @@
 TEST(CLegMedTest, ProjectInfo) {
     //Arrange
     using namespace clegmed::core;
+    auto clegmed = CLegMed();
 
     //Act
-    auto projectInfo = CLegMed<>::info();
+    auto versionInfo = clegmed.versionInfo();
 
     //Assert
-    std::cout << projectInfo.library_version << std::endl;
-    EXPECT_FALSE(projectInfo.library_version.empty());
+    std::cout << versionInfo.clegmed_version << std::endl;
+    std::cout << versionInfo.application << std::endl;
+    EXPECT_FALSE(versionInfo.clegmed_version.empty());
+    EXPECT_FALSE(versionInfo.application.empty());
 }
 
 TEST(CLegMedTest, StartStopMultitpleFlowGraphs) {

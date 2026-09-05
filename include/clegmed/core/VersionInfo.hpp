@@ -4,8 +4,10 @@
 #include <clegmed/core/generated/Version.hpp>
 
 namespace clegmed::core {
-    struct ProjectInfo {
-        std::string_view library_version{ CLEGMED_VERSION   };
+    struct VersionInfo {
+        VersionInfo(std::string_view application) : application{ application } {}
+        std::string_view application;
+        std::string_view clegmed_version{ CLEGMED_VERSION   };
         std::string_view build_type{
             #ifdef NDEBUG
                 "Release"
