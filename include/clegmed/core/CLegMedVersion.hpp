@@ -1,8 +1,8 @@
 #pragma once
 #define CLEGMED_VERSION_MAJOR 0
 #define CLEGMED_VERSION_MINOR 1
-#define CLEGMED_VERSION_PATCH 8
-#define CLEGMED_VERSION_STATUS "" // Für Releases einfach auf "" setzen
+#define CLEGMED_VERSION_PATCH 9
+#define CLEGMED_VERSION_STATUS "-SNAPSHOT" // Für Releases einfach auf "" setzen
 
 namespace clegmed::core {
 
