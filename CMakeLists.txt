@@ -2,74 +2,56 @@
 # 1. PREAMBLE & REQUIREMENTS
 # ==============================================================================
 cmake_minimum_required(VERSION 4.1)
-project(clegmed VERSION 0.1.7 LANGUAGES CXX)
-set(clegmed_VERSION_FULL ${clegmed_VERSION})
 
-find_package(Git QUIET)
-if(GIT_FOUND OR GIT_EXECUTABLE)
-    if(NOT GIT_EXECUTABLE)
-        set(GIT_EXECUTABLE git)
-    endif()
+# 1. Lies den C++ Header ein
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/include/clegmed/core/CLegMedVersion.hpp" VERSION_FILE_CONTENT)
 
-    # 1. Prüfen, ob der aktuelle Commit exakt ein Git-Tag ist
-    execute_process(
-            COMMAND ${GIT_EXECUTABLE} describe --tags --exact-match
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            OUTPUT_VARIABLE GIT_TAG
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            ERROR_QUIET
-    )
+# 2. Extrahiere alle Teile per Regex
+string(REGEX MATCH "#define CLEGMED_VERSION_MAJOR ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
+set(CLEGMED_MAJOR ${CMAKE_MATCH_1})
 
-    # 2. Den Hash auslesen
-    execute_process(
-            COMMAND ${GIT_EXECUTABLE} log -1 --format=%h
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            OUTPUT_VARIABLE GIT_COMMIT_HASH
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            ERROR_VARIABLE GIT_ERROR
-            ERROR_STRIP_TRAILING_WHITESPACE
-    )
+string(REGEX MATCH "#define CLEGMED_VERSION_MINOR ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
+set(CLEGMED_MINOR ${CMAKE_MATCH_1})
 
-    # 3. Den Status (dirty/clean) prüfen
-    execute_process(
-            COMMAND ${GIT_EXECUTABLE} status --porcelain
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-            OUTPUT_VARIABLE GIT_STATUS
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            ERROR_QUIET
-    )
+string(REGEX MATCH "#define CLEGMED_VERSION_PATCH ([0-9]+)" _ "${VERSION_FILE_CONTENT}")
+set(CLEGMED_PATCH ${CMAKE_MATCH_1})
 
-    # 4. Version zusammenbauen
-    if(GIT_COMMIT_HASH)
-        # Suffix für ungespeicherte Änderungen bestimmen (+dirty)
-        if(NOT GIT_STATUS STREQUAL "")
-            set(DIRTY_SUFFIX ".dirty")
-        else()
-            set(DIRTY_SUFFIX "")
-        endif()
+string(REGEX MATCH "#define CLEGMED_VERSION_STATUS \"([^\"]*)\"" _ "${VERSION_FILE_CONTENT}")
+set(CLEGMED_STATUS ${CMAKE_MATCH_1})
 
-        if(GIT_TAG)
-            # Wenn ein Tag existiert, kein -SNAPSHOT anhängen
-            if(DIRTY_SUFFIX)
-                set(clegmed_VERSION_FULL ${clegmed_VERSION}+git.${GIT_COMMIT_HASH}${DIRTY_SUFFIX})
-            else()
-                # Exakter Release-Stand (optional: nur ${clegmed_VERSION} nutzen)
-                set(clegmed_VERSION_FULL ${clegmed_VERSION})
-            endif()
-        else()
-            # Kein Tag -> SNAPSHOT-Version
-            set(clegmed_VERSION_FULL ${clegmed_VERSION}-SNAPSHOT+git.${GIT_COMMIT_HASH}${DIRTY_SUFFIX})
-        endif()
-    else()
-        set(clegmed_VERSION_FULL ${clegmed_VERSION}-SNAPSHOT+git.unknown)
-        message(WARNING "Git could not read hash. Error: ${GIT_ERROR}")
-    endif()
-else()
-    set(clegmed_VERSION_FULL ${clegmed_VERSION}-SNAPSHOT+nogit)
-endif()
+# 3. Das CMake-Projekt dynamisch initialisieren
+project(clegmed
+        VERSION "${CLEGMED_MAJOR}.${CLEGMED_MINOR}.${CLEGMED_PATCH}"
+        LANGUAGES CXX
+)
 
-# Test-Ausgabe zur Kontrolle
+# Kombinierte Version für interne CMake-Zwecke
+set(clegmed_VERSION_FULL "${CLEGMED_MAJOR}.${CLEGMED_MINOR}.${CLEGMED_PATCH}${CLEGMED_STATUS}")
+
+
+# Test-Ausgabe zur Kontrolle bei der Generierung
 message(STATUS "Clegmed Full Version: ${clegmed_VERSION_FULL}")
+
+# ==============================================================================
+# 3. TARGET DEFINITION (Header-Only) & EXPORTS
+# ==============================================================================
+# Erstellt die Header-Only Library
+add_library(clegmed INTERFACE)
+
+# Best Practice: Namespace-Alias für einbindende Apps bereitstellen
+add_library(clegmed::clegmed ALIAS clegmed)
+
+# Definiert die Include-Pfade für die Header
+target_include_directories(clegmed INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+target_compile_definitions(clegmed INTERFACE
+        CLEGMED_VERSION_FULL="${clegmed_VERSION_FULL}"
+        # Dieser Fallback zieht sich den exakten Text aus der project()-Zeile:
+        CLEGMED_PROJECT_VERSION_FALLBACK="${PROJECT_VERSION}"
+)
 # ==============================================================================
 # 2. GLOBAL SETTINGS & COMPILER OPTIONS
 # ==============================================================================

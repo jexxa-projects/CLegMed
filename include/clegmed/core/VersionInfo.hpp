@@ -1,7 +1,7 @@
 
 #pragma once
 #include <string_view>
-#include <clegmed/core/generated/CLegMedVersion.hpp>
+#include "CLegMedVersion.hpp"
 
 namespace clegmed::core {
     struct VersionInfo {
