@@ -2,7 +2,7 @@
 # 1. PREAMBLE & REQUIREMENTS
 # ==============================================================================
 cmake_minimum_required(VERSION 4.1)
-project(clegmed VERSION 0.1.5 LANGUAGES CXX)
+project(clegmed VERSION 0.1.7 LANGUAGES CXX)
 set(clegmed_VERSION_FULL ${clegmed_VERSION})
 
 find_package(Git QUIET)
