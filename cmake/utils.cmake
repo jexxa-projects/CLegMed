@@ -10,3 +10,8 @@ target_sources(clegmed_utils INTERFACE
         include/clegmed/utils/EntityTraits.hpp
         include/clegmed/utils/PropertiesLoader.hpp
 )
+
+target_link_libraries(clegmed_utils INTERFACE
+        # Für den lokalen Build (während der Entwicklung im Repo)
+        $<BUILD_LOCAL_INTERFACE:tomlplusplus::tomlplusplus>
+)

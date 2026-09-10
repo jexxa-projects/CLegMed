@@ -4,6 +4,7 @@
 
 add_executable(clegmed_utils_test
         LoggerTest.cpp
+        PropertiesLoaderTest.cpp
 )
 target_link_libraries(clegmed_utils_test PRIVATE
         clegmed::utils
