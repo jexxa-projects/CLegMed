@@ -110,6 +110,9 @@ This document serves as the single source of truth for software requirements. Al
   and the corresponding TimerID. This interval describes the active time window of the timer. 
   The associated components should reside in a dedicated namespace to ensure a clean separation of the filter logic.
 
+🧩 [REQ-010] Config file support
+* [REQ-010-A] The framework shall provide a way to define a standard config file that is loaded 
+  at startup. In a first step we will use toml as format
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
 
