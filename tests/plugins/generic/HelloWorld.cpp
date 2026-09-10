@@ -1,3 +1,7 @@
+#ifdef CLEGMED_APP_VERSION
+#undef CLEGMED_APP_VERSION
+#endif
+#define CLEGMED_APP_VERSION CLEGMED_VERSION
 
 // ReSharper disable CppParameterMayBeConst
 #include "clegmed/plugins/shortcuts.hpp"

@@ -1,5 +1,6 @@
 #pragma once
 #include <csignal>
+#include <filesystem>
 #include <vector>
 
 #include "clegmed/plugins/generic/GenericConsumer.hpp"
@@ -50,14 +51,22 @@ namespace clegmed::core {
             stop();
         }
 
-        [[nodiscard]] std::string_view applicationName() const noexcept {
+        [[nodiscard]]
+        std::string applicationName() const noexcept {
+            if (CLEGMED_APP_NAME != std::string("Unknown Application")) {
+                return CLEGMED_APP_NAME;
+            }
+
             if (!m_argv.empty()) {
-                return m_argv[0];
+                return std::filesystem::path(std::string(m_argv[0]))
+                    .filename()
+                    .string();
             }
             return "Unknown Application";
         }
 
         void start() {
+            printStartupInfo();
             auto execute_start = [this]<size_t... Is>(std::index_sequence<Is...>) {
                 (std::get<Is>(m_executable_graphs).start(), ...);
             };
@@ -97,10 +106,19 @@ namespace clegmed::core {
                 "Application {} successfully stopped ", applicationName());
 
         }
-        [[nodiscard]] VersionInfo versionInfo() const noexcept {
+
+        [[nodiscard]]
+        VersionInfo versionInfo() const noexcept {
             return VersionInfo(applicationName());
         }
+
     private:
+        void printStartupInfo() {
+            utils::Logger::log( utils::LogLevel::INFO, "CLegMed Version              : {} ", versionInfo().m_clegmed_version);
+            utils::Logger::log( utils::LogLevel::INFO, "Application Version          : {} ", versionInfo().m_application_version);
+            utils::Logger::log( utils::LogLevel::INFO, "Application Name             : {} ", versionInfo().m_application_name);
+            utils::Logger::log( utils::LogLevel::INFO, "");
+        }
         static void registerSignalHandler() {
             std::signal(SIGINT, handle_shutdown_signals);
             std::signal(SIGHUP, handle_shutdown_signals);
