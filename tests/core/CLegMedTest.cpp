@@ -13,10 +13,12 @@ TEST(CLegMedTest, ProjectInfo) {
     auto versionInfo = clegmed.versionInfo();
 
     //Assert
-    std::cout << versionInfo.clegmed_version << std::endl;
-    std::cout << versionInfo.application << std::endl;
-    EXPECT_FALSE(versionInfo.clegmed_version.empty());
-    EXPECT_FALSE(versionInfo.application.empty());
+    std::cout << versionInfo.m_clegmed_version << std::endl;
+    std::cout << versionInfo.m_application_name << std::endl;
+    std::cout << versionInfo.m_application_version << std::endl;
+    EXPECT_FALSE(versionInfo.m_clegmed_version.empty());
+    EXPECT_FALSE(versionInfo.m_application_name.empty());
+    EXPECT_FALSE(versionInfo.m_application_version.empty());
 }
 
 TEST(CLegMedTest, StartStopMultitpleFlowGraphs) {
