@@ -69,11 +69,11 @@ This document serves as the single source of truth for software requirements. Al
 *   **[REQ-006-B] CLegMed - run()**  
     CLegMed shall provide a convenience method that starts all registered flow graphs and blocks main-method until 
     the application is terminated by standard signals (see [REQ-006-C])
-*   **[REQ-006-C] CLegMed - Standard Signal handling**  
-    CLegMed shall provide a meaningful approach for handling standard signals such as: 
+*   **[REQ-006-C] CLegMed – Standard Signal handling**  
+    CLegMed shall provide a meaningful approach for handling standard signals such as 
     SIGINT (CTRL-C), SIGTERM (Signal 15) and SIGHUP (Signal 1)
-*   **[REQ-006-C] CLegMed - Shortcuts**  
-    CLegMed shall provide a shortcuts namespace that uses the required namespaced for convenience purpose 
+*   **[REQ-006-C] CLegMed – Shortcuts**  
+    CLegMed shall provide a shortcut namespace that uses the required namespaced for convenience purpose 
 
 ## 🧩 [REQ-007] Simple Logging support
 * **[REQ-007-A] Log Levels**
@@ -101,18 +101,18 @@ This document serves as the single source of truth for software requirements. Al
   To ensure a simplified repository API, the locking model should only guarantee a __Last Write Wins__ situation. 
 
 
-🧩 [REQ-009] Persistent Timer Filter
+🧩 [REQ-009] Persistent-Timer Filter
 * [REQ-009-A] The framework shall provide a filter that functions as a persistent
   timer, generating a defined time window based on a specific configuration.
   **Description:** The filter shall accept a timer configuration (TimerConfig) as input, 
   containing a unique timer-id and a start time. The filter shall produce a time interval 
-  (TimeInterval) as output, defined by a start point (begin), an end point (end), 
+  (TimeInterval) as an output, defined by a start point (begin), an end point (end), 
   and the corresponding TimerID. This interval describes the active time window of the timer. 
   The associated components should reside in a dedicated namespace to ensure a clean separation of the filter logic.
 
 🧩 [REQ-010] Config file support
 * [REQ-010-A] The framework shall provide a way to define a standard config file that is loaded 
-  at startup. In a first step we will use toml as format
+  at startup. In the first step we will use the toml format
 
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
 
