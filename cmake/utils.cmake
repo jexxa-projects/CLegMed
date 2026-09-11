@@ -1,4 +1,5 @@
-add_library(clegmed_utils INTERFACE)
+add_library(clegmed_utils INTERFACE
+        ../include/clegmed/utils/Properties.hpp)
 add_library(clegmed::utils ALIAS clegmed_utils)
 
 target_sources(clegmed_utils INTERFACE
@@ -8,7 +9,7 @@ target_sources(clegmed_utils INTERFACE
         include/clegmed/utils/Logger.hpp
         include/clegmed/utils/Signal.hpp
         include/clegmed/utils/EntityTraits.hpp
-        include/clegmed/utils/PropertiesLoader.hpp
+        include/clegmed/utils/Properties.hpp
 )
 
 target_link_libraries(clegmed_utils INTERFACE

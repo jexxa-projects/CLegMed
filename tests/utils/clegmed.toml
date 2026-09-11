@@ -1,0 +1,113 @@
+# ==============================================================================
+# ULTIMATIVE TOML-TESTDATEI (Enthält alle unterstützten Datentypen)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. STRINGS (Zeichenketten)
+# ------------------------------------------------------------------------------
+[strings]
+normal          = "Ein einfacher String in einer Zeile."
+escaped         = "Mit Tabs \t, Zeilenumbruch \n und Unicode: \u221E"
+literal         = 'C:\Users\Name\Documents\' # Backslashes müssen hier NICHT escaped werden
+
+# Mehrzeilige Strings (Multiline)
+multi_normal    = """
+Dies ist ein Text, der sich über
+mehrere Zeilen erstrecken darf.
+"""
+multi_literal   = '''
+Hier drin wird absolut nichts escaped.
+\n \t \u221E bleiben genau so stehen.
+'''
+
+# ------------------------------------------------------------------------------
+# 2. INTEGERS (Ganzzahlen)
+# ------------------------------------------------------------------------------
+[integers]
+positive        = +99
+negative        = -17
+decimal         = 12345
+with_underscores = 1_000_000 # Unterstriche zur besseren Lesbarkeit
+binary          = 0b11010010  # Binär (Prefix 0b)
+octal           = 0o755       # Oktal (Prefix 0o)
+hexadecimal     = 0xDEADBEEF  # Hexadezimal (Prefix 0x)
+
+# ------------------------------------------------------------------------------
+# 3. FLOATS (Fließkommazahlen)
+# ------------------------------------------------------------------------------
+[floats]
+normal          = 3.14159
+negative        = -0.01
+with_underscores = 9_224.567_890
+exponent_small  = 5e+22
+exponent_large  = 1e6
+exponent_neg    = -2E-2
+
+# Sonderfälle (Sollte dein Parser handhaben können)
+infinity        = inf
+minus_infinity  = -inf
+not_a_number    = nan
+
+# ------------------------------------------------------------------------------
+# 4. BOOLEANS (Wahrheitswerte)
+# ------------------------------------------------------------------------------
+[booleans]
+wahr            = true
+falsch          = false
+
+# ------------------------------------------------------------------------------
+# 5. DATES & TIMES (Datum und Uhrzeit)
+# ------------------------------------------------------------------------------
+[datetimes]
+# Offset Date-Time (Vollständiger Zeitstempel mit Zeitzone)
+offset_datetime = 1979-05-27T07:32:00.999999-08:00
+offset_space    = 1979-05-27 07:32:00Z # Leerzeichen statt T und 'Z' für UTC ist erlaubt
+
+# Local Date-Time (Ohne Zeitzonen-Bezug)
+local_datetime  = 1979-05-27T07:32:00
+
+# Local Date (Nur Datum)
+local_date      = 1979-05-27
+
+# Local Time (Nur Uhrzeit)
+local_time      = 07:32:00.999999
+
+# ------------------------------------------------------------------------------
+# 6. ARRAYS (Listen / Felder)
+# ------------------------------------------------------------------------------
+[arrays]
+integers        = [ 1, 2, 3 ]
+strings         = [ "C++", "Java", "Python" ]
+mixed_types     = [ 1, 2.0, "gemischt", true ] # Seit TOML 1.0 erlaubt!
+nested          = [ [ 1, 2 ], [ 3, 4, 5 ] ]
+multiline       = [
+    "Erstes Element",
+    "Zweites Element", # Komma am Ende ist erlaubt
+]
+
+# ------------------------------------------------------------------------------
+# 7. TABLES (Tabellen / Key-Value-Objekte)
+# ------------------------------------------------------------------------------
+# Verschachtelte Tabellen über die Punkt-Notation (Dot Notation)
+[servers.alpha]
+ip = "10.0.0.1"
+role = "backend"
+
+[servers.beta]
+ip = "10.0.0.2"
+role = "frontend"
+
+# Inline Tables (Kompakte Schreibweise, gut für kurze Konfigurationen)
+database = { type = "postgres", host = "localhost", ports = [ 5432, 5433 ] }
+
+# ------------------------------------------------------------------------------
+# 8. ARRAY OF TABLES (Listen von Objekten)
+# ------------------------------------------------------------------------------
+# Erzeugt ein Array aus Tabellen/Objekten (wichtig für Listen von Systemen)
+[[products]]
+name = "Hammer"
+sku = 738594
+
+[[products]]
+name = "Nagel"
+sku = 859302
