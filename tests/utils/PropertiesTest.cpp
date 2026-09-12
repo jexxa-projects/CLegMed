@@ -32,13 +32,15 @@ TEST(PropertiesLoaderTest, ValidProperties) {
 TEST(PropertiesLoaderTest, ReadProperties) {
     //Arrange
     using namespace clegmed::utils;
+    auto result = AppProperties();
 
     //Act
-    auto result =
-        Properties::fromFile("clegmed.toml")->get<StringProperties>("strings");
+    result.strings  = Properties::fromFile("clegmed.toml")->get<StringProperties>("strings");
+    result.integers = Properties::fromFile("clegmed.toml")->get<IntegerProperties>("integers");
+    result.servers  = Properties::fromFile("clegmed.toml")->get<ServersProperties>("servers");
 
     //Assert
-    ASSERT_FALSE(result.literal.empty());
-    ASSERT_FALSE(result.multi_normal.empty());
-    ASSERT_FALSE(result.normal.empty());
+    ASSERT_FALSE(result.strings.literal.empty());
+    ASSERT_FALSE(result.strings.multi_normal.empty());
+    ASSERT_FALSE(result.strings.normal.empty());
 }

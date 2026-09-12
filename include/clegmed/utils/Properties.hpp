@@ -1,7 +1,9 @@
 #pragma once
-#include <expected>
 #include <filesystem>
-#define TOML_EXCEPTIONS 0
+#include <expected>
+#include <type_traits>
+
+#define TOML_EXCEPTIONS 0 //NOSONAR
 #include <toml++/toml.hpp>
 
 namespace clegmed::utils {
@@ -32,7 +34,7 @@ namespace clegmed::utils {
 
         template <typename T>
         [[nodiscard]]
-        auto get(std::string_view path) const -> T {
+        auto get(const std::string_view path) const -> T {
             //Handle base types
             if constexpr (std::is_fundamental_v<T> || std::is_same_v<T, std::string>) {
                 return m_table.at_path(path).value_or(T{});
