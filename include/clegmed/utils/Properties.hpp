@@ -7,6 +7,14 @@
 #include <toml++/toml.hpp>
 
 namespace clegmed::utils {
+    class Properties;
+
+    template <typename T>
+    concept DeserializableFromProperties =
+        requires(const Properties& properties, T& target) { target.fromProperties(properties); } ||
+        requires(const Properties& properties, T& target) { fromProperties(properties, target);} ||
+        requires(const Properties& properties, T& target) { T::fromProperties(properties, target);};
+
     class Properties {
     public:
         enum class LoadError {
@@ -39,16 +47,33 @@ namespace clegmed::utils {
             if constexpr (std::is_fundamental_v<T> || std::is_same_v<T, std::string>) {
                 return m_table.at_path(path).value_or(T{});
             } else {
+                static_assert(DeserializableFromProperties<T>, "Typ T must implement a 'fromProperties' method with supported signatures in DeserializableFromProperties.");
+
                 //Handle complex data structures
                 T target{};
                 if (auto* node = m_table.at_path(path).as_table()) {
-                    Properties sub_properties{ *node };
-                    fromProperties(sub_properties, target);
+                    if constexpr (
+                        Properties sub_properties{ *node };
+                        requires { target.fromProperties(sub_properties); })
+                    {
+                        target.fromProperties(sub_properties);
+                    } else if constexpr (requires { fromProperties(sub_properties, target); }) {
+                        fromProperties(sub_properties, target);
+                    } else if constexpr (requires { T::fromProperties(sub_properties, target); }) {
+                        T::fromProperties(sub_properties, target);
+                    }
                 }
                 return target;
             }
         }
 
+        [[nodiscard]]
+        auto subProperties(std::string_view path) const -> std::optional<Properties> {
+            if (auto* node = m_table.at_path(path).as_table()) {
+                return Properties{ *node };
+            }
+            return std::nullopt;
+        }
     private:
         toml::v3::table m_table;
     };

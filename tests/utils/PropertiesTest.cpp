@@ -35,12 +35,18 @@ TEST(PropertiesLoaderTest, ReadProperties) {
     auto result = AppProperties();
 
     //Act
-    result.strings  = Properties::fromFile("clegmed.toml")->get<StringProperties>("strings");
-    result.integers = Properties::fromFile("clegmed.toml")->get<IntegerProperties>("integers");
-    result.servers  = Properties::fromFile("clegmed.toml")->get<ServersProperties>("servers");
+    auto properties = Properties::fromFile("clegmed.toml").value();
+    result.strings  = properties.get<StringProperties>("strings");
+    result.integers = properties.get<IntegerProperties>("integers");
+    result.servers  = properties.get<ServersProperties>("servers");
 
     //Assert
     ASSERT_FALSE(result.strings.literal.empty());
     ASSERT_FALSE(result.strings.multi_normal.empty());
     ASSERT_FALSE(result.strings.normal.empty());
+}
+TEST(PropertiesConceptTest, InvalidStructFailsConcept) {
+    using namespace clegmed::utils;
+    static_assert(! DeserializableFromProperties<InvalidPropertiesStruct>,
+                  "InvalidPropertiesStruct must not fulfill the concept!");
 }

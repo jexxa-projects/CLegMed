@@ -1,12 +1,16 @@
 #pragma once
 #include "../core/CLegMed.hpp"
 #include "../core/flowgraph/FlowGraph.hpp"
+#include "clegmed/utils/Properties.hpp"
 #include "generic/GenericProcessor.hpp"
 #include "generic/GenericProducer.hpp"
 #include "persistence/generic/PersistentConsumer.hpp"
 #include "persistence/timer/PersistentTimer.hpp"
 
 namespace clegmed::shortcuts {
+    //Utility classes
+    using utils::Properties;
+
     // Core classes
     using core::FlowGraph;
     using core::CLegMed;
