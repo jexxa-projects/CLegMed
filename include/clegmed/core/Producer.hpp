@@ -88,11 +88,8 @@ namespace clegmed::core {
         using DecayedStrategy = std::decay_t<ProducerStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 
-        // Nutze deine function_traits, um den echten Rückgabetyp der Funktion zu ermitteln!
-        using OutputData = typename detail::function_traits<MemberPtr>::result_type;
-
-        // FilterProperties extrahieren (je nachdem, an welcher Stelle es in den Traits steht)
-        using FilterProperties = typename detail::function_traits<MemberPtr>::template argument_t<0>;
+        using OutputData = detail::function_traits<MemberPtr>::result_type;
+        using FilterProperties = detail::function_traits<MemberPtr>::template argument_t<0>;
 
         using ConcreteProducer = Producer<OutputData, DecayedStrategy, FilterProperties>;
         return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
