@@ -4,14 +4,20 @@
 #include "Traits.hpp"
 
 namespace clegmed::core {
-    template<typename Strategy, typename InputData>
+    template<typename Strategy, typename InputData, typename FilterProperties>
     concept ValidConsumerStrategy =
         requires(Strategy&& strategy, InputData&& input_data)
-        { { strategy(std::forward<InputData>(input_data)) } -> std::same_as<void>; };
+        { { strategy(std::forward<InputData>(input_data)) } -> std::same_as<void>; } ||
 
-    template <typename InputData, typename ConsumerStrategy>
-        requires ValidConsumerStrategy<ConsumerStrategy, InputData>
+        (utils::DeserializableFromProperties<FilterProperties> &&
+        requires(Strategy&& strategy, InputData&& input_data, const FilterProperties& filter_properties)
+        {{strategy(std::forward<InputData>(input_data),filter_properties) } -> std::same_as<void>; });
+
+
+    template <typename InputData, typename ConsumerStrategy, typename FilterProperties = std::monostate>
+        requires ValidConsumerStrategy<ConsumerStrategy, InputData, FilterProperties>
     class Consumer : public Filter {
+        FilterProperties m_properties;
     public:
         Consumer() = delete;
         explicit Consumer(ConsumerStrategy strategy) : m_strategy(strategy) {}
@@ -20,8 +26,13 @@ namespace clegmed::core {
         Consumer& operator=(Consumer&&) noexcept = default;
 
         void properties(const utils::Properties& properties) {
-            //TODO
+            if constexpr (!std::is_same_v<FilterProperties, std::monostate>) {
+                if (hasProperties()) {
+                    m_properties = properties.get<FilterProperties>(propertiesName());
+                }
+            }
         }
+
 
         auto inputPipe() {
             return [this]<typename T> requires std::is_convertible_v<T, InputData> (T&& data) {

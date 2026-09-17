@@ -53,8 +53,6 @@ namespace clegmed::utils {
         void fromProperties(const Properties& properties) {
             ip = properties.get<std::string>("ip");
             port = properties.get<u_int32_t>("port");
-            std::cout << "IP is " << ip << std::endl;
-            std::cout << "Port is " << port << std::endl;
         }
     };
 

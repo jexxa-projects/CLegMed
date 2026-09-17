@@ -2,19 +2,27 @@
 
 #include "Filter.hpp"
 #include "OutputPipe.hpp"
+#include "Traits.hpp"
 #include <type_traits>
 #include <utility>
 
 
 namespace clegmed::core {
-    template <typename Strategy, typename OutputData>
+    template <typename Strategy, typename OutputData, typename FilterProperties>
     concept ValidProducerStrategy =
         requires(Strategy&& strategy) { { strategy() } -> std::same_as<OutputData>; } ||
-        requires(Strategy&& strategy, OutputPipe<OutputData>& pipe) { { strategy(pipe) } -> std::same_as<void>; };
+        requires(Strategy&& strategy, OutputPipe<OutputData>& pipe) { { strategy(pipe) } -> std::same_as<void>; } ||
 
-    template <typename OutputData, typename  ProducerStrategy>
-        requires ValidProducerStrategy<ProducerStrategy, OutputData>
+        (utils::DeserializableFromProperties<FilterProperties> && requires(Strategy&& strategy, FilterProperties& filter_properties)
+        { { strategy(filter_properties) } -> std::same_as<OutputData>; }) ||
+
+        (utils::DeserializableFromProperties<FilterProperties> && requires(Strategy&& strategy, OutputPipe<OutputData>& pipe, FilterProperties& filter_properties)
+        { { strategy(pipe, filter_properties) } -> std::same_as<void>; }) ;
+
+    template <typename OutputData, typename  ProducerStrategy, typename FilterProperties = std::monostate>
+        requires ValidProducerStrategy<ProducerStrategy, OutputData, FilterProperties>
     class Producer : public Filter {
+        FilterProperties m_properties;
     public:
         Producer() = delete;
         ~Producer() override = default;
@@ -27,7 +35,11 @@ namespace clegmed::core {
         }
 
         void properties(const utils::Properties& properties) {
-            //TODO
+            if constexpr (!std::is_same_v<FilterProperties, std::monostate>) {
+                if (hasProperties()) {
+                    m_properties = properties.get<FilterProperties>(propertiesName());
+                }
+            }
         }
 
         void produce() {
@@ -39,6 +51,13 @@ namespace clegmed::core {
             else if constexpr (std::is_invocable_r_v<OutputData, ProducerStrategy>) {
                 m_outputPipe.forward(std::forward<ProducerStrategy>(m_strategy)());
             }
+            else if constexpr (std::is_invocable_v<ProducerStrategy, OutputPipe<OutputData>&, const FilterProperties&>) {
+                m_strategy(m_outputPipe, m_properties);
+            }
+            else if constexpr (std::is_invocable_v<ProducerStrategy, const FilterProperties&>) {
+                m_outputPipe.forward(m_strategy(m_properties));
+            }
+
             else {
                 static_assert(false,
                     "❌ ARCHITECTURE-ERROR: Given ProducerStrategy neither uses "
@@ -64,14 +83,19 @@ namespace clegmed::core {
         return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
     }
 
+    template <typename ProducerStrategy>
+    [[nodiscard]] auto make_configured_producer(ProducerStrategy&& producer_strategy) {
+        using DecayedStrategy = std::decay_t<ProducerStrategy>;
+        using MemberPtr = decltype(&DecayedStrategy::operator());
 
-    template <typename >
-    struct is_producer_class : std::false_type {};
+        // Nutze deine function_traits, um den echten Rückgabetyp der Funktion zu ermitteln!
+        using OutputData = typename detail::function_traits<MemberPtr>::result_type;
 
-    template <typename OutputData, typename ProducerStrategy>
-    struct is_producer_class<Producer<OutputData, ProducerStrategy>> : std::true_type {};
+        // FilterProperties extrahieren (je nachdem, an welcher Stelle es in den Traits steht)
+        using FilterProperties = typename detail::function_traits<MemberPtr>::template argument_t<0>;
 
-    template <typename T>
-    inline constexpr bool is_producer_class_v = is_producer_class<std::decay_t<T>>::value;
+        using ConcreteProducer = Producer<OutputData, DecayedStrategy, FilterProperties>;
+        return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
+    }
 
 }
