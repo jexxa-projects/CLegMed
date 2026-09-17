@@ -19,6 +19,9 @@ namespace clegmed::core {
         Consumer(Consumer&&) noexcept = default;
         Consumer& operator=(Consumer&&) noexcept = default;
 
+        void properties(const utils::Properties& properties) {
+            //TODO
+        }
 
         auto inputPipe() {
             return [this]<typename T> requires std::is_convertible_v<T, InputData> (T&& data) {

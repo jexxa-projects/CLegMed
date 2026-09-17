@@ -5,6 +5,7 @@
 #include <thread>
 #include <memory>
 #include "FlowGraphConfig.hpp"
+#include "clegmed/utils/Properties.hpp"
 
 namespace clegmed::core {
 
@@ -65,6 +66,12 @@ namespace clegmed::core {
         [[nodiscard]] decltype(auto) filter() const {
             static_assert(Index < sizeof...(Filters), "PipelineBuilder: Index out of bounds!");
             return std::get<Index>(m_pipeline);
+        }
+
+        void properties(const utils::Properties& properties) {
+            std::apply([&](auto&&... elements)
+                { (elements->properties(properties), ...);},
+                m_pipeline);
         }
 
         void start() {

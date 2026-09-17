@@ -4,6 +4,8 @@
 #include <typeinfo>
 #include <memory>
 
+#include "clegmed/utils/Properties.hpp"
+
 namespace clegmed::core{
     /**
      * @class Filter
@@ -26,7 +28,8 @@ namespace clegmed::core{
      * @b Requirement [REQ-003-A]
      */
     class Filter {
-        std::string m_properties;
+        std::string m_properties_name;
+        utils::PropertiesPtr m_properties;
     public:
         /**
         * @brief Default constructor for creating a Filter instance.
@@ -82,17 +85,20 @@ namespace clegmed::core{
         }
 
         void withProperties(const std::string& properties) {
-            m_properties = properties;
+            m_properties_name = properties;
         }
 
-        [[nodiscard]] std::string properties() const {
-            return m_properties;
+        [[nodiscard]] std::string propertiesName() const {
+            return m_properties_name;
         }
+
+        [[nodiscard]] bool hasProperties() const {
+            return !m_properties_name.empty();
+        }
+
 
         [[nodiscard]]std::string name() const {
             return typeid(*this).name();
         }
     };
-
-    using FilterPtr = std::unique_ptr<Filter>;
 } // clegmed

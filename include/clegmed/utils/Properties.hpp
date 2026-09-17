@@ -23,6 +23,7 @@ namespace clegmed::utils {
         };
 
         explicit Properties(toml::v3::table tbl) : m_table(std::move(tbl)) {}
+        explicit Properties()  { m_table = toml::v3::table(); }
 
 
         [[nodiscard]]
@@ -78,5 +79,6 @@ namespace clegmed::utils {
         toml::v3::table m_table;
     };
 
+    using PropertiesPtr = std::unique_ptr<Properties>;
 
 }

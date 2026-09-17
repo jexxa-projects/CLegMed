@@ -7,10 +7,10 @@
 TEST(GenericPluginsTest, EmitProducer) {
     // Arrange
     using namespace clegmed::shortcuts;
-    const auto message = "Hello World";
+    constexpr auto message = "Hello World";
     std::vector<std::string> data_storage;
 
-    auto object_under_test = emit(message);
+    const auto object_under_test = emit(message);
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));

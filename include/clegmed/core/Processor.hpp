@@ -4,11 +4,24 @@
 
 #include "OutputPipe.hpp"
 #include "Traits.hpp"
+#include "clegmed/utils/Properties.hpp"
 
 namespace clegmed::core {
 
-    template <typename Strategy, typename InputData, typename OutputData>
+    template <
+        typename Strategy,
+        typename InputData,
+        typename OutputData,
+        typename  FilterProperties>
     concept ValidProcessorStrategy =
+        (utils::DeserializableFromProperties<FilterProperties> &&
+        requires(Strategy&& strategy, const InputData& input, const FilterProperties& filter_properties)
+        { { strategy(input, filter_properties) } -> std::convertible_to<OutputData>;})
+        ||
+        (utils::DeserializableFromProperties<FilterProperties> &&
+        requires(Strategy&& strategy, const InputData& input, OutputPipe<OutputData>& pipe, const FilterProperties& filter_properties)
+        { { strategy(input, pipe, filter_properties) } -> std::same_as<void>;})
+        ||
         requires(Strategy&& strategy, const InputData& input, OutputPipe<OutputData>& pipe)
         { { strategy(input, pipe) } -> std::same_as<void>;}
         ||
@@ -16,13 +29,22 @@ namespace clegmed::core {
         { { strategy(input) } -> std::convertible_to<OutputData>;};
 
 
-    template<typename InputData, typename OutputData, typename Strategy>
-        requires ValidProcessorStrategy<Strategy, InputData, OutputData>
+    template<typename InputData, typename OutputData, typename Strategy, typename FilterProperties = std::monostate>
+        requires ValidProcessorStrategy<Strategy, InputData, OutputData, FilterProperties>
     class Processor : public Filter {
+        FilterProperties m_properties;
     public:
         Processor() = delete;
         explicit  Processor(Strategy strategy) : m_strategy(std::move(strategy)) {}
         ~Processor() override = default;
+
+        void properties(const utils::Properties& properties) {
+            if constexpr (!std::is_same_v<FilterProperties, std::monostate>) {
+                if (hasProperties()) {
+                    m_properties = properties.get<FilterProperties>(propertiesName());
+                }
+            }
+        }
 
         auto inputPipe() {
             return [this]<typename T>requires std::is_convertible_v<T, InputData>(T&& data)
@@ -45,6 +67,19 @@ namespace clegmed::core {
 
             // 2. Check against const Lvalue-Ref, for read-only filter
             if constexpr (
+                std::is_invocable_v<Strategy, const DecayedT&, const FilterProperties&> ||
+                std::is_invocable_v<Strategy, T&&, const FilterProperties&>)
+            {
+                pipeline_result.emplace(m_strategy(std::forward<T>(input_data), m_properties));
+            }
+            else if constexpr (
+                std::is_invocable_v<Strategy, const DecayedT&, OutputPipe<OutputData>&, const FilterProperties&> ||
+                std::is_invocable_v<Strategy, T&&, OutputPipe<OutputData>&, const FilterProperties&>)
+            {
+                m_strategy(std::forward<T>(input_data), m_output_pipe, m_properties);
+                return;
+            }
+            else if constexpr (
                 std::is_invocable_v<Strategy, const DecayedT&, OutputPipe<OutputData>&> ||
                 std::is_invocable_v<Strategy, T&&, OutputPipe<OutputData>&>)
             {
@@ -117,6 +152,41 @@ namespace clegmed::core {
         using OutputData = detail::extract_pipe_type_t<PipeArg>;
 
         using ConcreteProcessor = Processor<InputData, OutputData, DecayedStrategy>;
+
+        return std::make_unique<ConcreteProcessor>(
+            std::forward<ProcessorStrategy>(strategy)
+        );
+    }
+
+    template <typename ProcessorStrategy>
+    [[nodiscard]] auto make_configured_piped_processor(ProcessorStrategy&& strategy) {
+        using DecayedStrategy = std::decay_t<ProcessorStrategy>;
+        using MemberPtr = decltype(&DecayedStrategy::operator());
+
+        using InputData = detail::function_traits<MemberPtr>::template argument_t<0>;
+        using PipeArg   = detail::function_traits<MemberPtr>::template argument_t<1>;
+        using FilterProperties = detail::function_traits<MemberPtr>::template argument_t<2>;
+        using OutputData = detail::extract_pipe_type_t<PipeArg>;
+
+        using ConcreteProcessor = Processor<InputData, OutputData, DecayedStrategy, FilterProperties>;
+
+        return std::make_unique<ConcreteProcessor>(
+            std::forward<ProcessorStrategy>(strategy)
+        );
+    }
+
+
+    template <typename ProcessorStrategy>
+    [[nodiscard]]
+    auto make_configured_processor(ProcessorStrategy&& strategy) {
+        using DecayedStrategy = std::decay_t<ProcessorStrategy>;
+        using MemberPtr = decltype(&DecayedStrategy::operator());
+
+        using InputData = detail::function_traits<MemberPtr>::template argument_t<0>;
+        using FilterProperties = detail::function_traits<MemberPtr>::template argument_t<1>;
+        using OutputData = detail::function_traits<MemberPtr>::result_type;
+
+        using ConcreteProcessor = Processor<InputData, OutputData, DecayedStrategy, FilterProperties>;
 
         return std::make_unique<ConcreteProcessor>(
             std::forward<ProcessorStrategy>(strategy)

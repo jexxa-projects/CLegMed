@@ -7,10 +7,10 @@
 TEST(GenericPluginsTest, PassThroughProcessor) {
     // Arrange
     using namespace clegmed::shortcuts;
-    const auto message = "Hello World";
+    constexpr auto message = "Hello World";
     std::vector<std::string> data_storage;
 
-    auto object_under_test = passThrough<std::string>();
+    const auto object_under_test = passThrough<std::string>();
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
@@ -30,10 +30,10 @@ TEST(GenericPluginsTest, TraceInfoPorcessor) {
     using namespace clegmed::shortcuts;
 
     std::vector<std::string> data_storage;
-    const auto message = "Hello World";
+    constexpr auto message = "Hello World";
 
     testing::internal::CaptureStdout();
-    auto object_under_test = traceInfo<std::string>();
+    const auto object_under_test = traceInfo<std::string>();
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));

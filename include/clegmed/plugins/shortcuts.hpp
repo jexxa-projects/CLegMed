@@ -12,6 +12,10 @@ namespace clegmed::shortcuts {
     using utils::Properties;
 
     // Core classes
+    using core::make_configured_processor;
+    using core::make_piped_processor;
+    using core::make_configured_piped_processor;
+    using core::OutputPipe;
     using core::FlowGraph;
     using core::CLegMed;
     using namespace std::chrono_literals;

@@ -91,11 +91,11 @@ multiline       = [
 # Verschachtelte Tabellen über die Punkt-Notation (Dot Notation)
 [servers.alpha]
 ip = "10.0.0.1"
-role = "backend"
+port = 8080
 
 [servers.beta]
 ip = "10.0.0.2"
-role = "frontend"
+port = 8080
 
 # Inline Tables (Kompakte Schreibweise, gut für kurze Konfigurationen)
 database = { type = "postgres", host = "localhost", ports = [ 5432, 5433 ] }

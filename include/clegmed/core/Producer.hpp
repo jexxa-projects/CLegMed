@@ -26,6 +26,10 @@ namespace clegmed::core {
             return std::forward<Self>(explicit_this).m_outputPipe;
         }
 
+        void properties(const utils::Properties& properties) {
+            //TODO
+        }
+
         void produce() {
             // 1. Piped-Signatur (1:n) (Strategy writes directly to the output-pipe)
             if constexpr (std::is_invocable_v<ProducerStrategy, OutputPipe<OutputData>&>) {

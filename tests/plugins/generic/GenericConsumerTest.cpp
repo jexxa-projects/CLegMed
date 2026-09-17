@@ -8,10 +8,10 @@
 TEST(GenericPluginsTest, StoreConsumer) {
     // Arrange
     using namespace clegmed::shortcuts;
-    const auto message = "Hello World";
+    constexpr auto message = "Hello World";
     std::vector<std::string> data_storage;
 
-    auto object_under_test = store(data_storage);
+    const auto object_under_test = store(data_storage);
 
     // Act: Produce data
     object_under_test->inputPipe()(message);
@@ -24,9 +24,9 @@ TEST(GenericPluginsTest, StoreConsumer) {
 TEST(GenericPluginsTest, DiscardConsumer) {
     // Arrange
     using namespace clegmed::shortcuts;
-    const auto message = "Hello World";
+    constexpr auto message = "Hello World";
 
-    auto object_under_test = discard<std::string>();
+    const auto object_under_test = discard<std::string>();
 
     // Act/Assert: Produce data
     object_under_test->inputPipe()(message);
@@ -36,10 +36,10 @@ TEST(GenericPluginsTest, DiscardConsumer) {
 TEST(GenericPluginsTest, LogInfoConsumer) {
     // Arrange
     using namespace clegmed::shortcuts;
-    const auto message = "Hello World";
+    constexpr auto message = "Hello World";
 
     testing::internal::CaptureStdout();
-    auto object_under_test = logInfo<std::string>();
+    const auto object_under_test = logInfo<std::string>();
 
     // Act/Assert: Produce data
     object_under_test->inputPipe()(message);

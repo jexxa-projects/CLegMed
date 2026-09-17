@@ -9,6 +9,15 @@ add_executable(clegmed_core_test
         FlowGraphTest.cpp
         CLegMedTest.cpp
 )
+
+add_custom_command(
+        TARGET clegmed_core_test POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        "${CMAKE_CURRENT_SOURCE_DIR}/filterproperties.toml"
+        "${CMAKE_CURRENT_BINARY_DIR}/filterproperties.toml"
+        COMMENT "Kopiere Test-Konfiguration in den Build-Ordner..."
+)
+
 target_link_libraries(clegmed_core_test PRIVATE
         clegmed::utils
         clegmed::core

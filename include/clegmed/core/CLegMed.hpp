@@ -27,6 +27,7 @@ namespace clegmed::core {
     class CLegMed final {
         std::tuple<ExecutableGraph ...> m_executable_graphs;
         std::vector<std::string> m_argv;
+        utils::Properties m_properties;
     public:
         template<typename ... Args>
         requires
@@ -67,6 +68,9 @@ namespace clegmed::core {
 
         void start() {
             printStartupInfo();
+
+            std::apply([&](auto&&... elements){ (elements.properties(m_properties), ...);},m_executable_graphs);
+
             auto execute_start = [this]<size_t... Is>(std::index_sequence<Is...>) {
                 (std::get<Is>(m_executable_graphs).start(), ...);
             };

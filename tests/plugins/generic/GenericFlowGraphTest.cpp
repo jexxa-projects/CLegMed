@@ -13,12 +13,12 @@ TEST(FlowGraphTest, GenericFlowGraphTest) {
     //Arrange
     using namespace clegmed::shortcuts;
 
-    const auto expected_result = "Hello World";
+    constexpr auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
 
-    auto producer = emit("Hello");
-    auto processor = append(" World");
-    auto consumer = store(data_storage);
+    const auto producer = emit("Hello");
+    const auto processor = append(" World");
+    const auto consumer = store(data_storage);
 
     //Act
     producer->outputPipe().connect(processor->inputPipe());
@@ -35,15 +35,15 @@ TEST(FlowGraphTest, PipeFlowGraphTest) {
     //Arrange
     using namespace clegmed::shortcuts;
 
-    const auto expected_result = "Hello World";
+    constexpr auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
 
-    auto producer = emit("Hello");
-    auto processor = append(" World");
-    auto consumer = store(data_storage);
+    const auto producer = emit("Hello");
+    const auto processor = append(" World");
+    const auto consumer = store(data_storage);
 
     //Act
-    (*producer) | (*processor) | (*consumer);
+    *producer | *processor | *consumer;
 
     //Act
     producer->produce();
@@ -58,7 +58,7 @@ TEST(FlowGraphTest, RealFlowGraphTest) {
     //Arrange
     using namespace clegmed::shortcuts;
 
-    const auto expected_result = "Hello World";
+    constexpr auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
     //Act
     auto flowgraph = FlowGraph{}
@@ -84,7 +84,7 @@ TEST(FlowGraphTest, RealFlowGraphTest) {
 TEST(PropertiesTest, PropertiesTest) {
     //Arrange
     using namespace clegmed::shortcuts;
-    auto properties = "my-properties";
+    constexpr auto properties = "my-properties";
 
     std::vector<std::string> data_storage;
     //Act
@@ -95,7 +95,7 @@ TEST(PropertiesTest, PropertiesTest) {
     .consumeWith(store(data_storage));
 
     //Act
-    auto result = flowgraph.filter<0>()->properties();
+    const auto result = flowgraph.filter<0>()->propertiesName();
 
     //Assert
     EXPECT_EQ(result, properties);
