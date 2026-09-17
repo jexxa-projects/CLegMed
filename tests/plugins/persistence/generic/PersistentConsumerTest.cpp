@@ -18,7 +18,7 @@ TEST(PersistentConsumerTest, PersistCustomer) {
     auto repository = IMDBRepository<Customer>{};
     repository.init();
 
-    auto object_under_test = persistentStore(repository);
+    const auto object_under_test = persistentStore(repository);
 
     // Act
     object_under_test->consume(Customer(1, customer_name));

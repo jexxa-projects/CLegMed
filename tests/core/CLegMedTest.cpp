@@ -7,10 +7,10 @@
 TEST(CLegMedTest, ProjectInfo) {
     //Arrange
     using namespace clegmed::core;
-    auto clegmed = CLegMed();
+    const auto clegmed = CLegMed();
 
     //Act
-    auto versionInfo = clegmed.versionInfo();
+    const auto versionInfo = clegmed.versionInfo();
 
     //Assert
     std::cout << versionInfo.m_clegmed_version << std::endl;
@@ -53,9 +53,11 @@ TEST(CLegMedTest, StartStopMultitpleFlowGraphs) {
 }
 
 
-class CLegMedSignalTest : public ::testing::TestWithParam<int> {
+namespace {
+    class CLegMedSignalTest : public testing::TestWithParam<int> {
 
-};
+    };
+}
 TEST_P(CLegMedSignalTest, RunFlowGraphs) {
     //Arrange
     using namespace clegmed::core;
@@ -86,9 +88,8 @@ TEST_P(CLegMedSignalTest, RunFlowGraphs) {
     }));
     EXPECT_GE(data_storage_1.size(), 10);
 
-    int current_signal = GetParam();
-
     {
+        int current_signal = GetParam();
         SCOPED_TRACE("Send Shutdown-Signal to CLegMed");
         EXPECT_TRUE(m_thread_ptr->joinable());
 
@@ -119,7 +120,7 @@ TEST(CLegMedTest, UseArgv) {
     auto object_under_test = CLegMed(1, argv_modern.data(), std::move(flowgraph_1));
 
     //Act
-    auto m_thread_ptr = std::make_unique<std::jthread>
+    const auto m_thread_ptr = std::make_unique<std::jthread>
     ([&object_under_test] { object_under_test.run();});
 
     //Assert

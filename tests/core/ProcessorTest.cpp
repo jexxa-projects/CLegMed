@@ -85,8 +85,8 @@ TEST(CoreTest, MakeConfiguredPipeProcessor) {
     constexpr auto message = "Hello";
 
     const auto properties = Properties::fromFile("filterproperties.toml").value();
-    const auto m_server_info = properties.get<clegmed::utils::ServerInfo>("processor");
-    const auto expected_result = "Hello World to " + m_server_info.ip;
+    const auto [ip, port] = properties.get<clegmed::utils::ServerInfo>("processor");
+    const auto expected_result = "Hello World to " + ip;
 
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](
@@ -118,13 +118,13 @@ TEST(CoreTest, MakeConfiguredProcessor) {
     constexpr auto message = "Hello";
 
     const auto properties = clegmed::utils::Properties::fromFile("filterproperties.toml").value();
-    const auto m_server_info = properties.get<clegmed::utils::ServerInfo>("processor");
-    const auto expected_result = "Hello World to " + m_server_info.ip;
+    const auto [ip, port] = properties.get<clegmed::utils::ServerInfo>("processor");
+    const auto expected_result = "Hello World to " + ip;
 
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](
         const std::string &input,
-        const clegmed::utils::ServerInfo& server_info)-> std::string {
+        const clegmed::utils::ServerInfo& server_info) {
         return input + " World to " + server_info.ip;
     };
 

@@ -49,12 +49,11 @@ TEST(IMDBRepositoryTest, ClearCustomer) {
     // Arrange
     auto object_under_test = clegmed::plugins::persistence::IMDBRepository<Customer>();
     constexpr auto customer_count = 10;
-    const auto customer_name = "HelloWorld";
+    const std::string customer_name = "HelloWorld";
 
     std::ranges::for_each(std::views::iota(0, customer_count), [&](const int i) {
         object_under_test.add(Customer(i, customer_name));
     });
-
     // Act
     const auto result = object_under_test.getAll().size();
     object_under_test.removeAll();
@@ -67,9 +66,9 @@ TEST(IMDBRepositoryTest, ClearCustomer) {
 TEST(IMDBRepositoryTest, UpdateCustomer) {
     // Arrange
     auto object_under_test = clegmed::plugins::persistence::IMDBRepository<Customer>();
-    const auto customer_id   = 1;
-    const auto customer_old_name = "OldName";
-    const auto customer_new_name = "NewName";
+    constexpr auto customer_id   = 1;
+    constexpr auto customer_old_name = "OldName";
+    constexpr auto customer_new_name = "NewName";
 
     object_under_test.add(Customer(customer_id, customer_old_name));
 

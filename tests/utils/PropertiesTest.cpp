@@ -22,7 +22,7 @@ TEST(PropertiesLoaderTest, ValidProperties) {
     using namespace clegmed::utils;
 
     //Act
-    auto result = Properties::fromFile("clegmed.toml");
+    const auto result = Properties::fromFile("clegmed.toml");
 
     //Assert
     EXPECT_TRUE(result.has_value());
@@ -32,18 +32,18 @@ TEST(PropertiesLoaderTest, ValidProperties) {
 TEST(PropertiesLoaderTest, ReadProperties) {
     //Arrange
     using namespace clegmed::utils;
-    auto result = AppProperties();
+    auto [strings, integers, servers] = AppProperties();
 
     //Act
     auto properties = Properties::fromFile("clegmed.toml").value();
-    result.strings  = properties.get<StringProperties>("strings");
-    result.integers = properties.get<IntegerProperties>("integers");
-    result.servers  = properties.get<ServersProperties>("servers");
+    strings  = properties.get<StringProperties>("strings");
+    integers = properties.get<IntegerProperties>("integers");
+    servers  = properties.get<ServersProperties>("servers");
 
     //Assert
-    ASSERT_FALSE(result.strings.literal.empty());
-    ASSERT_FALSE(result.strings.multi_normal.empty());
-    ASSERT_FALSE(result.strings.normal.empty());
+    ASSERT_FALSE(strings.literal.empty());
+    ASSERT_FALSE(strings.multi_normal.empty());
+    ASSERT_FALSE(strings.normal.empty());
 }
 TEST(PropertiesConceptTest, InvalidStructFailsConcept) {
     using namespace clegmed::utils;

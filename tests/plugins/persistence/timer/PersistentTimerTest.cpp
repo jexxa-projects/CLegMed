@@ -15,8 +15,8 @@ TEST(PersistentTimerTest, PersistentTimer) {
     //Arrange
     auto result = std::vector<TimeInterval>{};
     auto repository = IMDBRepository<TimerState>();
-    auto timer_config = TimerConfig::timerConfigOf(TimerId{"TestTimer"});
-    auto object_under_test = persistentTimer(timer_config, repository);
+    const auto timer_config = TimerConfig::timerConfigOf(TimerId{"TestTimer"});
+    const auto object_under_test = persistentTimer(timer_config, repository);
 
     object_under_test->outputPipe().connect([&result](const TimeInterval time_interval){result.push_back(time_interval);});
     //Act
