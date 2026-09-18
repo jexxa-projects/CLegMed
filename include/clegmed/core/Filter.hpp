@@ -38,28 +38,11 @@ namespace clegmed::core{
         Filter() = default; // Standard-Konstruktor explizit beibehalten
 
         /**
-         * @brief Copy constructor is explicitly deleted.
-         * @details Safety measure to avoid duplicating safety-critical medical data frames.
+         * @brief Copying is explicitly banned (implicitly bans Move as well).
+         * @details Safety measure to avoid duplicating safety-critical data.
          */
         Filter(const Filter&) = delete;
-
-        /**
-         * @brief Copy assignment operator is explicitly deleted.
-         * @details Prevents unintended overwriting of runtime active filter configurations.
-         */
         Filter& operator=(const Filter&) = delete;
-
-        /**
-         * @brief Move constructor is explicitly deleted.
-         * @details Prevents slicing and pointer invalidation within active pipeline topologies.
-         */
-        Filter(Filter&&) = delete;
-
-        /**
-         * @brief Move assignment operator is explicitly deleted.
-         * @details Enforces immutability of the allocated filter structure during execution.
-         */
-        Filter& operator=(Filter&&) = delete;
 
         /**
          * @brief Virtual destructor for proper cleanup of allocated resources.

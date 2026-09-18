@@ -5,38 +5,21 @@
 #include "OutputPipe.hpp"
 #include "Traits.hpp"
 #include "clegmed/utils/Properties.hpp"
+#include "concepts/ProcessorStrategy.hpp"
 
 namespace clegmed::core {
 
-    template <
-        typename Strategy,
+
+    template<
         typename InputData,
         typename OutputData,
-        typename  FilterProperties>
-    concept ValidProcessorStrategy =
-        (utils::DeserializableFromProperties<FilterProperties> &&
-        requires(Strategy&& strategy, const InputData& input, const FilterProperties& filter_properties)
-        { { strategy(input, filter_properties) } -> std::convertible_to<OutputData>;})
-        ||
-        (utils::DeserializableFromProperties<FilterProperties> &&
-        requires(Strategy&& strategy, const InputData& input, OutputPipe<OutputData>& pipe, const FilterProperties& filter_properties)
-        { { strategy(input, pipe, filter_properties) } -> std::same_as<void>;})
-        ||
-        requires(Strategy&& strategy, const InputData& input, OutputPipe<OutputData>& pipe)
-        { { strategy(input, pipe) } -> std::same_as<void>;}
-        ||
-        requires(Strategy&& strategy, const InputData& input)
-        { { strategy(input) } -> std::convertible_to<OutputData>;};
+        typename Strategy,
+        typename FilterProperties = std::monostate>
+    requires ValidProcessorStrategy<Strategy, InputData, OutputData, FilterProperties>
 
-
-    template<typename InputData, typename OutputData, typename Strategy, typename FilterProperties = std::monostate>
-        requires ValidProcessorStrategy<Strategy, InputData, OutputData, FilterProperties>
     class Processor : public Filter {
-        FilterProperties m_properties;
     public:
-        Processor() = delete;
         explicit  Processor(Strategy strategy) : m_strategy(std::move(strategy)) {}
-        ~Processor() override = default;
 
         void properties(const utils::Properties& properties) {
             if constexpr (!std::is_same_v<FilterProperties, std::monostate>) {
@@ -56,62 +39,72 @@ namespace clegmed::core {
             return std::forward<Self>(explicit_this).m_output_pipe;
         }
 
-        template<typename T>
-        requires std::is_convertible_v<T, InputData>
+
+        template<typename T> requires std::is_convertible_v<T, InputData>
         void process(T&& input_data) noexcept
         {
-            std::optional<std::expected<OutputData, std::exception_ptr>> pipeline_result;
+            PipelineResult pipeline_result = executeStrategy(input_data);
 
-            // 1. get cleaned type without references
-            using DecayedT = std::decay_t<T>;
+            validate(pipeline_result);
 
-            // 2. Check against const Lvalue-Ref, for read-only filter
-            if constexpr (
-                std::is_invocable_v<Strategy, const DecayedT&, const FilterProperties&> ||
-                std::is_invocable_v<Strategy, T&&, const FilterProperties&>)
-            {
-                pipeline_result.emplace(m_strategy(std::forward<T>(input_data), m_properties));
+            forward(pipeline_result);
+        }
+
+    private:
+        using PipelineResult = std::optional<std::expected<OutputData, std::exception_ptr>>;
+
+        template <typename T>
+        [[nodiscard]] PipelineResult executeStrategy(T&& input_data)
+        {
+            if constexpr (StrategyWithPropertiesAndReturn<Strategy, InputData, OutputData, FilterProperties>) {
+                return PipelineResult{ m_strategy(std::forward<T>(input_data), m_properties) };
             }
-            else if constexpr (
-                std::is_invocable_v<Strategy, const DecayedT&, OutputPipe<OutputData>&, const FilterProperties&> ||
-                std::is_invocable_v<Strategy, T&&, OutputPipe<OutputData>&, const FilterProperties&>)
-            {
+            else if constexpr (StrategyWithDirectReturn<Strategy, InputData, OutputData>) {
+                return PipelineResult{ m_strategy(std::forward<T>(input_data)) };
+            }
+            else if constexpr (StrategyWithPropertiesAndPipe<Strategy, InputData, OutputData, FilterProperties>) {
                 m_strategy(std::forward<T>(input_data), m_output_pipe, m_properties);
-                return;
+                return PipelineResult{ std::nullopt }; // Already integrated via side-effect pipe
             }
-            else if constexpr (
-                std::is_invocable_v<Strategy, const DecayedT&, OutputPipe<OutputData>&> ||
-                std::is_invocable_v<Strategy, T&&, OutputPipe<OutputData>&>)
-            {
+            else if constexpr (StrategyWithPipe<Strategy, InputData, OutputData>) {
                 m_strategy(std::forward<T>(input_data), m_output_pipe);
-                return;
-            }
-            else if constexpr (
-                std::is_invocable_v<Strategy, const DecayedT&> ||
-                std::is_invocable_v<Strategy, T&&>)
-            {
-                pipeline_result.emplace(m_strategy(std::forward<T>(input_data)));
+                return PipelineResult{ std::nullopt }; // Already integrated via side-effect pipe
             }
             else {
-                static_assert(false,
-                    "❌ ARCHITECTURE-ERROR: Given ProcessStrategy neither uses "
-                    "Piped-Signature (Input, Pipe&) nor 1:1-signature (Input).");
+                static_assert([]{ return false; }(), "❌ ARCHITECTURE-ERROR: Unsupported strategy signature.");
+            }
+            return PipelineResult{ std::nullopt };
+        }
+
+        static void validate(PipelineResult pipeline_result) {
+            if (!pipeline_result.has_value()) { // is null-opt
+                return;
             }
 
+            if (pipeline_result->has_value()) { //pointer oder null
+                return;
+            }
 
             //TODO: Actually, we do not know how to handle errors in general
-            if (!pipeline_result.has_value()) {
+            if (pipeline_result->error()) {
                 utils::Logger::log(utils::LogLevel::ERROR,
                     "Pipeline Error: error occurred . TODO implement error handling"
                     );
                 exit(EXIT_FAILURE);
             }
-
-            m_output_pipe.forward(std::move(*pipeline_result.value()));
         }
 
-    private:
-        [[no_unique_address]] Strategy m_strategy;
+        void forward(PipelineResult pipeline_result) {
+            if (pipeline_result.has_value()) {
+                m_output_pipe.forward(std::move(*pipeline_result.value()));
+            }
+        }
+
+
+        [[no_unique_address]]
+        Strategy m_strategy;
+        FilterProperties m_properties;
+
         OutputPipe<OutputData> m_output_pipe = OutputPipe<OutputData>(*this);
     };
 
