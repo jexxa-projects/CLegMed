@@ -6,6 +6,7 @@ add_executable(clegmed_core_test
         FilterTest.cpp
         ProcessorTest.cpp
         ProducerTest.cpp
+        ConsumerTest.cpp
         FlowGraphTest.cpp
         CLegMedTest.cpp
 )

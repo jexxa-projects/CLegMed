@@ -43,7 +43,7 @@ namespace clegmed::core {
         template<typename T> requires std::is_convertible_v<T, InputData>
         void process(T&& input_data) noexcept
         {
-            PipelineResult pipeline_result = executeStrategy(input_data);
+            PipelineResult pipeline_result = executeStrategy(std::forward<T>(input_data));
 
             validate(pipeline_result);
 
@@ -71,7 +71,7 @@ namespace clegmed::core {
                 return PipelineResult{ std::nullopt }; // Already integrated via side-effect pipe
             }
             else {
-                static_assert([]{ return false; }(), "❌ ARCHITECTURE-ERROR: Unsupported strategy signature.");
+                static_assert([]{ return false; }(), "❌ ARCHITECTURE-ERROR: Unsupported processor strategy signature.");
             }
             return PipelineResult{ std::nullopt };
         }

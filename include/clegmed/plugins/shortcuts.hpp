@@ -11,10 +11,19 @@ namespace clegmed::shortcuts {
     //Utility classes
     using utils::Properties;
 
-    // Core classes
+    // Core factory methods
+    using core::make_producer;
+    using core::make_configured_producer;
+    using core::make_configured_pipe_producer;
+
     using core::make_configured_processor;
     using core::make_piped_processor;
     using core::make_configured_piped_processor;
+
+    using core::make_consumer;
+    using core::make_configured_consumer;
+
+    // Core classes
     using core::OutputPipe;
     using core::FlowGraph;
     using core::CLegMed;

@@ -63,11 +63,8 @@ namespace clegmed::core {
             else if constexpr (ProducerWithPropertiesAndReturn<Strategy, OutputData, FilterProperties>) {
                 return PipelineResult{m_strategy(m_properties)};
             }
-
             else {
-                static_assert(false,
-                    "❌ ARCHITECTURE-ERROR: Given ProducerStrategy neither uses "
-                    "Piped-Signature (Pipe&) nor 1:1-signature ().");
+                static_assert(false, "❌ ARCHITECTURE-ERROR: Unsupported ProducerStrategy signature");
             }
 
             return PipelineResult{ std::nullopt };

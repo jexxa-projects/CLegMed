@@ -8,6 +8,7 @@ target_sources(clegmed_core_base INTERFACE
         include/clegmed/concepts/InjectedStrategy.hpp
         include/clegmed/concepts/ProcessorStrategy.hpp
         include/clegmed/concepts/ProducerStrategy.hpp
+        include/clegmed/concepts/ConsumerStrategy.hpp
         include/clegmed/core/Filter.hpp
         include/clegmed/core/InputPipe.hpp
         include/clegmed/core/Processor.hpp
