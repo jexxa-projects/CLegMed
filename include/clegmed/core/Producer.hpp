@@ -131,4 +131,20 @@ namespace clegmed::core {
         return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
     }
 
+    template <typename ProducerStrategy>
+    [[nodiscard]] auto make_configured_pipe_producer(ProducerStrategy&& producer_strategy) {
+        using DecayedStrategy = std::decay_t<ProducerStrategy>;
+        using MemberPtr = decltype(&DecayedStrategy::operator());
+
+        using PipeArg   = detail::function_traits<MemberPtr>::template argument_t<0>;
+        using FilterProperties = detail::function_traits<MemberPtr>::template argument_t<1>;
+        using OutputData = detail::extract_pipe_type_t<PipeArg>;
+
+        using ConcreteProducer = Producer<OutputData, DecayedStrategy, FilterProperties>;
+
+        return std::make_unique<ConcreteProducer>(
+            std::forward<ProducerStrategy>(producer_strategy)
+        );
+    }
+
 }

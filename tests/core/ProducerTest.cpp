@@ -77,3 +77,35 @@ TEST(CoreTest, MakeConfiguredProducer) {
     EXPECT_EQ(data_storage.size(), 1);
     EXPECT_EQ(data_storage[0], expected_result);
 }
+
+
+
+TEST(CoreTest, MakeConfiguredPipeProducer) {
+    // Arrange
+    using namespace clegmed::core;
+
+    const auto properties = clegmed::utils::Properties::fromFile("filterproperties.toml").value();
+    const auto [ip, port] = properties.get<clegmed::utils::ServerInfo>("processor");
+    const auto expected_result = "Hello World to " + ip;
+
+    std::vector<std::string> data_storage;
+    constexpr auto test_strategy = [](OutputPipe<std::string> outputPipe,
+        const clegmed::utils::ServerInfo& server_info) {
+        outputPipe.forward( "Hello World to " + server_info.ip);
+    };
+
+    const auto object_under_test = make_configured_pipe_producer(test_strategy);
+    object_under_test->withProperties("processor");
+    object_under_test->properties(properties);
+
+    object_under_test->outputPipe().connect([&data_storage](std::string data) {
+        data_storage.push_back(std::move(data));
+    });
+
+    // Act: Put some data into the input pipe
+    object_under_test->produce();
+
+    // Assert: Validate if passed
+    EXPECT_EQ(data_storage.size(), 1);
+    EXPECT_EQ(data_storage[0], expected_result);
+}
