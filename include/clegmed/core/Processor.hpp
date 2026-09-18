@@ -76,7 +76,7 @@ namespace clegmed::core {
             return PipelineResult{ std::nullopt };
         }
 
-        static void validate(PipelineResult pipeline_result) {
+        static void validate(const PipelineResult& pipeline_result) {
             if (!pipeline_result.has_value()) { // is null-opt
                 return;
             }
@@ -94,10 +94,12 @@ namespace clegmed::core {
             }
         }
 
-        void forward(PipelineResult pipeline_result) {
-            if (pipeline_result.has_value()) {
-                m_output_pipe.forward(std::move(*pipeline_result.value()));
-            }
+        void forward(PipelineResult& pipeline_result) {
+            pipeline_result.and_then([this](auto&& expected_val) {
+                m_output_pipe.forward(std::move(*expected_val));
+                return std::make_optional(true);
+            });
+            pipeline_result.reset();
         }
 
 

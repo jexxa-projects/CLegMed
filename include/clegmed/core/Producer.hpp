@@ -3,35 +3,29 @@
 #include "Filter.hpp"
 #include "OutputPipe.hpp"
 #include "Traits.hpp"
+#include "concepts/ProducerStartegy.hpp"
 #include <type_traits>
 #include <utility>
 
 
 namespace clegmed::core {
-    template <typename Strategy, typename OutputData, typename FilterProperties>
-    concept ValidProducerStrategy =
-        requires(Strategy&& strategy) { { strategy() } -> std::same_as<OutputData>; } ||
-        requires(Strategy&& strategy, OutputPipe<OutputData>& pipe) { { strategy(pipe) } -> std::same_as<void>; } ||
 
-        (utils::DeserializableFromProperties<FilterProperties> && requires(Strategy&& strategy, FilterProperties& filter_properties)
-        { { strategy(filter_properties) } -> std::same_as<OutputData>; }) ||
+    template <
+        typename OutputData,
+        typename  Strategy,
+        typename FilterProperties = std::monostate>
 
-        (utils::DeserializableFromProperties<FilterProperties> && requires(Strategy&& strategy, OutputPipe<OutputData>& pipe, FilterProperties& filter_properties)
-        { { strategy(pipe, filter_properties) } -> std::same_as<void>; }) ;
-
-    template <typename OutputData, typename  ProducerStrategy, typename FilterProperties = std::monostate>
-        requires ValidProducerStrategy<ProducerStrategy, OutputData, FilterProperties>
+    requires ValidProducerStrategy<Strategy, OutputData, FilterProperties>
     class Producer : public Filter {
-        FilterProperties m_properties;
     public:
         Producer() = delete;
         ~Producer() override = default;
 
-        explicit Producer(ProducerStrategy strategy) : Filter(), m_strategy(std::move(strategy)) {}
+        explicit Producer(Strategy strategy) : Filter(), m_strategy(std::move(strategy)) {}
 
         template<typename Self >
         auto&& outputPipe(this Self&& explicit_this) {
-            return std::forward<Self>(explicit_this).m_outputPipe;
+            return std::forward<Self>(explicit_this).m_output_pipe;
         }
 
         void properties(const utils::Properties& properties) {
@@ -42,20 +36,32 @@ namespace clegmed::core {
             }
         }
 
-        void produce() {
-            // 1. Piped-Signatur (1:n) (Strategy writes directly to the output-pipe)
-            if constexpr (std::is_invocable_v<ProducerStrategy, OutputPipe<OutputData>&>) {
-                m_strategy(m_outputPipe);
+        void produce() noexcept{
+            PipelineResult result = executeStrategy();
+
+            validate(result);
+
+            forward(result);
+        }
+
+    private:
+        using PipelineResult = std::optional<std::expected<OutputData, std::exception_ptr>>;
+
+        [[nodiscard]] PipelineResult executeStrategy() noexcept
+        {
+            if constexpr (ProducerWithPipe<Strategy, OutputData>) {
+                m_strategy(m_output_pipe) ;
+                return PipelineResult{ std::nullopt };
             }
-            // 2. 1:1-Signatur (Strategy returns a value that fits to OutputData)
-            else if constexpr (std::is_invocable_r_v<OutputData, ProducerStrategy>) {
-                m_outputPipe.forward(std::forward<ProducerStrategy>(m_strategy)());
+            else if constexpr ( ProducerWithDirectReturn<Strategy, OutputData> ) {
+                return PipelineResult{ m_strategy() };
             }
-            else if constexpr (std::is_invocable_v<ProducerStrategy, OutputPipe<OutputData>&, const FilterProperties&>) {
-                m_strategy(m_outputPipe, m_properties);
+            else if constexpr (ProducerWithPropertiesAndPipe<Strategy, OutputData, FilterProperties>) {
+                m_strategy(m_output_pipe, m_properties);
+                return PipelineResult{ std::nullopt };
             }
-            else if constexpr (std::is_invocable_v<ProducerStrategy, const FilterProperties&>) {
-                m_outputPipe.forward(m_strategy(m_properties));
+            else if constexpr (ProducerWithPropertiesAndReturn<Strategy, OutputData, FilterProperties>) {
+                return PipelineResult{m_strategy(m_properties)};
             }
 
             else {
@@ -63,11 +69,41 @@ namespace clegmed::core {
                     "❌ ARCHITECTURE-ERROR: Given ProducerStrategy neither uses "
                     "Piped-Signature (Pipe&) nor 1:1-signature ().");
             }
+
+            return PipelineResult{ std::nullopt };
         }
 
-    private:
-        [[no_unique_address]] ProducerStrategy m_strategy;
-        OutputPipe<OutputData> m_outputPipe = OutputPipe<OutputData>(*this);
+        static void validate(const PipelineResult& pipeline_result) {
+            if (!pipeline_result.has_value()) { // is null-opt
+                return;
+            }
+
+            if (pipeline_result->has_value()) { //pointer oder null
+                return;
+            }
+
+            //TODO: Actually, we do not know how to handle errors in general
+            if (pipeline_result->error()) {
+                utils::Logger::log(utils::LogLevel::ERROR,
+                    "Pipeline Error: error occurred . TODO implement error handling"
+                    );
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        void forward(PipelineResult& pipeline_result) {
+            pipeline_result.and_then([this](auto&& expected_val) {
+                m_output_pipe.forward(std::move(*expected_val));
+                return std::make_optional(true); // Dummy return for monadic chain
+            });
+            pipeline_result.reset();
+        }
+
+
+
+        [[no_unique_address]] Strategy m_strategy;
+        OutputPipe<OutputData> m_output_pipe = OutputPipe<OutputData>(*this);
+        FilterProperties m_properties;
     };
 
     template <typename ProducerStrategy>
