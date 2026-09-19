@@ -29,6 +29,9 @@ namespace clegmed::core {
         std::vector<std::string> m_argv;
         utils::Properties m_properties;
     public:
+        CLegMed(const CLegMed&) = delete;
+        CLegMed& operator=(const CLegMed&) = delete;
+
         template<typename ... Args>
         requires
             NotSelfClass<CLegMed, Args ...> &&

@@ -135,7 +135,7 @@ namespace clegmed::core {
         PipelineBuilder  withProperties(std::string properties) {
             if constexpr (sizeof...(Filters) >0) {
                 auto& last_filter_ptr = std::get<sizeof...(Filters) - 1>(m_pipeline);
-                last_filter_ptr->withProperties(std::forward<std::string>(properties));
+                last_filter_ptr->withProperties(properties);
             }
 
             return PipelineBuilder(std::move(m_pipeline), m_config);
