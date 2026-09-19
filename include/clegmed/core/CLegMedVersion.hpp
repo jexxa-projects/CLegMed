@@ -1,8 +1,12 @@
 #pragma once
-#define CLEGMED_VERSION_MAJOR 0
-#define CLEGMED_VERSION_MINOR 1
-#define CLEGMED_VERSION_PATCH 9
-#define CLEGMED_VERSION_STATUS "-SNAPSHOT" // Für Releases einfach auf "" setzen
+#include <array>
+#include <string_view>
+
+// 1. Typsichere constexpr-Konstanten statt #define (beseitigt die Warnung)
+inline constexpr int CLEGMED_VERSION_MAJOR = 0;
+inline constexpr int CLEGMED_VERSION_MINOR = 1;
+inline constexpr int CLEGMED_VERSION_PATCH = 9;
+inline constexpr std::string_view CLEGMED_VERSION_STATUS = "-SNAPSHOT";
 
 #ifndef CLEGMED_APP_NAME
 #define CLEGMED_APP_NAME "Unknown Application"
@@ -14,17 +18,39 @@
 
 namespace clegmed::core {
 
-#define CLEGMED_STR_HELPER(x) #x
-#define CLEGMED_STR(x) CLEGMED_STR_HELPER(x)
+    namespace detail {
+        // Hilfsfunktion zur Ermittlung der exakten Buffer-Größe zur Compilezeit
+        constexpr size_t calculate_version_buffer_size() {
+            // "X.Y.Z" benötigt mindestens 5 Zeichen + Status-Länge + 1 für die Nullterminierung '\0'
+            return 5 + CLEGMED_VERSION_STATUS.size() + 1;
+        }
 
-    inline constexpr const char* CLEGMED_VERSION = CLEGMED_STR(CLEGMED_VERSION_MAJOR) "."
-                                                   CLEGMED_STR(CLEGMED_VERSION_MINOR) "."
-                                                   CLEGMED_STR(CLEGMED_VERSION_PATCH)
-                                                   CLEGMED_VERSION_STATUS;
+        // Struktur baut den String zur Compilezeit zeichenweise zusammen
+        struct CompileTimeVersion {
+            std::array<char, calculate_version_buffer_size()> data{};
 
-#undef CLEGMED_STR
-#undef CLEGMED_STR_HELPER
+            constexpr CompileTimeVersion() {
+                size_t idx = 0;
+                data[idx++] = static_cast<char>('0' + CLEGMED_VERSION_MAJOR % 10);
+                data[idx++] = '.';
+                data[idx++] = static_cast<char>('0' + CLEGMED_VERSION_MINOR % 10);
+                data[idx++] = '.';
+                data[idx++] = static_cast<char>('0' + CLEGMED_VERSION_PATCH % 10);
 
-    inline constexpr const char* APPLICATION_NAME = CLEGMED_APP_NAME;
-    inline constexpr const char* APPLICATION_VERSION = CLEGMED_APP_VERSION;
+                for (const char c : CLEGMED_VERSION_STATUS) {
+                    data[idx++] = c;
+                }
+                data[idx] = '\0'; // Wichtig für die Kompatibilität mit C-Strings (const char*)
+            }
+        };
+
+        // Instanziierung zur Kompilierzeit
+        inline constexpr CompileTimeVersion version_storage;
+    }
+
+    // Vollständig kompatible Interfaces (Zuweisung an const char* funktioniert wie gewohnt)
+    inline constexpr const char* CLEGMED_VERSION = detail::version_storage.data.data();
+
+    inline constexpr auto APPLICATION_NAME = CLEGMED_APP_NAME;
+    inline constexpr auto APPLICATION_VERSION = CLEGMED_APP_VERSION;
 }
