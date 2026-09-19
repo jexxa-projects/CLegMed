@@ -67,8 +67,8 @@ namespace clegmed::core{
             return std::forward<Self>(explicit_this);
         }
 
-        void withProperties(const std::string& properties) {
-            m_properties_name = properties;
+        void withProperties(std::string properties) {
+            m_properties_name = std::move(properties);
         }
 
         [[nodiscard]] std::string propertiesName() const {
