@@ -2,7 +2,7 @@
 #define CLEGMED_VERSION_MAJOR 0 //NOSONAR
 #define CLEGMED_VERSION_MINOR 1 //NOSONAR
 #define CLEGMED_VERSION_PATCH 9 //NOSONAR
-#define CLEGMED_VERSION_STATUS "-SNAPSHOT" //NOSONAR // Für Releases einfach auf "" setzen
+#define CLEGMED_VERSION_STATUS "" //NOSONAR // Für Releases einfach auf "" setzen
 
 #ifndef CLEGMED_APP_NAME
 #define CLEGMED_APP_NAME "Unknown Application"
