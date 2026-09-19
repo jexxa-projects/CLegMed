@@ -15,7 +15,8 @@ jobs:
       # 1. Quellcode auschecken
       - name: Checkout Code
         uses: actions/checkout@v7
-
+        with:
+          fetch-depth: 0
       # 2. Abhängigkeiten (Doxygen) installieren
       - name: Install System Dependencies
         run: |
