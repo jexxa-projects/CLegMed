@@ -23,8 +23,7 @@ namespace clegmed::utils {
         };
 
         explicit Properties(toml::v3::table tbl) : m_table(std::move(tbl)) {}
-        explicit Properties() : m_table( toml::v3::table()) {  }
-
+        explicit Properties() = default;
 
         [[nodiscard]]
         static auto fromFile(const std::filesystem::path& path) -> std::expected<Properties, LoadError>
