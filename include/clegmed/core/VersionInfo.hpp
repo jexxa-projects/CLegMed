@@ -5,10 +5,9 @@
 
 namespace clegmed::core {
     struct VersionInfo {
-        VersionInfo(std::string application_name) :
+        explicit VersionInfo(std::string application_name) :
             m_application_name{ std::move(application_name) } {}
-        VersionInfo() :
-            m_application_name{ APPLICATION_NAME } {}
+        VersionInfo() = default;
         std::string m_application_name;
         std::string_view m_application_version{ APPLICATION_VERSION};
         std::string_view m_clegmed_version{ CLEGMED_VERSION   };

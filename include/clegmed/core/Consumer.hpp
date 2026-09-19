@@ -10,7 +10,6 @@ namespace clegmed::core {
     template <typename InputData, typename ConsumerStrategy, typename FilterProperties = std::monostate>
         requires ValidConsumerStrategy<ConsumerStrategy, InputData, FilterProperties>
     class Consumer : public Filter {
-        FilterProperties m_properties;
     public:
         explicit Consumer(ConsumerStrategy strategy) : m_strategy(strategy) {}
 
@@ -57,6 +56,7 @@ namespace clegmed::core {
             }
 
             return PipelineResult{ std::nullopt };
+
         }
 
         static void validate(const PipelineResult& pipeline_result) {
@@ -79,6 +79,7 @@ namespace clegmed::core {
         }
 
         [[no_unique_address]] ConsumerStrategy m_strategy;
+        [[no_unique_address]] FilterProperties m_properties;
     };
 
     template<typename ConsumerStrategy>
@@ -108,5 +109,4 @@ namespace clegmed::core {
             std::forward<ConsumerStrategy>(strategy)
         );
     }
-
 }

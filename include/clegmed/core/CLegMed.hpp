@@ -25,7 +25,7 @@ namespace clegmed::core {
 
     template<typename ... ExecutableGraph>
     class CLegMed final {
-        std::tuple<ExecutableGraph ...> m_executable_graphs;
+        [[no_unique_address]]std::tuple<ExecutableGraph ...> m_executable_graphs;
         std::vector<std::string> m_argv;
         utils::Properties m_properties;
     public:

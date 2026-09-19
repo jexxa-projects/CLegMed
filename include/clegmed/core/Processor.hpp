@@ -102,9 +102,8 @@ namespace clegmed::core {
         }
 
 
-        [[no_unique_address]]
-        Strategy m_strategy;
-        FilterProperties m_properties;
+        [[no_unique_address]] Strategy m_strategy;
+        [[no_unique_address]] FilterProperties m_properties;
 
         OutputPipe<OutputData> m_output_pipe = OutputPipe<OutputData>(*this);
     };
