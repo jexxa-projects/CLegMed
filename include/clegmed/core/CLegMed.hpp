@@ -120,11 +120,13 @@ namespace clegmed::core {
         }
 
     private:
-        void printStartupInfo() {
-            utils::Logger::log( utils::LogLevel::INFO, "CLegMed Version              : {} ", versionInfo().m_clegmed_version);
-            utils::Logger::log( utils::LogLevel::INFO, "Application Version          : {} ", versionInfo().m_application_version);
-            utils::Logger::log( utils::LogLevel::INFO, "Application Name             : {} ", versionInfo().m_application_name);
-            utils::Logger::log( utils::LogLevel::INFO, "");
+        void printStartupInfo() const {
+            using enum utils::LogLevel; // Holt INFO, WARN, ERROR etc. direkt in diesen Scope
+
+            utils::Logger::log( INFO, "CLegMed Version              : {} ", versionInfo().m_clegmed_version);
+            utils::Logger::log( INFO, "Application Version          : {} ", versionInfo().m_application_version);
+            utils::Logger::log( INFO, "Application Name             : {} ", versionInfo().m_application_name);
+            utils::Logger::log( INFO, "");
         }
         static void registerSignalHandler() {
             std::signal(SIGINT, handle_shutdown_signals);
