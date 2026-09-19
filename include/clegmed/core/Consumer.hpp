@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <exception>
 #include "Filter.hpp"
 #include "Traits.hpp"
 #include "clegmed/utils/Logger.hpp"

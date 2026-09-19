@@ -95,10 +95,9 @@ namespace clegmed::core {
         }
 
         void forward(PipelineResult& pipeline_result) {
-            pipeline_result.and_then([this](auto&& expected_val) {
-                m_output_pipe.forward(std::move(*expected_val));
-                return std::make_optional(true);
-            });
+            if (pipeline_result.has_value()) {
+                m_output_pipe.forward(std::move(**pipeline_result));
+            }
             pipeline_result.reset();
         }
 

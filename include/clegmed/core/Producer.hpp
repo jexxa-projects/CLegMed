@@ -6,6 +6,7 @@
 #include "concepts/ProducerStartegy.hpp"
 #include <type_traits>
 #include <utility>
+#include <exception>
 
 
 namespace clegmed::core {
@@ -89,10 +90,9 @@ namespace clegmed::core {
         }
 
         void forward(PipelineResult& pipeline_result) {
-            pipeline_result.and_then([this](auto&& expected_val) {
-                m_output_pipe.forward(std::move(*expected_val));
-                return std::make_optional(true); // Dummy return for monadic chain
-            });
+            if (pipeline_result.has_value()) {
+                m_output_pipe.forward(std::move(**pipeline_result));
+            }
             pipeline_result.reset();
         }
 
