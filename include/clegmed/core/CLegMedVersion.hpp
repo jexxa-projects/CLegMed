@@ -17,7 +17,7 @@ namespace clegmed::core {
 #define CLEGMED_STR_HELPER(x) #x
 #define CLEGMED_STR(x) CLEGMED_STR_HELPER(x)
 
-    inline constexpr const char* CLEGMED_VERSION = CLEGMED_STR(CLEGMED_VERSION_MAJOR) "."
+    inline constexpr auto CLEGMED_VERSION = CLEGMED_STR(CLEGMED_VERSION_MAJOR) "."
                                                    CLEGMED_STR(CLEGMED_VERSION_MINOR) "."
                                                    CLEGMED_STR(CLEGMED_VERSION_PATCH)
                                                    CLEGMED_VERSION_STATUS;
@@ -25,6 +25,6 @@ namespace clegmed::core {
 #undef CLEGMED_STR
 #undef CLEGMED_STR_HELPER
 
-    inline constexpr const char* APPLICATION_NAME = CLEGMED_APP_NAME;
-    inline constexpr const char* APPLICATION_VERSION = CLEGMED_APP_VERSION;
+    inline constexpr auto APPLICATION_NAME = CLEGMED_APP_NAME;
+    inline constexpr auto APPLICATION_VERSION = CLEGMED_APP_VERSION;
 }
