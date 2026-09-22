@@ -4,7 +4,7 @@
 #include <ranges>
 #include <shared_mutex>
 #include <mutex>
-#include "clegmed/utils/EntityTraits.hpp"
+#include "../../concepts/EntityTraits.hpp"
 
 namespace clegmed::plugins::persistence {
     template<typename Entity>

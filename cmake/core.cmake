@@ -5,10 +5,10 @@ target_sources(clegmed_core_base INTERFACE
         FILE_SET HEADERS
         BASE_DIRS include
         FILES
-        include/clegmed/concepts/InjectedStrategy.hpp
-        include/clegmed/concepts/ProcessorStrategy.hpp
-        include/clegmed/concepts/ProducerStrategy.hpp
-        include/clegmed/concepts/ConsumerStrategy.hpp
+        include/clegmed/core/concepts/InjectedStrategy.hpp
+        include/clegmed/core/concepts/ProcessorStrategy.hpp
+        include/clegmed/core/concepts/ProducerStrategy.hpp
+        include/clegmed/core/concepts/ConsumerStrategy.hpp
         include/clegmed/core/Filter.hpp
         include/clegmed/core/InputPipe.hpp
         include/clegmed/core/Processor.hpp

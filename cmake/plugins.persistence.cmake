@@ -5,6 +5,7 @@ target_sources(clegmed_plugins_persistence INTERFACE
         FILE_SET HEADERS
         BASE_DIRS include
         FILES
+        include/clegmed/plugins/persistence/concepts/EntityTraits.hpp
         include/clegmed/plugins/persistence/repository/Repository.hpp
         include/clegmed/plugins/persistence/repository/imdb/IMDBRepository.hpp
         include/clegmed/plugins/persistence/generic/PersistentConsumer.hpp
