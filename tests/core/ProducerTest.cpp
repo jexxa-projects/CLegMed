@@ -1,15 +1,16 @@
 #include "clegmed/core/Processor.hpp"
 #include "clegmed/core/Producer.hpp"
 #include "../utils/fixtures/PropertiesStructs.hpp"
+#include "clegmed/plugins/shortcuts.hpp"
 #include "gtest/gtest.h"
 
 TEST(CoreTest, ProducerSendsData) {
     // Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
 
     constexpr auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
-    constexpr auto test_strategy = [] { return "Hello World";};
+    constexpr auto test_strategy = [] { return "Hello World"s;};
 
     const auto object_under_test = make_producer(test_strategy);
 

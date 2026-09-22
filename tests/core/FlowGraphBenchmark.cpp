@@ -5,16 +5,17 @@
 #include "clegmed/core/Consumer.hpp"
 #include "clegmed/core/Processor.hpp"
 #include "clegmed/core/Producer.hpp"
+#include "clegmed/plugins/shortcuts.hpp"
 
 static void BM_FlowGraphThroughput(benchmark::State& state) {
     // 1. Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
 
     std::vector<std::string> data_storage;
     // Speicher vorreservieren, um Reallozierungen während des Tests zu minimieren
     data_storage.reserve(10000);
 
-    auto producer_strategy = [] { return "Hello"; };
+    auto producer_strategy = [] { return "Hello"s; };
     auto processor_strategy = [](const std::string &input) { return input + " World"; };
     auto consumer_strategy = [&data_storage](const std::string &data) {
         data_storage.push_back(data);

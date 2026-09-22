@@ -6,7 +6,7 @@
 
 TEST(CLegMedTest, ProjectInfo) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
     const auto clegmed = CLegMed();
 
     //Act
@@ -23,19 +23,19 @@ TEST(CLegMedTest, ProjectInfo) {
 
 TEST(CLegMedTest, StartStopMultitpleFlowGraphs) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
     std::vector<std::string> data_storage_1;
     std::vector<std::string> data_storage_2;
 
     auto flowgraph_1 = FlowGraph{}
         .every(std::chrono::milliseconds(10))
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage_1](const std::string &data) {data_storage_1.push_back(data);});
 
     auto flowgraph_2 = FlowGraph{}
         .every(std::chrono::milliseconds(10))
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage_2](const std::string &data) { data_storage_2.push_back(data);});
 
@@ -60,26 +60,26 @@ namespace {
 }
 TEST_P(CLegMedSignalTest, RunFlowGraphs) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
     std::vector<std::string> data_storage_1;
     std::vector<std::string> data_storage_2;
 
     auto flowgraph_1 = FlowGraph{}
     .every(std::chrono::milliseconds(10))
-    .from([] { return "Hello";})
+    .from([] { return "Hello"s;})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage_1](const std::string &data) {data_storage_1.push_back(data);});
 
     auto flowgraph_2 = FlowGraph{}
     .every(std::chrono::milliseconds(10))
-    .from([] { return "Hello";})
+    .from([] { return "Hello"s;})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage_2](const std::string &data) { data_storage_2.push_back(data);});
 
     auto object_under_test = CLegMed(std::move(flowgraph_1), std::move(flowgraph_2));
 
     //Act
-    auto m_thread_ptr = std::make_unique<std::jthread>
+    const auto m_thread_ptr = std::make_unique<std::jthread>
     ([&object_under_test] { object_under_test.run();});
 
     //Assert
@@ -89,7 +89,7 @@ TEST_P(CLegMedSignalTest, RunFlowGraphs) {
     EXPECT_GE(data_storage_1.size(), 10);
 
     {
-        int current_signal = GetParam();
+        const int current_signal = GetParam();
         SCOPED_TRACE("Send Shutdown-Signal to CLegMed");
         EXPECT_TRUE(m_thread_ptr->joinable());
 
@@ -107,13 +107,13 @@ INSTANTIATE_TEST_SUITE_P(
 );
 TEST(CLegMedTest, UseArgv) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
     std::vector<std::string> data_storage_1;
     std::array argv_modern = { const_cast<char*>("TestUseArgv") }; //NOSONAR
 
     auto flowgraph_1 = FlowGraph{}
     .every(std::chrono::milliseconds(10))
-    .from([] { return "Hello";})
+    .from([] { return "Hello"s;})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage_1](const std::string &data) {data_storage_1.push_back(data);});
 

@@ -4,16 +4,17 @@
 #include "clegmed/core/Producer.hpp"
 #include "gtest/gtest.h"
 #include "../utils/Await.hpp"
+#include "clegmed/plugins/shortcuts.hpp"
 
 
 TEST(FlowGraphTest, FlowGraphProcessesData) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
 
     constexpr auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
 
-    auto producer_strategy = [] { return "Hello";};
+    auto producer_strategy = [] { return "Hello"s;};
     auto processor_strategy = [](const std::string &input){ return input + " World";};
     auto consumer_strategy = [&data_storage](const std::string &data) {data_storage.push_back(data);};
 
@@ -36,14 +37,14 @@ TEST(FlowGraphTest, FlowGraphProcessesData) {
 
 TEST(FlowGraphTest, FlowGraphTest) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
 
     constexpr auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
         .repeat(1)
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
@@ -63,14 +64,14 @@ TEST(FlowGraphTest, FlowGraphTest) {
 
 TEST(FlowGraphTest, EveryFlowGraphTest) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
 
     constexpr auto expected_result = "Hello World";
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
         .every(std::chrono::milliseconds(10))
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
@@ -89,13 +90,13 @@ TEST(FlowGraphTest, EveryFlowGraphTest) {
 }
 TEST(FlowGraphTest, FailedEveryFlowGraphTest) {
     //Arrange
-    using namespace clegmed::core;
+    using namespace clegmed::shortcuts;
 
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
         .every(std::chrono::seconds(10))
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
