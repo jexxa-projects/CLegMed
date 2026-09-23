@@ -114,6 +114,16 @@ This document serves as the single source of truth for software requirements. Al
 * [REQ-010-A] The framework shall provide a way to define a standard config file that is loaded 
   at startup. In the first step we will use the toml format
 
+## 🧩 [REQ-011] Monadic Backward Error Propagation (Rollback Chain)
+*   **[REQ-011-A] The framework must support a monadic, type-safe error propagation mechanism that flows 
+    in reverse order of the execution chain. 
+    Behavior: When a filter stage encounters an error, execution of the main data path must short-circuit 
+    immediately. The framework will then propagate the error backward through the preceding stages:  
+    * If a stage has a registered .onError() handle, the error is routed into this pipe (acting as a local rollback or side-effect) and the propagation stops.If a stage has no .onError() handle, it must silently bubble the error up to its immediate predecessor.If the error reaches the beginning of the flow graph without encountering any .onError() pipe, it must trigger the application's global error handler.
+    * Payload: The error pipe target function must receive the raw error context directly (e.g., a custom error type or string), rather than a generic std::exception_ptr, keeping the application layer clean and easy to read.
+
+
+
 ## 🔒 [CHORE-001] Repository Governance & Compliance Tools
 
 *   **[CHORE-001-A] Documentation**  
