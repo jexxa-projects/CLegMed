@@ -13,7 +13,7 @@ namespace clegmed::core {
 
     template <
         typename OutputData,
-        typename  Strategy,
+        typename Strategy,
         typename FilterProperties = std::monostate>
 
     requires ValidProducerStrategy<Strategy, OutputData, FilterProperties>
