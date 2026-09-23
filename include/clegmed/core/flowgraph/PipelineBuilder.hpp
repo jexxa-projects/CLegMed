@@ -87,7 +87,7 @@ namespace clegmed::core {
             }
             // 3. Fall: Lambda / Hilfsfunktion
             else {
-                return std::move(*this).from(make_producer(std::forward<ProducerArg>(producer)));
+                return std::move(*this).from(makeProducer(std::forward<ProducerArg>(producer)));
             }
         }
 
@@ -101,9 +101,9 @@ namespace clegmed::core {
             // Fall 1: Lambda Ausdrücke
             if constexpr (std::is_invocable_v<DecayedArg, decltype(std::declval<PreviousOutputType>())>) {
                 if constexpr (requires { &DecayedArg::operator(); }) {
-                    return std::move(*this).then(make_processor(std::forward<ProcessorArg>(processor)));
+                    return std::move(*this).then(makeProcessor(std::forward<ProcessorArg>(processor)));
                 } else {
-                    return std::move(*this).then(make_processor<PreviousOutputType>(std::forward<ProcessorArg>(processor)));
+                    return std::move(*this).then(makeProcessor<PreviousOutputType>(std::forward<ProcessorArg>(processor)));
                 }
             }
             // Fall 2: Bereits ein unique_ptr
@@ -128,7 +128,7 @@ namespace clegmed::core {
                 return PipelineBuilder<Filters..., DecayedArg>(std::move(new_tuple), m_config);
             }
             else {
-                return std::move(*this).then(make_processor(std::forward<ProcessorArg>(processor)));
+                return std::move(*this).then(makeProcessor(std::forward<ProcessorArg>(processor)));
             }
         }
 
@@ -164,7 +164,7 @@ namespace clegmed::core {
                 );
                 return ExecutableGraph(std::move(new_tuple), m_config);
             } else {
-                return std::move(*this).consumeWith(make_consumer(std::forward<ConsumerArg>(consumer)));
+                return std::move(*this).consumeWith(makeConsumer(std::forward<ConsumerArg>(consumer)));
             }
         }
 

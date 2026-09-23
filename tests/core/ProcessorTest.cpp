@@ -18,7 +18,7 @@ TEST(CoreTest, MakeProcessor) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input){ return input + " World";};
 
-    const auto object_under_test = make_processor(test_strategy);
+    const auto object_under_test = makeProcessor(test_strategy);
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
@@ -44,7 +44,7 @@ TEST(CoreTest, MakeNoExceptProcessor) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input) noexcept{ return input + " World";};
 
-    const auto object_under_test = make_processor(test_strategy);
+    const auto object_under_test = makeProcessor(test_strategy);
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
@@ -71,7 +71,7 @@ TEST(CoreTest, MakePipedProcessor) {
     constexpr auto test_strategy = [](const std::string &input, OutputPipe<std::string>& output_pipe)
         { output_pipe.forward( input + " World");};
 
-    const auto object_under_test = make_piped_processor(test_strategy);
+    const auto object_under_test = makePipedProcessor(test_strategy);
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
@@ -103,7 +103,7 @@ TEST(CoreTest, MakeConfiguredPipeProcessor) {
         const clegmed::utils::ServerInfo& server_info)
     { output_pipe.forward( input + " World to " + server_info.ip);};
 
-    const auto object_under_test = make_configured_piped_processor(test_strategy);
+    const auto object_under_test = makeConfiguredPipedProcessor(test_strategy);
     object_under_test->withProperties("processor");
     object_under_test->properties(properties);
 
@@ -138,7 +138,7 @@ TEST(CoreTest, MakeConfiguredProcessor) {
         return input + " World to " + server_info.ip;
     };
 
-    const auto object_under_test = make_configured_processor(test_strategy);
+    const auto object_under_test = makeConfiguredProcessor(test_strategy);
     object_under_test->withProperties("processor");
     object_under_test->properties(properties);
 

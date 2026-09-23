@@ -17,6 +17,6 @@ namespace clegmed::plugins::persistence {
             }
         };
 
-        return core::make_consumer(lambda_strategy);
+        return core::makeConsumer(lambda_strategy);
     }
 }

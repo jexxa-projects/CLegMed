@@ -31,7 +31,7 @@ namespace clegmed::plugins::generic {
             return input_data;
         };
 
-        return core::make_processor(lambda_strategy);
+        return core::makeProcessor(lambda_strategy);
     }
 
     /**
@@ -45,7 +45,7 @@ namespace clegmed::plugins::generic {
         // Fall A: Aufruf im isolierten Unit-Test MIT Typ -> passThrough<std::string>()
         if constexpr (!std::is_same_v<InputData, void>) {
             auto lambda_strategy = [](const InputData& input) -> InputData { return input; };
-            return core::make_processor<InputData>(std::move(lambda_strategy));
+            return core::makeProcessor<InputData>(std::move(lambda_strategy));
         }
 
         // Fall B: Aufruf in der Pipeline OHNE Typ -> .then(passThrough())
@@ -59,14 +59,14 @@ namespace clegmed::plugins::generic {
 
     template<typename T = std::string>
     [[nodiscard]] auto traceInfo() {
-        return core::make_processor([](T data) {
+        return core::makeProcessor([](T data) {
             utils::Logger::log(utils::LogLevel::INFO, "{}", data);
             return data;
         });
     }
     template<typename T = std::string>
     [[nodiscard]] auto traceWarn() {
-        return core::make_processor([](T data) {
+        return core::makeProcessor([](T data) {
             utils::Logger::log(utils::LogLevel::WARN, "{}", data);
             return data;
         });
@@ -74,7 +74,7 @@ namespace clegmed::plugins::generic {
 
     template<typename T = std::string>
     [[nodiscard]] auto traceError() {
-        return core::make_processor([](T data) {
+        return core::makeProcessor([](T data) {
             utils::Logger::log(utils::LogLevel::ERROR, "{}", data);
             return data;
         });

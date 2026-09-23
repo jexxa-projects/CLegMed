@@ -18,7 +18,7 @@ TEST(CoreTest, MakeConsumer) {
     };
 
 
-    const auto object_under_test = make_consumer(test_strategy);
+    const auto object_under_test = makeConsumer(test_strategy);
 
     // Act: Put some data into the input pipe
     object_under_test->inputPipe()(expected_result);
@@ -45,7 +45,7 @@ TEST(CoreTest, MakeConfiguredConsumer) {
         data_storage.push_back(data + server.ip);
     };
 
-    const auto object_under_test = make_configured_consumer(test_strategy);
+    const auto object_under_test = makeConfiguredConsumer(test_strategy);
     object_under_test->withProperties("processor");
     object_under_test->properties(properties);
 

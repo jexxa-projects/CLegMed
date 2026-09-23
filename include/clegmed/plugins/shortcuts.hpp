@@ -12,17 +12,17 @@ namespace clegmed::shortcuts {
     using utils::Properties;
 
     // Core factory methods
-    using core::make_producer;
-    using core::make_configured_producer;
-    using core::make_configured_pipe_producer;
+    using core::makeProducer;
+    using core::makeConfiguredProducer;
+    using core::makeConfiguredPipeProducer;
 
-    using core::make_processor;
-    using core::make_configured_processor;
-    using core::make_piped_processor;
-    using core::make_configured_piped_processor;
+    using core::makeProcessor;
+    using core::makeConfiguredProcessor;
+    using core::makePipedProcessor;
+    using core::makeConfiguredPipedProcessor;
 
-    using core::make_consumer;
-    using core::make_configured_consumer;
+    using core::makeConsumer;
+    using core::makeConfiguredConsumer;
 
     // Core classes
     using core::OutputPipe;

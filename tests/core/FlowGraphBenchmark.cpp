@@ -21,9 +21,9 @@ static void BM_FlowGraphThroughput(benchmark::State& state) {
         data_storage.push_back(data);
     };
 
-    const auto producer = make_producer(producer_strategy);
-    const auto processor = make_processor(processor_strategy);
-    const auto consumer = make_consumer(consumer_strategy);
+    const auto producer = makeProducer(producer_strategy);
+    const auto processor = makeProcessor(processor_strategy);
+    const auto consumer = makeConsumer(consumer_strategy);
 
     producer->outputPipe().connect(processor->inputPipe());
     processor->outputPipe().connect(consumer->inputPipe());

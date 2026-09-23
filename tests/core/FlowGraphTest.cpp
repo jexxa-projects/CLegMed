@@ -17,9 +17,9 @@ TEST(FlowGraphTest, FlowGraphProcessesData) {
     auto processor_strategy = [](const std::string &input){ return input + " World";};
     auto consumer_strategy = [&data_storage](const std::string &data) {data_storage.push_back(data);};
 
-    const auto producer = make_producer(producer_strategy);
-    const auto processor = make_processor(processor_strategy);
-    const auto consumer = make_consumer(consumer_strategy);
+    const auto producer = makeProducer(producer_strategy);
+    const auto processor = makeProcessor(processor_strategy);
+    const auto consumer = makeConsumer(consumer_strategy);
 
     //Act
     producer->outputPipe().connect(processor->inputPipe());

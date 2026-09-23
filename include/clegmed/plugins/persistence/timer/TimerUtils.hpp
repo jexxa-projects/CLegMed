@@ -67,7 +67,7 @@ namespace clegmed::plugins::persistence {
             return TimeInterval(time_interval.begin - casted_duration, time_interval.end);
         };
 
-        return core::make_processor(lambda_strategy);
+        return core::makeProcessor(lambda_strategy);
     }
 
 
@@ -80,7 +80,7 @@ namespace clegmed::plugins::persistence {
             return TimeInterval(time_interval.begin, time_interval.end + casted_duration);
         };
 
-        return core::make_processor(lambda_strategy);
+        return core::makeProcessor(lambda_strategy);
     }
 
 }

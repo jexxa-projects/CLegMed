@@ -15,7 +15,7 @@ namespace clegmed::plugins::generic {
 
     template<typename T>
     [[nodiscard]] auto discard() {
-        return core::make_consumer([](T ) {
+        return core::makeConsumer([](T ) {
             // we discard data
         });
     }
@@ -34,26 +34,26 @@ namespace clegmed::plugins::generic {
             }
         };
 
-        return core::make_consumer(lambda_strategy);
+        return core::makeConsumer(lambda_strategy);
     }
 
     template<typename T = std::string>
     [[nodiscard]] auto logInfo() {
-        return core::make_consumer([](T data) {
+        return core::makeConsumer([](T data) {
             utils::Logger::log(utils::LogLevel::INFO, "{}", data);
         });
     }
 
     template<typename T = std::string>
     [[nodiscard]] auto logWarn() {
-        return core::make_consumer([](T data) {
+        return core::makeConsumer([](T data) {
             utils::Logger::log(utils::LogLevel::WARN, "{}", data);
         });
     }
 
     template<typename T = std::string>
     [[nodiscard]] auto logError() {
-        return core::make_consumer([](T data) {
+        return core::makeConsumer([](T data) {
             utils::Logger::log(utils::LogLevel::ERROR, "{}", data);
         });
     }

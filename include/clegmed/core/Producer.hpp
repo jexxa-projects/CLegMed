@@ -104,20 +104,20 @@ namespace clegmed::core {
     };
 
     template <typename ProducerStrategy>
-    [[nodiscard]] auto make_producer(ProducerStrategy&& producer_strategy) {
+    [[nodiscard]] auto makeProducer(ProducerStrategy&& producer_strategy) {
         using OutputData = std::invoke_result_t<ProducerStrategy>;
         using ConcreteProducer = Producer<OutputData, std::decay_t<ProducerStrategy>>;
         return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
     }
 
     template <typename OutputData, typename ProducerStrategy>
-    [[nodiscard]] auto make_piped_producer(ProducerStrategy&& producer_strategy) {
+    [[nodiscard]] auto makePipedProducer(ProducerStrategy&& producer_strategy) {
         using ConcreteProducer = Producer<OutputData, std::decay_t<ProducerStrategy>>;
         return std::make_unique<ConcreteProducer>(std::forward<ProducerStrategy>(producer_strategy));
     }
 
     template <typename ProducerStrategy>
-    [[nodiscard]] auto make_configured_producer(ProducerStrategy&& producer_strategy) {
+    [[nodiscard]] auto makeConfiguredProducer(ProducerStrategy&& producer_strategy) {
         using DecayedStrategy = std::decay_t<ProducerStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 
@@ -129,7 +129,7 @@ namespace clegmed::core {
     }
 
     template <typename ProducerStrategy>
-    [[nodiscard]] auto make_configured_pipe_producer(ProducerStrategy&& producer_strategy) {
+    [[nodiscard]] auto makeConfiguredPipeProducer(ProducerStrategy&& producer_strategy) {
         using DecayedStrategy = std::decay_t<ProducerStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 

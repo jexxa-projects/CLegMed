@@ -83,7 +83,7 @@ namespace clegmed::core {
     };
 
     template<typename ConsumerStrategy>
-    [[nodiscard]] auto make_consumer(ConsumerStrategy&& strategy) {
+    [[nodiscard]] auto makeConsumer(ConsumerStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ConsumerStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
         using InputData = detail::function_traits<MemberPtr>::template argument_t<0>;
@@ -96,7 +96,7 @@ namespace clegmed::core {
     }
 
     template<typename ConsumerStrategy>
-    [[nodiscard]] auto make_configured_consumer(ConsumerStrategy&& strategy) {
+    [[nodiscard]] auto makeConfiguredConsumer(ConsumerStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ConsumerStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 

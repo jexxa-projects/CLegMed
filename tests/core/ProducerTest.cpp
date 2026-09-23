@@ -13,7 +13,7 @@ TEST(CoreTest, ProducerSendsData) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [] { return "Hello World"s;};
 
-    const auto object_under_test = make_producer(test_strategy);
+    const auto object_under_test = makeProducer(test_strategy);
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
@@ -36,7 +36,7 @@ TEST(CoreTest, ProducerSendsDataByOutputPipe) {
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](auto& outputPipe) { outputPipe.forward( "Hello World");};
 
-    const auto object_under_test = make_piped_producer<std::string>(test_strategy);
+    const auto object_under_test = makePipedProducer<std::string>(test_strategy);
 
     object_under_test->outputPipe().connect([&data_storage](std::string data) {
         data_storage.push_back(std::move(data));
@@ -65,7 +65,7 @@ TEST(CoreTest, MakeConfiguredProducer) {
         return "Hello World to " + server_info.ip;
     };
 
-    const auto object_under_test = make_configured_producer(test_strategy);
+    const auto object_under_test = makeConfiguredProducer(test_strategy);
     object_under_test->withProperties("processor");
     object_under_test->properties(properties);
 
@@ -97,7 +97,8 @@ TEST(CoreTest, MakeConfiguredPipeProducer) {
         outputPipe.forward( "Hello World to " + server_info.ip);
     };
 
-    const auto object_under_test = make_configured_pipe_producer(test_strategy);
+    const auto object_under_test = makeConfiguredPipeProducer(test_strategy);
+
     object_under_test->withProperties("processor");
     object_under_test->properties(properties);
 

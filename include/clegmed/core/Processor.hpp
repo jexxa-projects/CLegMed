@@ -110,7 +110,7 @@ namespace clegmed::core {
 
 
     template <typename ProcessorStrategy>
-    [[nodiscard]] auto make_processor(ProcessorStrategy&& strategy) {
+    [[nodiscard]] auto makeProcessor(ProcessorStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 
@@ -126,7 +126,7 @@ namespace clegmed::core {
 
 
     template <typename InputData, typename ProcessorStrategy>
-    [[nodiscard]] auto make_processor(ProcessorStrategy&& strategy) {
+    [[nodiscard]] auto makeProcessor(ProcessorStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;
         using ConcreteProcessor = Processor<InputData, InputData, DecayedStrategy>;
 
@@ -136,7 +136,7 @@ namespace clegmed::core {
     }
 
     template <typename ProcessorStrategy>
-    [[nodiscard]] auto make_piped_processor(ProcessorStrategy&& strategy) {
+    [[nodiscard]] auto makePipedProcessor(ProcessorStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 
@@ -152,7 +152,7 @@ namespace clegmed::core {
     }
 
     template <typename ProcessorStrategy>
-    [[nodiscard]] auto make_configured_piped_processor(ProcessorStrategy&& strategy) {
+    [[nodiscard]] auto makeConfiguredPipedProcessor(ProcessorStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 
@@ -171,7 +171,7 @@ namespace clegmed::core {
 
     template <typename ProcessorStrategy>
     [[nodiscard]]
-    auto make_configured_processor(ProcessorStrategy&& strategy) {
+    auto makeConfiguredProcessor(ProcessorStrategy&& strategy) {
         using DecayedStrategy = std::decay_t<ProcessorStrategy>;
         using MemberPtr = decltype(&DecayedStrategy::operator());
 

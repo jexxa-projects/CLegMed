@@ -17,6 +17,6 @@ namespace clegmed::plugins::generic {
             return data; // Gibt nun legal einen std::string zurück
         };
 
-        return core::make_producer(std::move(lambda_strategy));
+        return core::makeProducer(std::move(lambda_strategy));
     }
 }
