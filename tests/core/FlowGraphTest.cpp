@@ -4,16 +4,16 @@
 #include "clegmed/core/Producer.hpp"
 #include "gtest/gtest.h"
 #include "../utils/Await.hpp"
+#include "clegmed/plugins/shortcuts.hpp"
 
+using namespace clegmed::shortcuts;
 
 TEST(FlowGraphTest, FlowGraphProcessesData) {
     //Arrange
-    using namespace clegmed::core;
-
-    constexpr auto expected_result = "Hello World";
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
 
-    auto producer_strategy = [] { return "Hello";};
+    auto producer_strategy = [] { return "Hello"s;};
     auto processor_strategy = [](const std::string &input){ return input + " World";};
     auto consumer_strategy = [&data_storage](const std::string &data) {data_storage.push_back(data);};
 
@@ -36,14 +36,12 @@ TEST(FlowGraphTest, FlowGraphProcessesData) {
 
 TEST(FlowGraphTest, FlowGraphTest) {
     //Arrange
-    using namespace clegmed::core;
-
-    constexpr auto expected_result = "Hello World";
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
         .repeat(1)
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
@@ -63,14 +61,12 @@ TEST(FlowGraphTest, FlowGraphTest) {
 
 TEST(FlowGraphTest, EveryFlowGraphTest) {
     //Arrange
-    using namespace clegmed::core;
-
-    constexpr auto expected_result = "Hello World";
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
 
     auto flowgraph = FlowGraph{}
         .every(std::chrono::milliseconds(10))
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
@@ -95,7 +91,7 @@ TEST(FlowGraphTest, FailedEveryFlowGraphTest) {
 
     auto flowgraph = FlowGraph{}
         .every(std::chrono::seconds(10))
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 
@@ -123,7 +119,7 @@ TEST(FlowGraphTest, AwaitFlowGraphTest) {
     .await()
     .from([] {
         std::this_thread::sleep_for(std::chrono::milliseconds(20)); //Simulate waiting
-        return "Hello";})
+        return "Hello"s;})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage](const std::string &data) {data_storage.push_back(data);});
 

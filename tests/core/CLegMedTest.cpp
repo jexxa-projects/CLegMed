@@ -24,12 +24,14 @@ TEST(CLegMedTest, ProjectInfo) {
 TEST(CLegMedTest, StartStopMultitpleFlowGraphs) {
     //Arrange
     using namespace clegmed::core;
+    using namespace std::string_literals;
+
     std::vector<std::string> data_storage_1;
     std::vector<std::string> data_storage_2;
 
     auto flowgraph_1 = FlowGraph{}
         .every(std::chrono::milliseconds(10))
-        .from([] { return "Hello";})
+        .from([] { return "Hello"s;})
         .then([](const std::string &input){ return input + " World";})
         .consumeWith([&data_storage_1](const std::string &data) {data_storage_1.push_back(data);});
 
@@ -61,18 +63,20 @@ namespace {
 TEST_P(CLegMedSignalTest, RunFlowGraphs) {
     //Arrange
     using namespace clegmed::core;
+    using namespace std::string_literals;
+
     std::vector<std::string> data_storage_1;
     std::vector<std::string> data_storage_2;
 
     auto flowgraph_1 = FlowGraph{}
     .every(std::chrono::milliseconds(10))
-    .from([] { return "Hello";})
+    .from([] { return "Hello"s;})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage_1](const std::string &data) {data_storage_1.push_back(data);});
 
     auto flowgraph_2 = FlowGraph{}
     .every(std::chrono::milliseconds(10))
-    .from([] { return "Hello";})
+    .from([] { return "Hello"s;})
     .then([](const std::string &input){ return input + " World";})
     .consumeWith([&data_storage_2](const std::string &data) { data_storage_2.push_back(data);});
 

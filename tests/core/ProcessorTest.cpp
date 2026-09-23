@@ -10,9 +10,11 @@ namespace clegmed::utils {
 TEST(CoreTest, MakeProcessor) {
     // Arrange
     using namespace std::string_view_literals;
+    using namespace std::string_literals;
     using namespace clegmed::core;
-    constexpr auto message = "Hello";
-    constexpr auto expected_result = "Hello World";
+
+    const auto message = "Hello"s;
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input){ return input + " World";};
 
@@ -35,8 +37,10 @@ TEST(CoreTest, MakeProcessor) {
 TEST(CoreTest, MakeNoExceptProcessor) {
     // Arrange
     using namespace clegmed::core;
-    constexpr auto message = "Hello";
-    constexpr auto expected_result = "Hello World";
+    using namespace std::string_literals;
+
+    const auto message = "Hello"s;
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input) noexcept{ return input + " World";};
 
@@ -59,8 +63,10 @@ TEST(CoreTest, MakeNoExceptProcessor) {
 TEST(CoreTest, MakePipedProcessor) {
     // Arrange
     using namespace clegmed::core;
-    constexpr auto message = "Hello";
-    constexpr auto expected_result = "Hello World";
+    using namespace std::string_literals;
+
+    const auto message = "Hello"s;
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](const std::string &input, OutputPipe<std::string>& output_pipe)
         { output_pipe.forward( input + " World");};
@@ -81,10 +87,12 @@ TEST(CoreTest, MakePipedProcessor) {
 
 TEST(CoreTest, MakeConfiguredPipeProcessor) {
     // Arrange
-    using namespace clegmed::shortcuts;
-    constexpr auto message = "Hello";
+    using namespace clegmed::core;
+    using namespace std::string_literals;
 
-    const auto properties = Properties::fromFile("filterproperties.toml").value();
+    const auto message = "Hello"s;
+
+    const auto properties = clegmed::utils::Properties::fromFile("filterproperties.toml").value();
     const auto [ip, port] = properties.get<clegmed::utils::ServerInfo>("processor");
     const auto expected_result = "Hello World to " + ip;
 
@@ -115,7 +123,9 @@ TEST(CoreTest, MakeConfiguredPipeProcessor) {
 TEST(CoreTest, MakeConfiguredProcessor) {
     // Arrange
     using namespace clegmed::core;
-    constexpr auto message = "Hello";
+    using namespace std::string_literals;
+
+    const auto message = "Hello"s;
 
     const auto properties = clegmed::utils::Properties::fromFile("filterproperties.toml").value();
     const auto [ip, port] = properties.get<clegmed::utils::ServerInfo>("processor");

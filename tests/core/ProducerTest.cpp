@@ -2,14 +2,16 @@
 #include "clegmed/core/Producer.hpp"
 #include "../utils/fixtures/PropertiesStructs.hpp"
 #include "gtest/gtest.h"
+#include <string>
 
 TEST(CoreTest, ProducerSendsData) {
     // Arrange
     using namespace clegmed::core;
+    using namespace std::string_literals;
 
-    constexpr auto expected_result = "Hello World";
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
-    constexpr auto test_strategy = [] { return "Hello World";};
+    constexpr auto test_strategy = [] { return "Hello World"s;};
 
     const auto object_under_test = make_producer(test_strategy);
 
@@ -28,8 +30,9 @@ TEST(CoreTest, ProducerSendsData) {
 TEST(CoreTest, ProducerSendsDataByOutputPipe) {
     // Arrange
     using namespace clegmed::core;
+    using namespace std::string_literals;
 
-    constexpr auto expected_result = "Hello World";
+    const auto expected_result = "Hello World"s;
     std::vector<std::string> data_storage;
     constexpr auto test_strategy = [](auto& outputPipe) { outputPipe.forward( "Hello World");};
 

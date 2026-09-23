@@ -6,7 +6,7 @@
 #include "clegmed/plugins/persistence/generic/PersistentConsumer.hpp"
 #include "clegmed/plugins/persistence/repository/imdb/IMDBRepository.hpp"
 
-
+using namespace clegmed::shortcuts;
 using namespace clegmed::plugins::persistence;
 using namespace clegmed::plugins::persistence::fixtures;
 
@@ -14,7 +14,7 @@ using namespace clegmed::plugins::persistence::fixtures;
 
 TEST(PersistentConsumerTest, PersistCustomer) {
     // Arrange
-    constexpr auto customer_name = "HelloWorld";
+    const auto customer_name = "HelloWorld"s;
     auto repository = IMDBRepository<Customer>{};
     repository.init();
 
@@ -29,7 +29,6 @@ TEST(PersistentConsumerTest, PersistCustomer) {
 
 TEST(PersistentConsumerTest, PersistCustomerFlowGraph) {
     // Arrange
-    using namespace clegmed::shortcuts;
     auto repository = IMDBRepository<Customer>{};
     repository.init();
 

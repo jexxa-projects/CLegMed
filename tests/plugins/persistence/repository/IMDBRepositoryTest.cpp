@@ -7,6 +7,7 @@
 
 using namespace clegmed::plugins::persistence;
 using namespace clegmed::plugins::persistence::fixtures;
+using namespace clegmed::shortcuts;
 
 static_assert(isRepository<IMDBRepository<Customer>, Customer>,
     "InMemoryRepository must fulfill the isRepository concept!");
@@ -17,7 +18,7 @@ TEST(IMDBRepositoryTest, StoreCustomer) {
     // Arrange
     auto object_under_test = IMDBRepository<Customer>();
     constexpr auto customer_count = 10;
-    constexpr auto customer_name = "HelloWorld";
+    const auto customer_name = "HelloWorld"s;
 
     std::ranges::for_each(std::views::iota(0, customer_count), [&](const int i) {
         object_under_test.add(Customer(i, customer_name));
@@ -38,7 +39,7 @@ TEST(IMDBRepositoryTest, AddCustomerTwice) {
     // Arrange
     auto object_under_test = clegmed::plugins::persistence::IMDBRepository<Customer>();
     constexpr auto customer_id = 1;
-    constexpr auto customer_name = "HelloWorld";
+    const auto customer_name = "HelloWorld"s;
     object_under_test.add(Customer(customer_id, customer_name));
 
     // Act/Assert
@@ -49,7 +50,7 @@ TEST(IMDBRepositoryTest, ClearCustomer) {
     // Arrange
     auto object_under_test = clegmed::plugins::persistence::IMDBRepository<Customer>();
     constexpr auto customer_count = 10;
-    const std::string customer_name = "HelloWorld";
+    const auto customer_name = "HelloWorld"s;
 
     std::ranges::for_each(std::views::iota(0, customer_count), [&](const int i) {
         object_under_test.add(Customer(i, customer_name));
@@ -67,8 +68,8 @@ TEST(IMDBRepositoryTest, UpdateCustomer) {
     // Arrange
     auto object_under_test = clegmed::plugins::persistence::IMDBRepository<Customer>();
     constexpr auto customer_id   = 1;
-    constexpr auto customer_old_name = "OldName";
-    constexpr auto customer_new_name = "NewName";
+    const auto customer_old_name = "OldName"s;
+    const auto customer_new_name = "NewName"s;
 
     object_under_test.add(Customer(customer_id, customer_old_name));
 
