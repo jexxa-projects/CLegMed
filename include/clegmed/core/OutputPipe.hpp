@@ -32,6 +32,13 @@ namespace clegmed::core {
             }
         }
 
+        bool isConnected() {
+            if (!m_input_pipe) {
+                return false;
+            }
+            return true;
+        }
+
     private:
         std::function<void(T)> m_input_pipe;
         const Filter& m_filter;
