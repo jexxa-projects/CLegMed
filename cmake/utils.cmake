@@ -8,7 +8,6 @@ target_sources(clegmed_utils INTERFACE
         FILES
         include/clegmed/utils/Logger.hpp
         include/clegmed/utils/Signal.hpp
-        include/clegmed/utils/EntityTraits.hpp
         include/clegmed/utils/Properties.hpp
 )
 

@@ -3,7 +3,7 @@
 #include "Filter.hpp"
 #include "OutputPipe.hpp"
 #include "Traits.hpp"
-#include "concepts/ProducerStartegy.hpp"
+#include "concepts/ProducerStrategy.hpp"
 #include <type_traits>
 #include <utility>
 #include <exception>

@@ -2,7 +2,7 @@
 #include <chrono>
 
 #include "clegmed/core/Processor.hpp"
-#include "clegmed/utils/EntityTraits.hpp"
+#include "../concepts/EntityTraits.hpp"
 
 namespace clegmed::plugins::persistence {
 

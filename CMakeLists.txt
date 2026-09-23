@@ -36,9 +36,7 @@ message(STATUS "Clegmed Full Version: ${clegmed_VERSION_FULL}")
 # 2. TARGET DEFINITION (Header-Only) & EXPORTS
 # ==============================================================================
 # Erstellt die Header-Only Library
-add_library(clegmed INTERFACE
-        include/clegmed/core/concepts/InjectedStrategy.hpp
-        include/clegmed/core/concepts/ProcessorStrategy.hpp)
+add_library(clegmed INTERFACE)
 
 # Best Practice: Namespace-Alias für einbindende Apps bereitstellen
 add_library(clegmed::clegmed ALIAS clegmed)
