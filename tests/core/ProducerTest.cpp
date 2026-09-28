@@ -113,3 +113,32 @@ TEST(CoreTest, MakeConfiguredPipeProducer) {
     EXPECT_EQ(data_storage.size(), 1);
     EXPECT_EQ(data_storage[0], expected_result);
 }
+
+
+TEST(CoreTest, ExceptionTest) {
+    // Arrange
+    using namespace clegmed::core;
+    using namespace std::string_literals;
+
+    const auto expected_result = "Test Exception"s;
+    std::vector<std::string> data_storage;
+    std::vector<PipelineError<std::string>> occurred_errors;
+    constexpr auto test_strategy = [] { throw std::runtime_error("Test Exception"s); return "Test Exception"s;};
+
+    const auto object_under_test = makeProducer(test_strategy);
+
+    object_under_test->outputPipe().connect([&data_storage](std::string data) {
+        data_storage.push_back(std::move(data));
+    });
+    object_under_test->errorPipe().connect([&occurred_errors](PipelineError<std::string> error) {
+        occurred_errors.push_back(std::move(error));
+    });
+
+    // Act: Put some data into the input pipe
+    object_under_test->produce();
+
+    // Assert: Validate if passed
+    EXPECT_EQ(data_storage.size(), 0);
+    EXPECT_EQ(occurred_errors.size(), 1);
+    EXPECT_EQ(occurred_errors[0].processingError().errorMessage(), expected_result);
+}

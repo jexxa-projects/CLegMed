@@ -3,10 +3,10 @@
 #include "Filter.hpp"
 #include "OutputPipe.hpp"
 #include "Traits.hpp"
+#include "PipelineError.hpp"
 #include "concepts/ProducerStrategy.hpp"
 #include <type_traits>
 #include <utility>
-#include <exception>
 
 
 namespace clegmed::core {
@@ -29,6 +29,11 @@ namespace clegmed::core {
             return std::forward<Self>(explicit_this).m_output_pipe;
         }
 
+        template<typename Self >
+        auto&& errorPipe(this Self&& explicit_this) {
+            return std::forward<Self>(explicit_this).m_error_pipe;
+        }
+
         void properties(const utils::Properties& properties) {
             if constexpr (!std::is_same_v<FilterProperties, std::monostate>) {
                 if (hasProperties()) {
@@ -38,67 +43,63 @@ namespace clegmed::core {
         }
 
         void produce() noexcept{
-            PipelineResult result = executeStrategy();
-
-            validate(result);
-
-            forward(result);
+            try {
+                executeStrategy();
+            } catch(...) {
+                emitOnError(std::current_exception());
+            }
         }
 
     private:
-        using PipelineResult = std::optional<std::expected<OutputData, std::exception_ptr>>;
+        using PipelineResult = std::expected<void, PipelineError<OutputData>>;
 
-        [[nodiscard]] PipelineResult executeStrategy() noexcept
+        void executeStrategy()
         {
             if constexpr (ProducerWithPipe<Strategy, OutputData>) {
-                m_strategy(m_output_pipe) ;
-                return PipelineResult{ std::nullopt };
+                m_strategy(m_output_pipe);
             }
             else if constexpr ( ProducerWithDirectReturn<Strategy, OutputData> ) {
-                return PipelineResult{ m_strategy() };
+                return m_output_pipe.forward( std::move(m_strategy()) );
             }
             else if constexpr (ProducerWithPropertiesAndPipe<Strategy, OutputData, FilterProperties>) {
                 m_strategy(m_output_pipe, m_properties);
-                return PipelineResult{ std::nullopt };
             }
             else if constexpr (ProducerWithPropertiesAndReturn<Strategy, OutputData, FilterProperties>) {
-                return PipelineResult{m_strategy(m_properties)};
+                 m_output_pipe.forward( std::move(m_strategy(m_properties)) );
             }
             else {
                 static_assert(false, "❌ ARCHITECTURE-ERROR: Unsupported ProducerStrategy signature");
             }
-
-            return PipelineResult{ std::nullopt };
         }
 
-        static void validate(const PipelineResult& pipeline_result) {
-            if (!pipeline_result.has_value()) { // is null-opt
+        void emitOnError(const std::exception_ptr& exception) {
+            if (!exception) {
                 return;
             }
 
-            if (pipeline_result->has_value()) { //pointer oder null
-                return;
+            try {
+                std::rethrow_exception(exception);
             }
-
-            //TODO: Actually, we do not know how to handle errors in general
-            if (pipeline_result->error()) {
+            catch (const std::exception& e) {
                 utils::Logger::log(utils::LogLevel::ERROR,
-                    "Pipeline Error: error occurred . TODO implement error handling"
+                    "Pipeline Error: error occurred. {}" , e.what()
                     );
-                exit(EXIT_FAILURE);
+                if (m_error_pipe.isConnected()) {
+                    m_error_pipe.forward(PipelineError<OutputData>(ProcessingError(name(), e.what())));
+                } else {
+                    utils::Logger::log(utils::LogLevel::ERROR,
+                        "Pipeline Error: error occurred and no error pipe is connected. " , e.what()
+                        );
+                }
+            }
+            catch (...) {
+                utils::Logger::log(utils::LogLevel::ERROR,
+                    "Pipeline Error: Unknown error occurred .");
             }
         }
-
-        void forward(PipelineResult& pipeline_result) {
-            if (pipeline_result.has_value()) {
-                m_output_pipe.forward(std::move(**pipeline_result));
-            }
-            pipeline_result.reset();
-        }
-
-
 
         OutputPipe<OutputData> m_output_pipe = OutputPipe<OutputData>(*this);
+        OutputPipe<PipelineError<OutputData>> m_error_pipe = OutputPipe<PipelineError<OutputData>>(*this);
         [[no_unique_address]] Strategy m_strategy;
         [[no_unique_address]] FilterProperties m_properties;
     };

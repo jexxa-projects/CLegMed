@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
     auto clegmed = CLegMed(argc, argv,
         FlowGraph{}
             .every(2s)
-            .from(emit("Hello "))
+            .from(emit("Hello "s))
             .then(append("World"))
             .consumeWith(logInfo())
     );
