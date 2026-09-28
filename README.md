@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 ```
 
 ## 📚 Ecosystem & Docs
-*   [clegmed-template](https://github.com/jexxa-projects/clegmed_template) — C++ copier-template for quick start
+*   [clegmed-template](https://github.com/jexxa-projects/clegmed-template) — C++ copier-template for quick start
 
 ---
 
