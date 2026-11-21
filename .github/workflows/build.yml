@@ -28,7 +28,7 @@ jobs:
 
       # 2. SonarCloud Build Wrapper installieren
       - name: Install Build Wrapper
-        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@d209202bc7d53ff1cc128f7f907dac145c9d6ae9
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@59202af334b4ba7b5db01b701b8e79f8b3bef0f4
 
       - name: Set Build Directory
         id: strings
