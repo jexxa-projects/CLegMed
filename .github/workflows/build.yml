@@ -73,7 +73,7 @@ jobs:
 
       # 7. SonarCloud Scan ausführen und die generierten Berichte übergeben
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9
+        uses: SonarSource/sonarqube-scan-action@70bad232163b09d998ea0707ee80c0ec80798c16
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
